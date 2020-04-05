@@ -395,22 +395,26 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 this.kinectSensor = null;
             }
 
-            //Servo Stuff
-            //Closing serial port
-            try
+            if (use_pan_tilt)
             {
-                for (int i = 0; i < 32; i++)
+                //Servo Stuff
+                //Closing serial port
+                try
                 {
-                    string command = "#" + i + "P0\r";
-                    serialPort.Write(command);
+                    for (int i = 0; i < 32; i++)
+                    {
+                        string command = "#" + i + "P0\r";
+                        serialPort.Write(command);
+                    }
+                    serialPort.Close();
                 }
-                serialPort.Close();
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Couldn't close the darned serial port. Here's what it said: " + Environment.NewLine);
+                    Console.WriteLine(ex.ToString());
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Couldn't close the darned serial port. Here's what it said: " + Environment.NewLine);
-                Console.WriteLine(ex.ToString());
-            }
+
         }
 
         /// <summary>
