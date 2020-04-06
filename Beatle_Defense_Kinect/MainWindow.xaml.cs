@@ -161,7 +161,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         bool wait_for_right_key_up = false;
 
         //Servo Stuff
-        private bool use_pan_tilt = false;
+        private bool use_pan_tilt = true;
         public System.IO.Ports.SerialPort serialPort;
 
         //Targeting  Stuff
@@ -510,21 +510,21 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         if (use_pan_tilt)
                         {
                             //If not aiming close enough to target on y axis
-                            if (Math.Abs(Find_Angle_Of_Face(targetIndex).Y) > target_degree_tolerance)
+                            if (Math.Abs(Find_Angle_Of_Face(targetIndex).Y) > 5)
                             {
                                 float amount = movement_amount;
                                 if (Find_Angle_Of_Face(targetIndex).Y > 0) amount *= -1;
 
-                                CommandServo(0, (float)(current_y_degrees + amount), 500.0f);
+                                CommandServo(0, (float)(current_y_degrees + amount), 1000.0f);
                             }
 
                             //If not aiming close enough to target on x axis
-                            if (Math.Abs(Find_Angle_Of_Face(targetIndex).X) > target_degree_tolerance)
+                            if (Math.Abs(Find_Angle_Of_Face(targetIndex).X) > 1)
                             {
                                 float amount = movement_amount;
                                 if (Find_Angle_Of_Face(targetIndex).X < 0) amount *= -1;
 
-                                CommandServo(1, (float)(current_x_degrees + 0.5f*amount), 100.0f);
+                                CommandServo(1, (float)(current_x_degrees + 0.1f*amount), 100.0f);
                             }
 
 
