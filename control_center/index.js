@@ -8,6 +8,10 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html")
 })
 
+
+// 
+// setup socket connections
+// 
 let systemData = require(systemDataStoragePath)
 io.on("connection",  (socket) => {
     
