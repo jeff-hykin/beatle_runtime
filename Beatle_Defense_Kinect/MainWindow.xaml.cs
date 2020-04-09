@@ -18,6 +18,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     using System.Windows.Media.Media3D;
     using Microsoft.Kinect;
     using System.Windows.Input;
+    using System.Timers;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -159,6 +160,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         //For Key Controls
         bool wait_for_left_key_up = false;
         bool wait_for_right_key_up = false;
+        bool wait_for_space_key_up = false;
 
         //Servo Stuff
         private bool use_pan_tilt = true;
@@ -170,6 +172,20 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         private double current_x_degrees = 0;
         private double current_y_degrees = 0;
+
+        //Room Searching Stuff
+        private static System.Timers.Timer motion_cooldown_timer;
+        private readonly float motion_detection_search_time = 15.0f;
+        private float motion_cooldown_time_seconds;
+        private bool motion_detected = false;
+
+        private static System.Timers.Timer body_cooldown_timer;
+        private readonly float body_detection_search_time = 5.0f;
+        private float body_cooldown_time_seconds;
+        private bool body_detected = false;
+        
+        //For Room Search Function - Will pan left of center first, before panning right of center
+        private Boolean done_searching_left_side = false;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -276,6 +292,10 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+
+            //Search Stuff
+            motion_cooldown_time_seconds = motion_detection_search_time;
+            body_cooldown_time_seconds = body_detection_search_time;
         }
 
         /// <summary>
@@ -527,8 +547,19 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                                 CommandServo(1, (float)(current_x_degrees + 0.1f*amount), 100.0f);
                             }
 
+                            //If no bodies tracked for a LONG time then should search room.
+                            //If no bodies tracked for a SHORT time then should stay where it is to hopefully catch the lost person.
+                            if (bodies_active.Count < 1 && motion_detected && !body_detected) SearchRoom();
+                            if (bodies_active.Count > 0) BodyDetected();
 
-                            //AimAtTarget(-(float)Find_Angle_Of_Face(targetIndex).Y, (float)Find_Angle_Of_Face(targetIndex).X);//Seemed to work, but lagged entire program
+                            //Test Motion Simulation
+                            if (Keyboard.IsKeyDown(Key.Space)) wait_for_space_key_up = true;
+
+                            if (Keyboard.IsKeyUp(Key.Space) && wait_for_space_key_up)
+                            {
+                                wait_for_space_key_up = false;
+                                MotionDetected();
+                            }
                         }
 
                         //Shifting Tracking Target
@@ -537,10 +568,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                             //LEFT SHIFT
                             if (Keyboard.IsKeyDown(Key.Left)) wait_for_left_key_up = true;
 
-                            if (Keyboard.IsKeyUp(Key.Left) && wait_for_left_key_up)//Need something to not allow it to be pressed a bunch of times
+                            if (Keyboard.IsKeyUp(Key.Left) && wait_for_left_key_up)
                             {
-                                //All(-(float)Find_Angle_Of_Face(targetIndex).Y);
-
                                 wait_for_left_key_up = false;
                                 Debug.Print("Shift Left");
                                 int target_active_index = bodies_active.IndexOf(bodies[targetIndex]);
@@ -865,21 +894,128 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             }
         }
 
-        //public void AimAtTarget(float y_angle, float x_angle)
-        //{
-        //    if (y_angle >= -90.0f && y_angle <= 90.0f && x_angle >= -90.0f && x_angle <= 90.0f)
-        //    {
-        //        try
-        //        {
-        //            CommandServo(0, y_angle, 300);
-        //            //CommandServo(1, x_angle, 150);//Loses tracking super easy
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine("Couldn't send the command for some reason... I give up. Sorry!");
-        //            Console.WriteLine(ex.ToString()); //Report the actual error
-        //        }
-        //    }
-        //}
+        public void SearchRoom()
+        {
+            if (use_pan_tilt)
+            {
+                if(bodies_active.Count <= 0)
+                {
+                    float amount = movement_amount;
+                    if (!done_searching_left_side && current_y_degrees < 90.0f)
+                    {
+                        CommandServo(0, (float)(current_y_degrees + amount), 250.0f);//Needs to be slowed down considerably
+                    }
+                    else if (done_searching_left_side && current_y_degrees > -90.0f)
+                    {
+                        CommandServo(0, (float)(current_y_degrees - amount), 250.0f);//Needs to be slowed down considerably
+                    }
+
+                    if (current_y_degrees >= 90.0f) done_searching_left_side = true;
+                    if (current_y_degrees <= -90.0f && done_searching_left_side)//At this point it should be 90 degrees to the RIGHT and returning to center having finished doing a sweep of the room.
+                    {
+                        CommandServo(0, 0, 250.0f);
+                        done_searching_left_side = false;
+                    }
+                }                
+            }
+        }
+
+        public void MotionDetected()
+        {
+            //Reset memory
+            if(motion_cooldown_timer != null && motion_cooldown_timer.Enabled == true)
+            {
+                motion_cooldown_timer.Stop();
+                motion_cooldown_timer.Dispose();
+                Debug.Print("Additional Motion Detected. Cooldown Reset at " + motion_cooldown_time_seconds + " seconds remaining");
+                motion_cooldown_time_seconds = motion_detection_search_time;
+            }
+            else
+            {
+                Debug.Print("\nMotion Detected");
+            }
+
+            //Sets Cool down timer
+            motion_detected = true;
+            SearchRoom();
+            motion_cooldown_timer = new System.Timers.Timer(1000);
+
+            motion_cooldown_timer.Elapsed += Motion_Cooldown_Countdown;
+            motion_cooldown_timer.AutoReset = true;
+            motion_cooldown_timer.Start();
+        }
+
+        private void Motion_Cooldown_Countdown(Object source, ElapsedEventArgs e)//Will be called every second
+        {
+            if(!body_detected)
+            {
+                if (motion_cooldown_time_seconds > 0)
+                {
+                    Debug.Print("Continuing Search for " + motion_cooldown_time_seconds + " seconds.");
+                    motion_cooldown_time_seconds--;
+                }
+                else//Countdown finished 
+                {
+                    motion_detected = false;
+                    Debug.Print("Motion Detected Cooldown Has Expired. Entering Standby.\n");
+                    motion_cooldown_time_seconds = motion_detection_search_time;//Should point to a static value
+                    motion_cooldown_timer.Stop();
+                    motion_cooldown_timer.Dispose();
+
+                    //Center Kinect
+                    CommandServo(0, 0.0f, 250.0f);//Returns to Center
+                    CommandServo(1, 0.0f, 250.0f);
+                }
+            }
+            else//A body was detected - Kill the search
+            {
+                Debug.Print("A body was detected - Discontinuing search");
+                //motion_detected = false;
+                //motion_cooldown_time_seconds = motion_detection_search_time;//Should point to a static value
+                //motion_cooldown_timer.Stop();
+                //motion_cooldown_timer.Dispose();
+            }
+        }
+
+        private void BodyDetected()
+        {
+            //Reset memory
+            if (body_cooldown_timer != null && body_cooldown_timer.Enabled == true)
+            {
+                body_cooldown_timer.Stop();
+                body_cooldown_timer.Dispose();
+                body_cooldown_time_seconds = body_detection_search_time;
+            }
+
+            //Sets Cool down timer
+            body_detected = true;
+            body_cooldown_timer = new System.Timers.Timer(1000);
+
+            body_cooldown_timer.Elapsed += Body_Cooldown_Countdown;
+            body_cooldown_timer.AutoReset = true;
+            body_cooldown_timer.Start();
+        }
+
+        private void Body_Cooldown_Countdown(Object source, ElapsedEventArgs e)//Will be called every second
+        {
+            if (body_cooldown_time_seconds > 0)
+            {
+                body_cooldown_time_seconds--;
+            }
+            else//Countdown finished
+            {
+                body_detected = false;
+                body_cooldown_time_seconds = body_detection_search_time;//Should point to a static value
+                body_cooldown_timer.Stop();
+                body_cooldown_timer.Dispose();
+                CommandServo(1, 0.0f, 250.0f);
+
+                //Center Kinect
+                if (!motion_detected)
+                {
+                    CommandServo(0, 0.0f, 250.0f);//Returns to Center, unless there is motion detected
+                }
+            }
+        }
     }
 }
