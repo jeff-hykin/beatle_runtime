@@ -2,9 +2,9 @@
   "name": "beatle_runtime",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "control_center/main.js",
   "scripts": {
-    "start_control_server": "npx nodemon control_center/index.js",
+    "start_control_server": "npx nodemon control_center/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
