@@ -1,7 +1,7 @@
 <template>
     <column>
             <ui-button color=primary raised @click="toggleStrobe">Toggle Strobe</ui-button>
-            <column width=40rem height=20rem overflow=auto>
+            <column width=40rem height=20rem overflow=auto align-v=top align-h=left>
                 {{eventStream}}
             </column>
     </column>
