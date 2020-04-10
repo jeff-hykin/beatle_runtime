@@ -9,8 +9,11 @@ number_of_inputs = 4
 number_of_outputs = 4
 attachment_number = 5000
 
-input_pins  = [ DigitalInput().setChannel(each_index).openWaitForAttachment(attachment_number)  for each_index in range(number_of_inputs)  ]
-output_pins = [ DigitalOutput().setChannel(each_index).openWaitForAttachment(attachment_number) for each_index in range(number_of_outputs) ]
+input_pins  = [ DigitalInput().setChannel(each_index)  for each_index in range(number_of_inputs)  ]
+output_pins = [ DigitalOutput().setChannel(each_index) for each_index in range(number_of_outputs) ]
+
+for each in input_pins + output_pins:
+    each.openWaitForAttachment(attachment_number)
 
 def which_key(input_pin, index_of_input):
     key_values = [
