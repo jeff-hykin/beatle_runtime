@@ -35,7 +35,7 @@ def which_key(input_pin, index_of_input):
         each_output.setState(1)
         time.sleep(0.05)
         if input_pin.getState() == 0:
-            return_value = key_values[index_of_output][index_of_input]
+            return_value = key_values[index_of_input][index_of_output]
             break
     
     # reset all the output pins
