@@ -1,8 +1,10 @@
 import io from "socket.io-client"
 let packageJson = require("../../package.json")
 
-let socket = io(`http://localhost:${packageJson.centralServerPort}`)
+console.log(`packageJson.centralServerPort is:`,packageJson.centralServerPort)
+window.socket = io(`http://localhost:${packageJson.centralServerPort}`)
 
+console.log(`window.socket is:`, window.socket)
 
 
 socket.on("connect", () => {
