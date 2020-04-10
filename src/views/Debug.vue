@@ -14,11 +14,9 @@ export default {
         eventStream: "",
     }),
     mounted() {
-        mounted() {
-            window.socket.on("keypad.keyPressed", (whichKey)=> {
-                
-            })
-        }
+        window.socket.on("keypad.keyPressed", (whichKey)=> {
+            eventStream += `\nkey pressed: ${whichKey}`
+        })
     },
     methods: {
         toggleStrobe() {
