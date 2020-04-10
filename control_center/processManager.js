@@ -3,8 +3,8 @@
 // 
 // this skeleton calls all of the processes and tells them "hey, put your functions on me so I'm not a skeleton" and then they do that
 // then the setup() function in here (below) connects everything to sockets
-let mainInterface
-module.exports = mainInterface = {
+let processManager
+module.exports = processManager = {
     // these processes need to match the names of their folder
     processes:  {
         strobeLight: {
@@ -16,7 +16,9 @@ module.exports = mainInterface = {
         },
         keypad: {
             listensFor: {},
-            canYell: {}
+            canYell: {
+                keyPressed: null,
+            }
         },
         motionSensor: {
             listensFor: {},
@@ -62,8 +64,8 @@ module.exports = mainInterface = {
         // 
         // generate all of the yell function bodies
         // 
-        for (let eachProcessName in mainInterface.processes) {
-            let eachProcess = mainInterface.processes[eachProcessName]
+        for (let eachProcessName in processManager.processes) {
+            let eachProcess = processManager.processes[eachProcessName]
             for (let eachYellableThing in eachProcess.canYell) {
                 // turn it into a function
                 eachProcess.canYell[eachYellableThing] = (returnValue)=>{
@@ -75,7 +77,7 @@ module.exports = mainInterface = {
         // 
         // start all of the processes
         // 
-        for (let eachProcessName in mainInterface.processes) {
+        for (let eachProcessName in processManager.processes) {
             console.group(`\nonStart.js: ${eachProcessName}`)
             // run each process file
             require(global.pathFor.processFolder+eachProcessName+"/onStart.js")
@@ -88,8 +90,8 @@ module.exports = mainInterface = {
         // 
         // connect all of the listeners
         // 
-        for (let eachProcessName in mainInterface.processes) {
-            let eachProcess = mainInterface.processes[eachProcessName]
+        for (let eachProcessName in processManager.processes) {
+            let eachProcess = processManager.processes[eachProcessName]
             for (let eachListenerName in eachProcess.listensFor) {
                 // attach the listener to the socket callback based on its name
                 let eventName = `${eachProcessName}.${eachListenerName}`

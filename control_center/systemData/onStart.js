@@ -1,10 +1,10 @@
-let mainInterface = require("../interfaceManager")
+let processManager = require("../processManager")
 let systemData = require(global.pathFor.systemDataStoragePath)
 let fs = require("fs")
 
 // import the official listener-names for this process
-let listeners = mainInterface.processes.systemData.listensFor
-let yell = mainInterface.processes.systemData.canYell
+let listeners = processManager.processes.systemData.listensFor
+let yell = processManager.processes.systemData.canYell
 
 // whenever dataShouldChange
 listeners.dataShouldChange = (newData) => {

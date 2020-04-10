@@ -1,12 +1,11 @@
-let fs = require("fs")
-let mainInterface = require("../interfaceManager")
+let processManager = require("../processManager")
 let setupProcess = require("../commandlineHelper")
 
 // import the official listener-names for this process
-let listeners = mainInterface.processes.strobeLight.listensFor
-let yell = mainInterface.processes.strobeLight.canYell
+let listeners = processManager.processes.strobeLight.listensFor
+let yell = processManager.processes.strobeLight.canYell
 // start the process
-let strobeProcess = setupProcess(`python ${__dirname}/process.py`, {})
+let strobeProcess = setupProcess(`python ${__dirname}/process.py`)
 
 // whenever dataShouldChange
 listeners.turnOn = ()=> {

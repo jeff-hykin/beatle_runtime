@@ -8,10 +8,10 @@ global.pathFor = {
     processFolder: __dirname + "/",
     systemDataStoragePath: __dirname + "/systemData.json",
     homepage: __dirname + "/index.html",
-    interfaceManager: __dirname + "/interfaceManager.js",
+    processManager: __dirname + "/processManager.js",
 }
 
-let mainInterface = require(global.pathFor.interfaceManager)
+let processManager = require(global.pathFor.processManager)
 let packageJson = require(global.pathFor.package)
 
 //
@@ -24,8 +24,8 @@ app.get("/", (req, res) => {
 //
 // setup socket connections (all data transfer)
 //
-mainInterface.setupIo(io)
-io.on("connection", mainInterface.setupNewSocket)
+processManager.setupIo(io)
+io.on("connection", processManager.setupNewSocket)
 
 //
 // start the central server
