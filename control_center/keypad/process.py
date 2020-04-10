@@ -28,14 +28,14 @@ def which_key(input_pin, index_of_input):
         ["7", "8", "9", "C"],
         ["*", "0", "#", "D"]
     ]
-    return_value = key_values[-1][-1] # not sure why this is the default -- Jeff
+    return_value = None
     
     # do trial-and-error to find which output pin
     for index_of_output, each_output in enumerate(output_pins):
         each_output.setState(1)
         time.sleep(0.05)
         if input_pin.getState() == 0:
-            return_value = key_values[index_of_input][index_of_output]
+            return_value = key_values[index_of_input][-(index_of_output+1)]
             break
     
     # reset all the output pins
