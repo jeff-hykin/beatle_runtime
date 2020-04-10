@@ -11,13 +11,13 @@ attachment_number = 5000
 
 # create input pins
 input_pins  = [ DigitalInput() for each_index in range(number_of_inputs)  ]
-for each, each_index in enumerate(input_pins):
+for each_index, each in enumerate(input_pins):
     each.setChannel(each_index)
     each.openWaitForAttachment(attachment_number)
 
 # create ouput pins
 output_pins = [ DigitalOutput() for each_index in range(number_of_outputs) ]
-for each, each_index in enumerate(output_pins):
+for each_index, each in enumerate(output_pins):
     each.setChannel(each_index)
     each.openWaitForAttachment(attachment_number)
 
