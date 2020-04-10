@@ -1,5 +1,5 @@
 // 
-// Create the skeleton of the main interface
+// Create the skeleton of the processManager
 // 
 // this skeleton calls all of the processes and tells them "hey, put your functions on me so I'm not a skeleton" and then they do that
 // then the setup() function in here (below) connects everything to sockets
