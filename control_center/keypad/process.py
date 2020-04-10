@@ -4,63 +4,58 @@ from Phidget22.Phidget import *
 from Phidget22.Devices.DigitalOutput import *
 from Phidget22.Devices.DigitalInput import *
 
-
-number_of_inputs = 4
-number_of_outputs = 4
-attachment_number = 5000
-
-# create input pins
-input_pins  = [ DigitalInput() for each_index in range(number_of_inputs)  ]
-for each_index, each in enumerate(input_pins):
-    each.setChannel(each_index)
-    each.openWaitForAttachment(attachment_number)
-
-# create ouput pins
-output_pins = [ DigitalOutput() for each_index in range(number_of_outputs) ]
-for each_index, each in enumerate(output_pins):
-    each.setChannel(each_index)
-    each.openWaitForAttachment(attachment_number)
-
-def which_key(input_pin, index_of_input):
-    key_values = [
-        ["1", "2", "3", "A"],
-        ["4", "5", "6", "B"],
-        ["7", "8", "9", "C"],
-        ["*", "0", "#", "D"]
-    ]
-    return_value = key_values[-1][-1] # not sure why this is the default -- Jeff
-    
-    # do trial-and-error to find which output pin
-    for index_of_output, each_output in enumerate(output_pins):
-        each_output.setState(1)
+def check_keys(di, do, i):
+    ret = (-1, -1)
+    for j in range(num_out):
+        do[j].setState(1)
         time.sleep(0.05)
-        if input_pin.getState() == 0:
-            return_value = key_values[index_of_output][index_of_input]
+        if (di[i].getState() == 0):
+            ret = (j, i)
             break
-    
-    # reset all the output pins
-    for each in output_pins:
-        each.setState(0)
-    
+    for j in range(num_out):
+        do[j].setState(0)
     time.sleep(0.05)
-    
-    return return_value
+    return ret
+   
+key_values = [["1", "2", "3", "A"], ["4", "5", "6", "B"], ["7", "8", "9", "C"], ["*", "0", "#", "D"]]
+def get_value(pos):
+    return key_values[pos[0]][pos[1]]
 
+num_in = 4
+num_out = 4
 
-previous_vals = [0, 0, 0, 0]
-current_values = [0, 0, 0, 0]
-while True:
-    # find which one(s) changed 
-    for index_of_input, (old_value, input_pin) in enumerate(zip(previous_vals, input_pins)):
-        # update the input pin value right before checking it
-        value = current_values[index_of_input] = input_pin.getState()
-        if value == 1 and value != old_value:
-            print(which_key(input_pin, index_of_input))
+digitalInput = [0] * num_in
+digitalOutput = [0] * num_out
+
+for i in range(num_in):
+    digitalInput[i] = DigitalInput()
+for i in range(num_out):
+    digitalOutput[i] = DigitalOutput()
+
+for i in range(num_in):
+    # digitalInput[i].setDeviceSerialNumber(96781)
+    digitalInput[i].setChannel(i)
+for i in range(num_out):
+    # digitalOutput[i].setDeviceSerialNumber(96781)
+    digitalOutput[i].setChannel(i)
+
+for i in range(num_in):
+    digitalInput[i].openWaitForAttachment(5000)
+for i in range(num_out):
+    digitalOutput[i].openWaitForAttachment(5000)
+
+last_vals = [0, 0, 0, 0]
+curr_vals = [0, 0, 0, 0]
+while (True):
+    for i in range(num_in):
+        curr_vals[i] = digitalInput[i].getState()
+        if (curr_vals[i] != last_vals[i] and curr_vals[i] == 1):
+            pos = check_keys(digitalInput, digitalOutput, i)
+            print(pos, get_value(pos))
             sys.stdout.flush()
-    
-    # keep track of old states
-    previous_vals = current_values
+        last_vals[i] = curr_vals[i]
 
-# clean up
-for each in input_pins + output_pins:
-    each.close()
+for i in range(num_in):
+    digitalInput[i].close()
+for i in range(num_out):
+    digitalOutput[i].close()
