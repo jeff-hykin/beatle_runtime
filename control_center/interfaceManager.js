@@ -95,7 +95,7 @@ module.exports = mainInterface = {
                 let eventName = `${eachProcessName}.${eachListenerName}`
                 socket.on(eventName,  (...args)=>{
                     // use console grouping to improve debugging
-                    console.group(eventName)
+                    console.group("\n"+eventName)
                     eachProcess.listensFor[eachListenerName](...args)
                     console.groupEnd()
                 })

@@ -6,10 +6,7 @@
     "main": "control_center/main.js",
     "scripts": {
         "start": "npx nodemon control_center/main.js",
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint",
-        "prod-serve": "serve -s dist -l 8081"
+        "start_frontend": "vue-cli-service serve"
     },
     "repository": {
         "type": "git",
