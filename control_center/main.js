@@ -1,46 +1,35 @@
 let app = require("express")()
 let http = require("http").createServer(app)
 let io = require("socket.io")(http)
-let fs = require("fs")
-const systemDataStoragePath = __dirname + "/systemData.json"
 
+// a single location for all javascript paths to prevent future breaking changes
+global.pathFor = {
+    processFolder: __dirname+"/",
+    systemDataStoragePath: __dirname+"/systemData.json",
+    homepage: __dirname + "/index.html",
+    interfaceManager: __dirname+"/interfaceManager.js",
+}
+
+let mainInterface = require(global.pathFor.interfaceManager)
+
+
+// 
+// setup homepage (no main use, just for tests)
+// 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html")
+    res.sendFile(global.pathFor.homepage)
 })
 
 
 // 
-// setup socket connections
+// setup socket connections (all data transfer)
 // 
-let systemData = require(systemDataStoragePath)
-io.on("connection",  (socket) => {
-    
-    // regular data changes
-    socket.on("dataShouldChange",  (newData) => {
-        let dataBeforeChange = JSON.stringify(systemData)
-        console.log('received dataChange request')
-        systemData = {...systemData, ...newData}
-        let dataAfterChange = JSON.stringify(systemData)
-        console.log(`systemData is now:`,systemData)
-        // if there was a change, tell everyone about it
-        if (dataBeforeChange != dataAfterChange) {
-            console.log("sending dataDidChange")
-            io.emit('dataDidChange', systemData)
-            // save changes to permanent storage
-            fs.writeFile(systemDataStoragePath, dataAfterChange, (...args)=>{
-                console.log(`file write args is:`,args)
-            })
-        }
-    })
-    
-    // refreshing data
-    socket.on("requestSystemData",  (newData) => {
-        console.log("found a requestSystemData")
-        io.emit('providingSystemData', systemData)
-    })
-    
-})
+mainInterface.setupIo(io)
+io.on("connection",  mainInterface.setupNewSocket)
 
+// 
+// start the server 
+// 
 http.listen(3000,  () => {
     console.log("listening on *:3000")
 })
