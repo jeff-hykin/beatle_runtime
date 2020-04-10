@@ -1,5 +1,7 @@
 import io from "socket.io-client"
-let socket = io("http://localhost:3000")
+let packageJson = require("../../package.json")
+
+let socket = io(`http://localhost:${packageJson.centralServerPort}`)
 
 
 
@@ -8,7 +10,7 @@ socket.on("connect", () => {
     // TODO: show the user this status somehow
     window.$root.connectedToBackend = true
     // ask the backend for the most-up-to-date info
-    socket.emit('requestSystemData', {})
+    socket.emit('systemData.requestSystemData', {})
 })
 socket.on("disconnect", () => {
     console.log("socket disconnected")
@@ -16,7 +18,7 @@ socket.on("disconnect", () => {
 })
 
 // update the app state whenever there are changes
-socket.on("dataDidChange", (backendSystemData) => {
+socket.on("systemData.dataDidChange", (backendSystemData) => {
     console.log(`backend data changed: `,backendSystemData)
     // 
     // update systemData from backend
@@ -29,7 +31,7 @@ socket.on("dataDidChange", (backendSystemData) => {
 })
 
 // server responding to request
-socket.on("providingSystemData", (backendSystemData) => {
+socket.on("systemData.providingSystemData", (backendSystemData) => {
     console.log(`receiving backend data: `,backendSystemData)
     // make sure frontend is up to date
     if (Object.keys(backendSystemData).length > 0) {

@@ -1,76 +1,82 @@
 {
-  "name": "beatle_runtime",
-  "version": "1.0.0",
-  "description": "",
-  "main": "control_center/main.js",
-  "scripts": {
-    "start": "npx nodemon control_center/main.js",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "prod-serve": "serve -s dist -l 8081"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jeff-hykin/beatle_runtime.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jeff-hykin/beatle_runtime/issues"
-  },
-  "homepage": "https://github.com/jeff-hykin/beatle_runtime#readme",
-  "dependencies": {
-    "express": "^4.17.1",
-    "nodemon": "^2.0.2",
-    "socket.io": "^2.3.0",
-    "babel-runtime": "^6.26.0",
-    "core-js": "^2.6.5",
-    "css-baseline": "^1.1.10",
-    "good-vue": "^1.3.1",
-    "keen-ui": "^1.2.0",
-    "mathjs": "^6.2.3",
-    "serve": "^11.2.0",
-    "socket.io-client": "^2.3.0",
-    "vue": "^2.6.10",
-    "vue-router": "^3.0.3",
-    "vue-simple-markdown": "^1.1.1",
-    "vue-toasted": "^1.1.27"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
-    "@vue/eslint-config-standard": "^4.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "sass": "^1.18.0",
-    "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "beatle_runtime",
+    "version": "1.0.0",
+    "description": "",
+    "centralServerPort": 3000,
+    "main": "control_center/main.js",
+    "scripts": {
+        "start": "npx nodemon control_center/main.js",
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "prod-serve": "serve -s dist -l 8081"
     },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/standard"
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jeff-hykin/beatle_runtime.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jeff-hykin/beatle_runtime/issues"
+    },
+    "homepage": "https://github.com/jeff-hykin/beatle_runtime#readme",
+    "dependencies": {
+        "express": "^4.17.1",
+        "nodemon": "^2.0.2",
+        "socket.io": "^2.3.0",
+        "babel-runtime": "^6.26.0",
+        "core-js": "^2.6.5",
+        "css-baseline": "^1.1.10",
+        "good-vue": "^1.3.1",
+        "keen-ui": "^1.2.0",
+        "mathjs": "^6.2.3",
+        "serve": "^11.2.0",
+        "socket.io-client": "^2.3.0",
+        "vue": "^2.6.10",
+        "vue-router": "^3.0.3",
+        "vue-simple-markdown": "^1.1.1",
+        "vue-toasted": "^1.1.27"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "^3.11.0",
+        "@vue/cli-plugin-eslint": "^3.11.0",
+        "@vue/cli-service": "^3.11.0",
+        "@vue/eslint-config-standard": "^4.0.0",
+        "babel-eslint": "^10.0.1",
+        "eslint": "^5.16.0",
+        "eslint-plugin-vue": "^5.0.0",
+        "sass": "^1.18.0",
+        "sass-loader": "^7.1.0",
+        "vue-template-compiler": "^2.6.10"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "@vue/standard"
+        ],
+        "rules": {},
+        "parserOptions": {
+            "parser": "babel-eslint"
+        }
+    },
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions"
     ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
+    "nodemonConfig": {
+        "ignore": [
+            "control_center/systemData.json"
+        ]
     }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
 }

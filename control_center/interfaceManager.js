@@ -58,7 +58,7 @@ module.exports = mainInterface = {
         },
     },
     setupIo(io) {
-        console.group(`setupIo()`)
+        console.group(`\nsetupIo()`)
         // 
         // generate all of the yell function bodies
         // 
@@ -76,7 +76,7 @@ module.exports = mainInterface = {
         // start all of the processes
         // 
         for (let eachProcessName in mainInterface.processes) {
-            console.group(`onStart.js: ${eachProcessName}`)
+            console.group(`\nonStart.js: ${eachProcessName}`)
             // run each process file
             require(global.pathFor.processFolder+eachProcessName+"/onStart.js")
             console.groupEnd()
@@ -84,7 +84,7 @@ module.exports = mainInterface = {
         console.groupEnd()
     },
     setupNewSocket(socket) {
-        console.group(`setupNewSocket()`)
+        console.group(`\nsetupNewSocket()`)
         // 
         // connect all of the listeners
         // 

@@ -41,7 +41,7 @@ new Vue({
             handler(value, oldValue) {
                 console.log(`frontend systemData value is:`,value)
                 // everytime something (anything) changes any part of a system value, tell the backend about it
-                socket.emit('dataShouldChange', this.systemData)
+                socket.emit('systemData.dataShouldChange', this.systemData)
                 this.changesAreUnconfirmed = true
             },
         }
