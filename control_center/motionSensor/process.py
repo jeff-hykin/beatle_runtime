@@ -1,13 +1,15 @@
 from Phidget22.Phidget import *
 from Phidget22.Devices.VoltageRatioInput import *
 import time
+import sys
 
 #Declare any event handlers here. These will be called every time the associated event occurs.
 
 def onSensorChange(self, sensorValue, sensorUnit):
     if sensorValue > -.100:
+        print("motionDetected")
+        sys.stdout.flush()
         print("SensorValue: " + str(sensorValue))
-        print("Motion Detected")
         time.sleep(5)
 
 def main():

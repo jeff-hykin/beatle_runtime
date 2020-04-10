@@ -1,7 +1,8 @@
+import sys
+import time
 from Phidget22.Phidget import *
 from Phidget22.Devices.DigitalOutput import *
 from Phidget22.Devices.DigitalInput import *
-import time
 
 def check_keys(di, do, i):
     ret = (-1, -1)
@@ -51,6 +52,7 @@ while (True):
         if (curr_vals[i] != last_vals[i] and curr_vals[i] == 1):
             pos = check_keys(digitalInput, digitalOutput, i)
             print(pos, get_value(pos))
+            sys.stdout.flush()
         last_vals[i] = curr_vals[i]
 
 for i in range(num_in):
