@@ -15,7 +15,7 @@ export default {
     }),
     mounted() {
         window.socket.on("keypad.keyPressed", (whichKey)=> {
-            eventStream += `\nkey pressed: ${whichKey}`
+            this.eventStream += `\nkey pressed: ${whichKey}`
         })
     },
     methods: {
