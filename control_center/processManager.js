@@ -5,7 +5,7 @@
 // then the setup() function in here (below) connects everything to sockets
 let processManager
 module.exports = processManager = {
-    // these processes need to match the names of their folder
+    // these processes need to match the names of their folders
     processes:  {
         strobeLight: {
             listensFor: {
@@ -17,7 +17,7 @@ module.exports = processManager = {
         keypad: {
             listensFor: {},
             canYell: {
-                keyPressed: null,
+                keyPressed: null, // returns: which key as a string
             }
         },
         motionSensor: {
@@ -31,7 +31,7 @@ module.exports = processManager = {
                 wakeUp: null, // no arguments
             },
             canYell: {
-                foundPeople: null, // returns: list of people (each with an id and maybe head location)
+                foundPeople: null, // returns: list of people-objects (each with an id and maybe head location)
             }
         },
         systemData: {
