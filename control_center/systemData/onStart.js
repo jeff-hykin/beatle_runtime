@@ -15,7 +15,7 @@ listeners.dataShouldChange = (newData) => {
     console.log(`systemData is now:`,systemData)
     // if there was a change, tell everyone about it
     if (dataBeforeChange != dataAfterChange) {
-        console.log("sending dataDidChange")
+        console.log("sending dataDidCha    nge")
         yell.dataDidChange(systemData)
         // save changes to permanent storage
         fs.writeFile(global.pathFor.systemDataStoragePath, dataAfterChange, (...args)=>{
