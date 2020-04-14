@@ -6,5 +6,6 @@ let fs = require("fs")
 let listeners = processManager.processes.systemData.listensFor
 let yell = processManager.processes.Interface.canYell
 
-listeners.attemptLogin=function(newData){console.log(newData)}
-
+listeners.attemptLogin = function(newData) {
+    console.log(newData)
+}
