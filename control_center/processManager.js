@@ -55,7 +55,7 @@ module.exports = processManager = {
 
                 providingSystemData: null, // returns: JSON object representing all system data
                     // this is a response to a process asking for information
-                    // all other processes will likely ignore this message
+                    // all other processes will like    ly ignore this message
             }
         },
         
