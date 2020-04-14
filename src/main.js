@@ -29,7 +29,8 @@ new Vue({
             status: "unknown"
         },
         connectedToBackend: false,
-        changesAreUnconfirmed: true
+        changesAreUnconfirmed: true,
+        loggedIn: false,
     }),
     mounted() {
         window.systemData = this.$data.systemData

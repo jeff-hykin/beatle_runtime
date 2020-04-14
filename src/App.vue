@@ -1,12 +1,27 @@
 <template>
     <div id="app">
-        <Nav />
-        <transition name="fade" mode="out-in" >
-            <router-view/>
-        </transition>
-        <column position=fixed left=0 bottom=0 width=100vw padding=1rem align-h=left color="white" :background-color='$root.systemData.status=="disarmed"?"var(--blue-400)" : "var(--red-500)" '  >
-            status: {{$root.systemData.status}}
-        </column>
+        <!-- when not loggedIn -->
+        <div v-if='!$root.loggedIn' >
+            <Login />
+        </div>    
+        
+        <!-- when loggedIn -->
+        <div v-if='$root.loggedIn' >    
+            
+            <Nav />
+            
+            <transition name="fade" mode="out-in" >
+                <router-view/>
+            </transition>
+            
+            <column position=fixed left=0 bottom=0 width=100vw padding=1rem align-h=left color="white" :background-color='$root.systemData.status=="disarmed"?"var(--blue-400)" : "var(--red-500)" '  >
+                status: {{$root.systemData.status}}
+            </column>
+            
+            <ui-button color='primary' :href="href" @click="navigate">
+                {{ route.name }}
+            </ui-button>
+        </div>
     </div>
 </template>
 
@@ -14,12 +29,14 @@
 
 import Nav from '@/components/Nav.vue'
 import router from "./router"
+import Login from "@/views/Login.vue"
 
 export default {
   name: 'App',
   router,
   components: {
-    Nav
+    Nav,
+    Login,
   },
 }
 </script>
