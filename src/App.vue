@@ -18,8 +18,8 @@
                 status: {{$root.systemData.status}}
             </column>
             
-            <ui-button color='primary' :href="href" @click="navigate">
-                {{ route.name }}
+            <ui-button class="logout-button" @click="onLogout">
+                Logout
             </ui-button>
         </div>
     </div>
@@ -32,12 +32,18 @@ import router from "./router"
 import Login from "@/views/Login.vue"
 
 export default {
-  name: 'App',
-  router,
-  components: {
-    Nav,
-    Login,
-  },
+    name: 'App',
+    router,
+    components: {
+        Nav,
+        Login,
+    },
+    methods: {
+        onLogout() {
+            // FIXME: tell backend too
+            $root.loggedIn = false
+        }
+    }
 }
 </script>
 
@@ -74,6 +80,12 @@ body {
 .fade-enter,
 .fade-leave-active {
     opacity: 0
+}
+
+.logout-button {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
 }
 
 // add vars for material shadows
