@@ -43,5 +43,10 @@ socket.on("systemData.providingSystemData", (backendSystemData) => {
     window.$root.changesAreUnconfirmed = false    
 })
 
+socket.on("interface.userAuthenticated", function(){
+    console.log("authenicated")
+})
+
+
 
 export default socket

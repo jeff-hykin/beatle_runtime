@@ -64,6 +64,7 @@ module.exports = processManager = {
                 attemptLogin: null,
             },
             canYell: {
+                userAuthenticated:null,
             },
         },
     },
