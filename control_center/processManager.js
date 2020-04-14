@@ -58,6 +58,14 @@ module.exports = processManager = {
                     // all other processes will likely ignore this message
             }
         },
+        
+        interface: {
+            listensFor: {
+                attemptLogin: null,
+            },
+            canYell: {
+            },
+        },
     },
     setupIo(io) {
         console.group(`\nsetupIo()`)
