@@ -18,9 +18,7 @@
                 status: {{$root.systemData.status}}
             </column>
             
-            <ui-button class="logout-button" @click="onLogout">
-                Logout
-            </ui-button>
+            <LogoutButton />
         </div>
     </div>
 </template>
@@ -30,6 +28,7 @@
 import Nav from '@/components/Nav.vue'
 import router from "./router"
 import Login from "@/views/Login.vue"
+import LogoutButton from "@/components/LogoutButton.vue"
 
 export default {
     name: 'App',
@@ -37,13 +36,8 @@ export default {
     components: {
         Nav,
         Login,
+        LogoutButton,
     },
-    methods: {
-        onLogout() {
-            // FIXME: tell backend too
-            $root.loggedIn = false
-        }
-    }
 }
 </script>
 
