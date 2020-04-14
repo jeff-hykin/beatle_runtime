@@ -109,7 +109,7 @@ module.exports = processManager = {
                     try {
                         eachProcess.listensFor[eachListenerName](...args)
                     } catch (error) {
-                        console.console.warn(`warning, failed to run ${eachListenerName}\nargs:${args}\n\nerror: ${error}`)
+                        console.warn(`warning, failed to run ${eachListenerName}\nargs:${args}\n\nerror: ${error}`)
                     }
                     console.groupEnd()
                 })
