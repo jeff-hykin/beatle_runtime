@@ -31,7 +31,7 @@ io.on("connection", processManager.setupNewSocket)
 // start the central server
 //
 http.listen(packageJson.centralServerPort, () => {
-    console.log(`\nlistening on *:${packageJson.centralServerPort}`)
+    console.log(`\nsocket is listening on *:${packageJson.centralServerPort}`)
 })
 
 //
