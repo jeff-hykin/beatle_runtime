@@ -106,7 +106,11 @@ module.exports = processManager = {
                 socket.on(eventName,  (...args)=>{
                     // use console grouping to improve debugging
                     console.group("\n"+eventName)
-                    eachProcess.listensFor[eachListenerName](...args)
+                    try {
+                        eachProcess.listensFor[eachListenerName](...args)
+                    } catch (error) {
+                        console.warn(`warning, failed to run ${eachListenerName}\nargs:${args}\n\nerror: ${error}`)
+                    }
                     console.groupEnd()
                 })
             }
