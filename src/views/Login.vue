@@ -33,8 +33,7 @@
                 //     console.log("A username and password must be present")
                 // }
                 
-                // FIXME
-                $root.loggedIn = true
+                
             }
         }
     }
