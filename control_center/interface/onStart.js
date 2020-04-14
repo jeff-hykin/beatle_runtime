@@ -12,8 +12,9 @@ let yell = processManager.processes.interface.canYell
 
 listeners.attemptLogin = function(newData) {
     console.log(newData)
+
+    if (newData.username == "user1" && newData.password == "password1") {
+        yell.userAuthenticated({ username:"user1" })
+    }
 }
 
-if (newData.username == "user1" && newData.password == "password1") {
-    yell.userAuthenticated({ username:"user1" })
-}
