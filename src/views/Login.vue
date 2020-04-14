@@ -20,6 +20,7 @@
         },
         methods: {
             login() {
+                socket.emit("interface.attemptLogin", { username: this.input.username, password: this.input.password })
                 if(this.input.username != "" && this.input.password != "") {
                     if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
                         this.$emit("authenticated", true)
