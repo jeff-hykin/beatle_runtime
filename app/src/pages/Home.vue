@@ -17,7 +17,7 @@
             <h4> To connect to the Beatle from any device </h4>
             <br /><br /> 1. Make sure the Beatle (this computer) is connected to WiFi
             <br /><br /> 2. Make sure the other device is connected to the same WiFi
-            <br /><br /> 3. Go to {{$root.localIpAddress}} in the web browser of the other device
+            <br /><br /> 3. Go to http://{{$root.localIpAddress}}:8080 in the web browser of the other device
         </column>
     </row>
 </template>
