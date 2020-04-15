@@ -35,6 +35,7 @@ new Vue({
     mounted() {
         window.systemData = this.$data.systemData
         window.$root = this
+        window.$toasted = this.$toasted
     },
     watch: {
         systemData: {
