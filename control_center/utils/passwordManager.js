@@ -1,4 +1,6 @@
 let crypto = require("crypto")
+let fs = require("fs")
+let pathFor = require("../../pathFor")
 
 const PASSWORD_LENGTH = 256
 const SALT_LENGTH = 64
@@ -21,7 +23,58 @@ function checkPassword(hashData, passwordAttempt) {
     return hashData.hash === hash.toString(BYTE_TO_STRING_ENCODING)
 }
 
+function checkIfNormalString(string, argumentSource) {
+    if (!(typeof string == 'string')) {
+        throw new Error(`${argumentSource} isn't a string, the value was: ${string}`)
+    } else if (string.length == 0) {
+        throw new Error(`${argumentSource} was the empty string which isn't allowed`)
+    }
+}
+
+
+function setUsernameAndPassword({ username, password }) {
+    // 
+    // check inputs
+    // 
+    checkIfNormalString(username, "username argument from setUsernameAndPassword()")
+    checkIfNormalString(password, "password argument from setUsernameAndPassword()")
+
+    let privateData = JSON.parse(fs.readFileSync(pathFor.privateSystemData))
+    // ensure users exists
+    privateData.users || (privateData.users = {})
+    // create user and password
+    privateData.users[username] = hashPassword(password)
+    // save them to the file
+    fs.writeFileSync(pathFor.privateSystemData, JSON.stringify(privateData))
+}
+
+function checkUsernameAndPassword({ username, password }) {
+    // 
+    // check inputs
+    // 
+    checkIfNormalString(username, "username argument from setUsernameAndPassword()")
+    checkIfNormalString(password, "password argument from setUsernameAndPassword()")
+
+    let privateData = JSON.parse(fs.readFileSync(pathFor.privateSystemData))
+    // ensure users exists
+    privateData.users || (privateData.users = {})
+    // check the data
+    if (privateData[username] instanceof Object) {
+        if (privateData[username] == checkPassword(privateData[username], password)) {
+            return true
+        }
+    }
+    return false
+}
+
+function doesAtLeastOneUserExist() {
+    let privateData = JSON.parse(fs.readFileSync(pathFor.privateSystemData))
+    let validUsers = Object.values(privateData.users).filter(each=>(each instanceof Object) && (each.salt) && (each.hash) && (each.iterations))
+    return validUsers.length > 0
+}
+
 module.exports = {
-    hashPassword,
-    checkPassword,
+    doesAtLeastOneUserExist,
+    setUsernameAndPassword,
+    checkUsernameAndPassword,
 }
