@@ -2,7 +2,7 @@
     "name": "beatle_runtime",
     "version": "1.0.0",
     "description": "",
-    "centralServerPort": 3000,
+    "centralServerPort": 3001,
     "main": "control_center/main.js",
     "scripts": {
         "start": "npx nodemon control_center/main.js",
