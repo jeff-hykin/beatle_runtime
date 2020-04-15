@@ -1,8 +1,8 @@
 import io from "socket.io-client"
-let packageJson = require("../../package.json")
+let packageJson = require("../../../package.json")
 
 console.log(`packageJson.centralServerPort is:`,packageJson.centralServerPort)
-window.socket = io(`http://${location.hostname}:${packageJson.centralServerPort}`)
+window.socket = io(`http://localhost:${packageJson.centralServerPort}`)
 
 console.log(`window.socket is:`, window.socket)
 
@@ -10,7 +10,7 @@ console.log(`window.socket is:`, window.socket)
 socket.on("connect", () => {
     console.log("socket is connected")
     // TODO: show the user this status somehow
-    window.$root.connectedToBackend = true
+    window.$root && (window.$root.connectedToBackend = true)
     // ask the backend for the most-up-to-date info
     socket.emit('systemData.requestSystemData', {})
 })
@@ -41,16 +41,6 @@ socket.on("systemData.providingSystemData", (backendSystemData) => {
     }
     // changes were just confirmed
     window.$root.changesAreUnconfirmed = false    
-})
-
-socket.on("interface.userAuthenticated", function(){
-    console.log("authenicated")
-    $root.loggedIn = true
-})
-
-socket.on("interface.userAuthenticationFailed", function(){
-    console.log("failed authenication")
-    $toasted.show(`Authentication Failed: invalid username or password`, {keepOnHover:true}).goAway(6500)
 })
 
 export default socket

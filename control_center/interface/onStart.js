@@ -1,11 +1,8 @@
-let processManager = require("../processManager")
-let Interface = require(global.pathFor.systemDataStoragePath)
 let fs = require("fs")
+let processManager = require(pathFor.processManager)
+let passwordManager = require(pathFor.passwordManager)
 
 // import the official listener-names for this process
-
-
-
 let listeners = processManager.processes.interface.listensFor
 let yell = processManager.processes.interface.canYell
 
@@ -13,8 +10,10 @@ let yell = processManager.processes.interface.canYell
 listeners.attemptLogin = function(newData) {
     console.log(newData)
 
-    if (newData.username == "user1" && newData.password == "password1") {
-        yell.userAuthenticated({ username:"user1" })
+    if (passwordManager.checkUsernameAndPassword({ username: newData.username, password: newData.password })) {
+        yell.userAuthenticated({ username: newData.username })
+    } else {
+        yell.userAuthenticationFailed({ username: newData.username })
     }
 }
 

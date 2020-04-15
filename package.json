@@ -2,7 +2,7 @@
     "name": "beatle_runtime",
     "version": "1.0.0",
     "description": "",
-    "centralServerPort": 3000,
+    "centralServerPort": 3001,
     "main": "control_center/main.js",
     "scripts": {
         "start": "npx nodemon control_center/main.js",
@@ -28,6 +28,7 @@
         "keen-ui": "^1.2.0",
         "mathjs": "^6.2.3",
         "nodemon": "^2.0.2",
+        "phidget22": "^2.6.4",
         "serve": "^11.2.0",
         "socket.io": "^2.3.0",
         "socket.io-client": "^2.3.0",

@@ -17,10 +17,6 @@
             <column position=fixed left=0 bottom=0 width=100vw padding=1rem align-h=left color="white" :background-color='$root.systemData.status=="disarmed"?"var(--blue-400)" : "var(--red-500)" '  >
                 status: {{$root.systemData.status}}
             </column>
-            
-            <ui-button class="logout-button" @click="onLogout">
-                Logout
-            </ui-button>
         </div>
     </div>
 </template>
@@ -30,6 +26,7 @@
 import Nav from '@/components/Nav.vue'
 import router from "./router"
 import Login from "@/views/Login.vue"
+import LogoutButton from "@/components/LogoutButton.vue"
 
 export default {
     name: 'App',
@@ -37,13 +34,8 @@ export default {
     components: {
         Nav,
         Login,
+        LogoutButton,
     },
-    methods: {
-        onLogout() {
-            // FIXME: tell backend too
-            $root.loggedIn = false
-        }
-    }
 }
 </script>
 
@@ -70,6 +62,11 @@ body {
     text-align: center;
 }
 
+// all ui buttons should appear clickable
+.ui-button {
+    cursor: pointer;
+}
+
 .fade-enter-active,
 .fade-leave-active {
     transition-duration: 0.3s;
@@ -80,12 +77,6 @@ body {
 .fade-enter,
 .fade-leave-active {
     opacity: 0
-}
-
-.logout-button {
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
 }
 
 // add vars for material shadows

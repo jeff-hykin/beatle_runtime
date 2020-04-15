@@ -1,13 +1,13 @@
 <template>
     <column>
         <!-- Icon/Title -->
-        <row class=title-section align-v=center width=100vw padding=2rem :wrap=true>
+        <column class=title-section align-v=center width=100vw padding=2rem :wrap=true>
             <img class=our-logo src="../assets/logo.png" alt="logo">
             <div style='min-width: 0.5rem; width: 3rem;'></div>
-            <column align-h=left>
+            <column align-h=center padding-top=1rem>
                 <h1 class=our-title>Beatle Control Center</h1>
             </column>
-        </row>
+        </column>
         <!-- Projects -->
         <row class=content-container width=100vw margin=2rem>
             <ui-button color='primary' @click="toggleStatus">
