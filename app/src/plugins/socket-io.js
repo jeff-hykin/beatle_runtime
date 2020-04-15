@@ -10,7 +10,7 @@ console.log(`window.socket is:`, window.socket)
 socket.on("connect", () => {
     console.log("socket is connected")
     // TODO: show the user this status somehow
-    window.$root.connectedToBackend = true
+    window.$root && (window.$root.connectedToBackend = true)
     // ask the backend for the most-up-to-date info
     socket.emit('systemData.requestSystemData', {})
 })
