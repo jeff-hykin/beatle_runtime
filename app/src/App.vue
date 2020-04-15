@@ -32,6 +32,7 @@ import './plugins/keen-ui'
 import './plugins/vue-toasted'
 import './plugins/window-listener'
 import './plugins/simple-functional-components'
+import socket from "./plugins/socket-io"
 import { Router } from './plugins/vue-router'
 
 // routes
@@ -46,6 +47,28 @@ let App = {
     name: 'App',
     components: { App },
     router: new Router({ routes }),
+    data: () => ({
+        systemData: {
+            status: "unknown"
+        },
+        connectedToBackend: false,
+        changesAreUnconfirmed: true,
+    }),
+    mounted() {
+        window.systemData = this.$data.systemData
+        window.$root = this
+    },
+    watch: {
+        systemData: {
+            deep: true,
+            handler(value, oldValue) {
+                console.log(`frontend systemData value is:`,value)
+                // everytime something (anything) changes any part of a system value, tell the backend about it
+                socket.emit('systemData.dataShouldChange', this.systemData)
+                this.changesAreUnconfirmed = true
+            },
+        }
+    }
 }
 // create and attach app
 setTimeout(()=>(new (Vue.extend(App))).$mount('#app'),0)
