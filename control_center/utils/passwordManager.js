@@ -58,11 +58,10 @@ function checkUsernameAndPassword({ username, password }) {
     let privateData = JSON.parse(fs.readFileSync(pathFor.privateSystemData))
     // ensure users exists
     privateData.users || (privateData.users = {})
+    let savedData = privateData.users[username]
     // check the data
-    if (privateData[username] instanceof Object) {
-        if (privateData[username] == checkPassword(privateData[username], password)) {
-            return true
-        }
+    if (savedData instanceof Object) {
+        return checkPassword(savedData, password)
     }
     return false
 }
