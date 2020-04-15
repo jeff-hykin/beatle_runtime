@@ -1,5 +1,5 @@
 let processManager = require("../processManager")
-let systemData = require(global.pathFor.systemDataStoragePath)
+let systemData = require(global.pathFor.systemDataStorage)
 let fs = require("fs")
 
 // import the official listener-names for this process
@@ -18,7 +18,7 @@ listeners.dataShouldChange = (newData) => {
         console.log("sending dataDidCha    nge")
         yell.dataDidChange(systemData)
         // save changes to permanent storage
-        fs.writeFile(global.pathFor.systemDataStoragePath, dataAfterChange, (...args)=>{
+        fs.writeFile(global.pathFor.systemDataStorage, dataAfterChange, (...args)=>{
             console.log(`file write args is:`,args)
         })
     }

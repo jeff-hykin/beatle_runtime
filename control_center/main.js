@@ -3,13 +3,7 @@ let http = require("http").createServer(app)
 let io = require("socket.io")(http)
 
 // a single location for all javascript paths to prevent future breaking changes
-global.pathFor = {
-    package: __dirname + "/../package.json",
-    processFolder: __dirname + "/",
-    systemDataStoragePath: __dirname + "/systemData.json",
-    homepage: __dirname + "/index.html",
-    processManager: __dirname + "/processManager.js",
-}
+global.pathFor = require("../pathFor")
 
 let processManager = require(global.pathFor.processManager)
 let packageJson = require(global.pathFor.package)

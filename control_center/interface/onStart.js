@@ -1,11 +1,8 @@
 let processManager = require("../processManager")
-let Interface = require(global.pathFor.systemDataStoragePath)
+let Interface = require(global.pathFor.systemDataStorage)
 let fs = require("fs")
 
 // import the official listener-names for this process
-
-
-
 let listeners = processManager.processes.interface.listensFor
 let yell = processManager.processes.interface.canYell
 

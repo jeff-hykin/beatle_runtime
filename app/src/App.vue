@@ -1,7 +1,17 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+    <div id="app">
+        <column v-if="loading">
+            Loading
+        </column>
+        <column v-if="!loading">
+            <column v-if="!needsSetup">
+                <router-view></router-view>
+            </column>
+            <column v-if="needsSetup">
+                Lets get you setup
+            </column>
+        </column>
+    </div>
 </template>
 
 <script>
@@ -23,6 +33,9 @@ import { webFrame } from 'electron'
 webFrame.setVisualZoomLevelLimits(1, 3)
 
 
+// paths
+window.pathFor = require("../../pathFor")
+
 // 
 // Plugins
 // 
@@ -31,6 +44,7 @@ import './plugins/good-vue'
 import './plugins/keen-ui'
 import './plugins/vue-toasted'
 import './plugins/window-listener'
+import './plugins/custom-require'
 import './plugins/simple-functional-components'
 import socket from "./plugins/socket-io"
 import { Router } from './plugins/vue-router'
@@ -38,7 +52,13 @@ import { Router } from './plugins/vue-router'
 // routes
 import routes from './routes'
 
-let systemData = require("../../control_center/systemData.json")
+// let path = require("path")
+// let resolved = path.relative(__dirname, pathFor.passwordManager)
+// console.log(`resolved is:`,resolved)
+
+// utils
+let fs = require('fs')
+let passwordManager = customRequire(pathFor.passwordManager)
 
 // 
 // App
@@ -53,10 +73,15 @@ let App = {
         },
         connectedToBackend: false,
         changesAreUnconfirmed: true,
+        loading: true,
+        needsSetup: null,
     }),
     mounted() {
         window.systemData = this.$data.systemData
         window.$root = this
+        this.needsSetup = passwordManager.doesAtLeastOneUserExist()
+        // finished loading
+        this.loading = false
     },
     watch: {
         systemData: {
