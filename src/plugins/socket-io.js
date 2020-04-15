@@ -2,7 +2,7 @@ import io from "socket.io-client"
 let packageJson = require("../../package.json")
 
 console.log(`packageJson.centralServerPort is:`,packageJson.centralServerPort)
-window.socket = io(`http://localhost:${packageJson.centralServerPort}`)
+window.socket = io(`http://${location.hostname}:${packageJson.centralServerPort}`)
 
 console.log(`window.socket is:`, window.socket)
 
@@ -46,8 +46,11 @@ socket.on("systemData.providingSystemData", (backendSystemData) => {
 socket.on("interface.userAuthenticated", function(){
     console.log("authenicated")
     $root.loggedIn = true
-})  
+})
 
-
+socket.on("interface.userAuthenticationFailed", function(){
+    console.log("failed authenication")
+    $toasted.show(`Authentication Failed: invalid username or password`, {keepOnHover:true}).goAway(6500)
+})
 
 export default socket
