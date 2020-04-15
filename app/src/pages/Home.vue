@@ -13,8 +13,12 @@
         <!-- Settings panel gost -->
         <div class=panel-ghost ></div>
         <!-- Main Section -->
-        <div class=main-area>
-        </div>
+        <column class=main-area>
+            <h4> To connect to the Beatle from any device </h4>
+            <br /><br /> 1. Make sure the Beatle (this computer) is connected to WiFi
+            <br /><br /> 2. Make sure the other device is connected to the same WiFi
+            <br /><br /> 3. Go to {{$root.localIpAddress}} in the web browser of the other device
+        </column>
     </row>
 </template>
 <script>
@@ -56,8 +60,6 @@ export default {
         windowListeners$
     }),
     mounted() {
-        // debugging
-        window.main = this 
         // connect the settings panel
         this.settings = settingsPanelComponent.settings
     },
@@ -108,11 +110,6 @@ export default {
         .main-area {
             height: 100vh;
             flex-grow: 1;
-            justify-content: space-between;
-            align-items: flex-start;
-            display: flex;
-            flex-direction: column;
-            flex-wrap: nowrap;
             margin: 0;
         }
     }

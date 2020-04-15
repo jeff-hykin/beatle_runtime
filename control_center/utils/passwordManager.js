@@ -73,8 +73,17 @@ function doesAtLeastOneUserExist() {
     return validUsers.length > 0
 }
 
+function resetAllUsers() {
+    let privateData = JSON.parse(fs.readFileSync(pathFor.privateSystemData))
+    // ensure users exists
+    privateData.users = {}
+    // save them to the file
+    fs.writeFileSync(pathFor.privateSystemData, JSON.stringify(privateData))
+}
+
 module.exports = {
     doesAtLeastOneUserExist,
     setUsernameAndPassword,
     checkUsernameAndPassword,
+    resetAllUsers,
 }

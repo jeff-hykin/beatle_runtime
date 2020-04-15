@@ -4,23 +4,28 @@
         <div class=settings-panel-name>Settings Panel</div>
         
         <!-- Show Help -->
-        <row>
+        <!-- <row>
             <ui-button size=large style='background-color: var(--gray); color: white' @click="showHelp('modal1')">
                 Show Help
             </ui-button>
         </row>
         <ui-modal ref="modal1" title="Help / Show Controls" transition="scale-up">
             <helpMenu />
-        </ui-modal>
+        </ui-modal> -->
         
+        <row>
+            <ui-button size=large @click="confirmUserReset" style='background-color: var(--red); color: white'>
+                Reset All Users
+            </ui-button>
+        </row>
         
         <!-- General Settings -->
-        <br /><br />
+        <!-- <br /><br />
         <h5>General Settings</h5>
         <column class="settings-bubble bubble" shadow="1" align-h="left">
             <ui-textbox label="Pick a Number" v-model="settings.numberSetting" />
             <br />
-        </column>
+        </column> -->
         
     </column>
 </template>
@@ -66,6 +71,16 @@ export default {
         },
     },
     methods: {
+        confirmUserReset(ref) {
+            $root.confirmDialogue({ 
+                title: "Confirm User Reset",
+                message: "Are you sure you want to remove all users?",
+                action: ()=>{
+                    passwordManager.resetAllUsers()
+                    $root.needsSetup = true
+                },
+            })
+        },
         showHelp(ref) {
             this.$refs[ref].open()
             window.document.body.appendChild(this.$refs[ref].$el)

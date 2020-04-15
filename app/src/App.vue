@@ -1,14 +1,28 @@
 <template>
     <div id="app">
-        <column v-if="loading">
-            Loading
+        <!-- loader -->
+        <column v-if='loading' height=100vh width=100vw position=fixed>
+            <ui-progress-circular color="primary" />
         </column>
+        <!-- main content -->
         <column v-if="!loading">
             <column v-if="!needsSetup">
-                <router-view></router-view>
+                <transition name="fade" mode="out-in" >
+                    <router-view></router-view>
+                </transition>
+                <ui-confirm
+                    ref="confirmationBox"
+                    :title="confirmationBox.title"
+
+                    @confirm="confirmationBox.action"
+                    >
+                    {{confirmationBox.message}}
+                </ui-confirm>
             </column>
-            <column v-if="needsSetup">
-                Lets get you setup
+            <column v-if="needsSetup"  >
+                <transition name="fade" mode="out-in" >
+                    <setup />
+                </transition>
             </column>
         </column>
     </div>
@@ -33,8 +47,13 @@ import { webFrame } from 'electron'
 webFrame.setVisualZoomLevelLimits(1, 3)
 
 
+// utils 
+const { lookup } = require('dns').promises
+const { hostname } = require('os')
+
 // paths
 window.pathFor = require("../../pathFor")
+window.passwordManager = customRequire(pathFor.passwordManager)
 
 // 
 // Plugins
@@ -52,20 +71,15 @@ import { Router } from './plugins/vue-router'
 // routes
 import routes from './routes'
 
-// let path = require("path")
-// let resolved = path.relative(__dirname, pathFor.passwordManager)
-// console.log(`resolved is:`,resolved)
-
-// utils
-let fs = require('fs')
-let passwordManager = customRequire(pathFor.passwordManager)
+// components
+import setup from './components/setup'
 
 // 
 // App
 // 
 let App = {
     name: 'App',
-    components: { App },
+    components: { App, setup },
     router: new Router({ routes }),
     data: () => ({
         systemData: {
@@ -75,11 +89,14 @@ let App = {
         changesAreUnconfirmed: true,
         loading: true,
         needsSetup: null,
+        localIpAddress: null,
+        confirmationBox: {},
     }),
-    mounted() {
+    async mounted() {
         window.systemData = this.$data.systemData
         window.$root = this
-        this.needsSetup = passwordManager.doesAtLeastOneUserExist()
+        this.needsSetup = !passwordManager.doesAtLeastOneUserExist()
+        this.localIpAddress = (await lookup(hostname(), {})).address
         // finished loading
         this.loading = false
     },
@@ -93,6 +110,14 @@ let App = {
                 this.changesAreUnconfirmed = true
             },
         }
+    },
+    methods: {
+        confirmDialogue({title, action, message}) {
+            // set everything
+            this.confirmationBox = { title, action, message }
+            // then display
+            this.$refs.confirmationBox.open()
+        }
     }
 }
 // create and attach app
@@ -101,6 +126,11 @@ export default App
 </script>
 
 <style lang='scss'>
+
+.ui-button {
+    cursor: pointer;
+}
+
 :root {
     --blue: #007bff;
     --indigo: #6610f2;
@@ -147,6 +177,18 @@ export default App
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition-duration: 0.3s;
+    transition-property: opacity;
+    transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0
 }
 
 </style>

@@ -64,6 +64,11 @@ body {
     text-align: center;
 }
 
+// all ui buttons should appear clickable
+.ui-button {
+    cursor: pointer;
+}
+
 .fade-enter-active,
 .fade-leave-active {
     transition-duration: 0.3s;
@@ -74,12 +79,6 @@ body {
 .fade-enter,
 .fade-leave-active {
     opacity: 0
-}
-
-.logout-button {
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
 }
 
 // add vars for material shadows
