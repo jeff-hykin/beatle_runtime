@@ -29,5 +29,17 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ "./views/Debug.vue"),
     },
+
+    {
+    path: "/gallery",
+    name: "gallery",
+      // route level code-splitting
+      // this generates a separate chunk (help.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ "./views/Gallery.vue"),
+    },
+
+
+
   ]
 })

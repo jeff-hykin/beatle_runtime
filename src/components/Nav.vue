@@ -33,6 +33,11 @@ export default {
                 name: 'Debug',
                 location: '/debug'
             },
+
+            {
+                name: 'Gallery',
+                location: '/gallery'
+            },
         ]
     })
 }
