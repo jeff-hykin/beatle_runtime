@@ -36,3 +36,22 @@ C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64
 C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
 C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
 C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe.config
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.pdb
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.dll
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.dll
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.xml
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.xml
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csprojAssemblyReference.cache
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.baml
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.g.cs
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\App.g.cs
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect_MarkupCompile.cache
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.g.resources
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Microsoft.Samples.Kinect.Beatle_Defense_Kinect.Properties.Resources.resources
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.GenerateResource.cache
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CoreCompileInputs.cache
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
+C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb

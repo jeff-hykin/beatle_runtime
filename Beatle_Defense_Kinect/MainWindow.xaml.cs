@@ -44,7 +44,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// Text layout offset in X axis
         /// </summary>
         private const float TextLayoutOffsetX = -0.1f;
-        
+
         /// <summary>
         /// Text layout offset in Y axis
         /// </summary>
@@ -95,15 +95,15 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         private KinectSensor kinectSensor = null;
 
-                    /// <summary>
-                    /// Reader for color frames
-                    /// </summary>
-                    private ColorFrameReader colorFrameReader = null;
+        /// <summary>
+        /// Reader for color frames
+        /// </summary>
+        private ColorFrameReader colorFrameReader = null;
 
-                    /// <summary>
-                    /// Bitmap to display
-                    /// </summary>
-                    private WriteableBitmap colorBitmap = null;
+        /// <summary>
+        /// Bitmap to display
+        /// </summary>
+        private WriteableBitmap colorBitmap = null;
 
         /// <summary>
         /// Coordinate mapper to map one type of point to another
@@ -124,6 +124,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// definition of bones
         /// </summary>
         private List<Tuple<JointType, JointType>> bones;
+        private List<JointType> usedJoints;
 
         /// <summary>
         /// Number of bodies tracked
@@ -183,7 +184,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         private readonly float body_detection_search_time = 5.0f;
         private float body_cooldown_time_seconds;
         private bool body_detected = false;
-        
+
         //For Room Search Function - Will pan left of center first, before panning right of center
         private Boolean done_searching_left_side = false;
 
@@ -195,17 +196,17 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
 
-                    // open the reader for the color frames
-                    this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
+            // open the reader for the color frames
+            this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
 
-                    // wire handler for frame arrival
-                    this.colorFrameReader.FrameArrived += this.Reader_ColorFrameArrived;
+            // wire handler for frame arrival
+            this.colorFrameReader.FrameArrived += this.Reader_ColorFrameArrived;
 
-                    // create the colorFrameDescription from the ColorFrameSource using Bgra format
-                    FrameDescription colorFrameDescription = this.kinectSensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Bgra);
+            // create the colorFrameDescription from the ColorFrameSource using Bgra format
+            FrameDescription colorFrameDescription = this.kinectSensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Bgra);
 
-                    // create the bitmap to display
-                    this.colorBitmap = new WriteableBitmap(colorFrameDescription.Width, colorFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
+            // create the bitmap to display
+            this.colorBitmap = new WriteableBitmap(colorFrameDescription.Width, colorFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
 
 
             // get the coordinate mapper
@@ -227,6 +228,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
             // a bone defined as a line between two joints
             this.bones = new List<Tuple<JointType, JointType>>();
+            this.usedJoints = new List<JointType>();
 
             // Torso
             this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
@@ -235,32 +237,45 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
+            this.usedJoints.Add(JointType.Head);
+            this.usedJoints.Add(JointType.Neck);
+            this.usedJoints.Add(JointType.SpineShoulder);
+            this.usedJoints.Add(JointType.SpineMid);
+            this.usedJoints.Add(JointType.SpineBase);
+            this.usedJoints.Add(JointType.ShoulderRight);
+            this.usedJoints.Add(JointType.ShoulderLeft);
 
             // Right Arm
             this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
+            this.usedJoints.Add(JointType.ElbowRight);
+            this.usedJoints.Add(JointType.WristRight);
+            this.usedJoints.Add(JointType.HandRight);
 
             // Left Arm
             this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
+            this.usedJoints.Add(JointType.ElbowLeft);
+            this.usedJoints.Add(JointType.WristLeft);
+            this.usedJoints.Add(JointType.HandLeft);
 
             // Right Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
 
             // Left Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
 
             // wire handler for body frame arrival
             this.bodyFrameReader.FrameArrived += this.Reader_BodyFrameArrived;
@@ -353,7 +368,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 this.bodyFrameReader.FrameArrived += this.Reader_BodyFrameArrived;
             }
 
-            if(use_pan_tilt)
+            if (use_pan_tilt)
             {
                 //Servo Stuff
                 serialPort = new System.IO.Ports.SerialPort();
@@ -402,12 +417,12 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 this.bodyFrameReader = null;
             }
 
-                            if (this.colorFrameReader != null)
-                            {
-                                // ColorFrameReder is IDisposable
-                                this.colorFrameReader.Dispose();
-                                this.colorFrameReader = null;
-                            }
+            if (this.colorFrameReader != null)
+            {
+                // ColorFrameReder is IDisposable
+                this.colorFrameReader.Dispose();
+                this.colorFrameReader = null;
+            }
 
             if (this.kinectSensor != null)
             {
@@ -424,7 +439,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     for (int i = 0; i < 32; i++)
                     {
                         string command = "#" + i + "P0\r";
-                        serialPort.Write(command);
+                        //serialPort.Write(command);
                     }
                     serialPort.Close();
                 }
@@ -454,7 +469,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     using (DrawingContext dc = this.drawingGroup.Open())
                     {
                         // draw the dark background
-                        dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+                        //dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+                        dc.DrawImage(this.colorBitmap, this.displayRect);
 
                         //Used for counting bodies observed
                         bodies_active.Clear();
@@ -490,16 +506,19 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                                 foreach (JointType jointType in joints.Keys)
                                 {
-                                    // sometimes the depth(Z) of an inferred joint may show as negative
-                                    // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
-                                    CameraSpacePoint position = joints[jointType].Position;
-                                    if (position.Z < 0)
+                                    if (usedJoints.Contains(jointType))
                                     {
-                                        position.Z = InferredZPositionClamp;
-                                    }
+                                        // sometimes the depth(Z) of an inferred joint may show as negative
+                                        // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
+                                        CameraSpacePoint position = joints[jointType].Position;
+                                        if (position.Z < 0)
+                                        {
+                                            position.Z = InferredZPositionClamp;
+                                        }
 
-                                    DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
-                                    jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+                                        DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
+                                        jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+                                    }
                                 }
 
                                 this.DrawBody(joints, jointPoints, dc, drawPen);
@@ -509,13 +528,13 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                             {
                                 targetIndex = i;
                             }
-                        } 
-                
+                        }
+
                         //Display the Number of bodies tracked currently
                         dc.DrawText(
                                         new FormattedText(
-                                        ("Number of Bodies Detected = " + bodies_active.Count + 
-                                        "\nTargetIndex = " + targetIndex + 
+                                        ("Number of Bodies Detected = " + bodies_active.Count +
+                                        "\nTargetIndex = " + targetIndex +
                                         "\nTarget X-Angle from Camera : " + Find_Angle_Of_Face(targetIndex).X + "°\n" +
                                         "Target Y-Angle from Camera : " + Find_Angle_Of_Face(targetIndex).Y + "°\n"),
                                         CultureInfo.GetCultureInfo("en-us"),
@@ -523,7 +542,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                                         new Typeface("Georgia"),
                                         DrawTextFontSize,
                                         Brushes.White),
-                                        new Point(displayWidth/2 + 90, displayHeight - 50)
+                                        new Point(displayWidth / 2 + 90, displayHeight - 50)
                                     );
 
                         //Servo Tracking
@@ -544,7 +563,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                                 float amount = movement_amount;
                                 if (Find_Angle_Of_Face(targetIndex).X < 0) amount *= -1;
 
-                                CommandServo(1, (float)(current_x_degrees + 0.1f*amount), 100.0f);
+                                CommandServo(1, (float)(current_x_degrees + 0.1f * amount), 100.0f);
                             }
 
                             //If no bodies tracked for a LONG time then should search room.
@@ -620,22 +639,25 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             // Draw the joints
             foreach (JointType jointType in joints.Keys)
             {
-                Brush drawBrush = null;
-
-                TrackingState trackingState = joints[jointType].TrackingState;
-
-                if (trackingState == TrackingState.Tracked)
+                if (usedJoints.Contains(jointType))
                 {
-                    drawBrush = this.trackedJointBrush;
-                }
-                else if (trackingState == TrackingState.Inferred)
-                {
-                    drawBrush = this.inferredJointBrush;
-                }
+                    Brush drawBrush = null;
 
-                if (drawBrush != null)
-                {
-                    drawingContext.DrawEllipse(drawBrush, null, jointPoints[jointType], JointThickness, JointThickness);
+                    TrackingState trackingState = joints[jointType].TrackingState;
+
+                    if (trackingState == TrackingState.Tracked)
+                    {
+                        drawBrush = this.trackedJointBrush;
+                    }
+                    else if (trackingState == TrackingState.Inferred)
+                    {
+                        drawBrush = this.inferredJointBrush;
+                    }
+
+                    if (drawBrush != null)
+                    {
+                        drawingContext.DrawEllipse(drawBrush, null, jointPoints[jointType], JointThickness, JointThickness);
+                    }
                 }
             }
         }
@@ -787,7 +809,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 faceTextLayout.X = depthSpacePoint.X;
                 faceTextLayout.Y = depthSpacePoint.Y;
 
-                isLayoutValid = true;                
+                isLayoutValid = true;
             }
             return isLayoutValid;
         }
@@ -890,7 +912,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                 int pulse_width = DegreeToPulseWidth(desired_degrees);
                 string command = "#" + servo_num + "P" + pulse_width + "S" + speed + "\r";
-                serialPort.Write(command);
+                //serialPort.Write(command);
             }
         }
 
@@ -898,7 +920,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         {
             if (use_pan_tilt)
             {
-                if(bodies_active.Count <= 0)
+                if (bodies_active.Count <= 0)
                 {
                     float amount = movement_amount;
                     if (!done_searching_left_side && current_y_degrees < 90.0f)
@@ -916,14 +938,14 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         CommandServo(0, 0, 250.0f);
                         done_searching_left_side = false;
                     }
-                }                
+                }
             }
         }
 
         public void MotionDetected()
         {
             //Reset memory
-            if(motion_cooldown_timer != null && motion_cooldown_timer.Enabled == true)
+            if (motion_cooldown_timer != null && motion_cooldown_timer.Enabled == true)
             {
                 motion_cooldown_timer.Stop();
                 motion_cooldown_timer.Dispose();
@@ -947,7 +969,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         private void Motion_Cooldown_Countdown(Object source, ElapsedEventArgs e)//Will be called every second
         {
-            if(!body_detected)
+            if (!body_detected)
             {
                 if (motion_cooldown_time_seconds > 0)
                 {
