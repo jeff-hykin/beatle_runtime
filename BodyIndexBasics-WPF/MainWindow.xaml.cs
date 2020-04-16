@@ -7,6 +7,7 @@
 namespace Microsoft.Samples.Kinect.BodyIndexBasics
 {
     using System;
+    using System.Drawing;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
