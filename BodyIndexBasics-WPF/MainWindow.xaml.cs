@@ -16,12 +16,19 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using AForge.Video.FFMPEG;
 
     /// <summary>
     /// Interaction logic for the MainWindow
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        
+        /// <summary>
+        /// An object used to create a video file
+        /// </summary>
+        public VideoFileWriter VideoWriter = new VideoFileWriter();
+        
         /// <summary>
         /// Size of the RGB pixel in the bitmap
         /// </summary>
@@ -71,7 +78,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         public MainWindow()
         {
             this.kinectSensor = KinectSensor.GetDefault();
-
+            
+            
             
             
             // 
@@ -81,15 +89,22 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // open the reader for the depth frames
             this.bodyIndexFrameReader = this.kinectSensor.BodyIndexFrameSource.OpenReader();
             // attach the callback handler (via +=) that will be called on every frame arrival
-            this.bodyIndexFrameReader.FrameArrived += this.bodyIndexReader_FrameArrived;
+            this.bodyIndexFrameReader.FrameArrived += this.bodyIndexReader_onFrameArrived;
             this.bodyIndexFrameDescription = this.kinectSensor.BodyIndexFrameSource.FrameDescription;
 
             // allocate space to put the pixels being converted
             this.bodyIndexPixels = new uint[this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height];
             // create the bitmap to display
             this.bodyIndexBitmap = new WriteableBitmap(this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
-
-
+            
+            
+            // 
+            // setup saving data to video file
+            // 
+            
+            // create new video file with the same dimensions as the incoming frames
+            any frameRate = 25; // fps
+            this.VideoWriter.Open("test.avi", this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, frameRate, VideoCodec.MPEG4);
 
             // open the sensor
             this.kinectSensor.Open();
@@ -127,7 +142,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             if (this.bodyIndexFrameReader != null)
             {
                 // remove the event handler
-                this.bodyIndexFrameReader.FrameArrived -= this.bodyIndexReader_FrameArrived;
+                this.bodyIndexFrameReader.FrameArrived -= this.bodyIndexReader_onFrameArrived;
 
                 // BodyIndexFrameReder is IDisposable
                 this.bodyIndexFrameReader.Dispose();
@@ -139,6 +154,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 this.kinectSensor.Close();
                 this.kinectSensor = null;
             }
+            
+            // clean up the video writer
+            this.VideoWriter.Close();
         }
 
         /// <summary>
@@ -173,10 +191,11 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void bodyIndexReader_FrameArrived(object sender, BodyIndexFrameArrivedEventArgs e)
+        private void bodyIndexReader_onFrameArrived(object sender, BodyIndexFrameArrivedEventArgs e)
         {
             bool bodyIndexFrameProcessed = false;
-
+            
+            // get the new frame
             using (BodyIndexFrame bodyIndexFrame = e.FrameReference.AcquireFrame())
             {
                 if (bodyIndexFrame != null)
@@ -185,20 +204,35 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     // the underlying buffer
                     using (Microsoft.Kinect.KinectBuffer bodyIndexBuffer = bodyIndexFrame.LockImageBuffer())
                     {
+                        any widthMatches = this.bodyIndexFrameDescription.Width == this.bodyIndexBitmap.PixelWidth;
+                        any heightMatches = this.bodyIndexFrameDescription.Height == this.bodyIndexBitmap.PixelHeight;
+                        any sizeMatches = (this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height) == bodyIndexBuffer.Size;
                         // verify data and write the color data to the display bitmap
-                        if (((this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height) == bodyIndexBuffer.Size) &&
-                            (this.bodyIndexFrameDescription.Width == this.bodyIndexBitmap.PixelWidth) && (this.bodyIndexFrameDescription.Height == this.bodyIndexBitmap.PixelHeight))
+                        if (sizeMatches && heightMatches && widthMatches)
                         {
+                            // this is inside its own function only because it has to be marked as "unsafe"
+                            // it changes the `this.bodyIndexPixels` which is used later
                             this.ProcessBodyIndexFrameData(bodyIndexBuffer.UnderlyingBuffer, bodyIndexBuffer.Size);
+                            
+                            // set this to true because we want to finish using (dispose of) the bodyIndexBuffer 
+                            // to free up memory before we convert the indexes into a bitmap
                             bodyIndexFrameProcessed = true;
                         }
                     }
                 }
             }
-
+            
+            // if something changed, then save it to the bitmap variable
             if (bodyIndexFrameProcessed)
             {
-                this.RenderBodyIndexPixels();
+                this.bodyIndexBitmap.WritePixels(
+                    new Int32Rect(0, 0, this.bodyIndexBitmap.PixelWidth, this.bodyIndexBitmap.PixelHeight),
+                    this.bodyIndexPixels,
+                    this.bodyIndexBitmap.PixelWidth * (int)BytesPerPixel,
+                    0
+                );
+                // add a frame to the video
+                this.VideoWriter.WriteVideoFrame(this.bodyIndexBitmap)
             }
         }
 
@@ -232,19 +266,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     this.bodyIndexPixels[i] = 0x00000000;
                 }
             }
-        }
-
-        /// <summary>
-        /// Renders color pixels into the writeableBitmap.
-        /// </summary>
-        private void RenderBodyIndexPixels()
-        {
-            this.bodyIndexBitmap.WritePixels(
-                new Int32Rect(0, 0, this.bodyIndexBitmap.PixelWidth, this.bodyIndexBitmap.PixelHeight),
-                this.bodyIndexPixels,
-                this.bodyIndexBitmap.PixelWidth * (int)BytesPerPixel,
-                0
-            );
         }
     }
 }
