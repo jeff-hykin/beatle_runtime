@@ -166,7 +166,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <param name="e">event arguments</param>
         private void ScreenshotButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("this.bodyIndexBitmap is", this.bodyIndexBitmap)
             if (this.bodyIndexBitmap != null)
             {
                 // create a png bitmap encoder which knows how to save a .png file
@@ -232,7 +231,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     0
                 );
                 // add a frame to the video
-                this.VideoWriter.WriteVideoFrame(this.bodyIndexBitmap)
+                this.VideoWriter.WriteVideoFrame(this.bodyIndexBitmap);
             }
         }
 
