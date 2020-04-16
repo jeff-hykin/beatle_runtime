@@ -66,41 +66,33 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         private uint[] bodyIndexPixels = null;
 
         /// <summary>
-        /// Current status text to display
-        /// </summary>
-        private string statusText = null;
-
-        /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
         public MainWindow()
         {
-            // get the kinectSensor object
             this.kinectSensor = KinectSensor.GetDefault();
 
+            
+            
+            // 
+            // body index frame reader
+            // 
+            
             // open the reader for the depth frames
             this.bodyIndexFrameReader = this.kinectSensor.BodyIndexFrameSource.OpenReader();
-
-            // wire handler for frame arrival
-            this.bodyIndexFrameReader.FrameArrived += this.Reader_FrameArrived;
-
+            // attach the callback handler (via +=) that will be called on every frame arrival
+            this.bodyIndexFrameReader.FrameArrived += this.bodyIndexReader_FrameArrived;
             this.bodyIndexFrameDescription = this.kinectSensor.BodyIndexFrameSource.FrameDescription;
 
             // allocate space to put the pixels being converted
             this.bodyIndexPixels = new uint[this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height];
-
             // create the bitmap to display
             this.bodyIndexBitmap = new WriteableBitmap(this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
 
-            // set IsAvailableChanged event notifier
-            this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
+
 
             // open the sensor
             this.kinectSensor.Open();
-
-            // set the status text
-            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
-                                                            : Properties.Resources.NoSensorStatusText;
 
             // use the window object as the view model in this simple example
             this.DataContext = this;
@@ -126,31 +118,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         }
 
         /// <summary>
-        /// Gets or sets the current status text to display
-        /// </summary>
-        public string StatusText
-        {
-            get
-            {
-                return this.statusText;
-            }
-
-            set
-            {
-                if (this.statusText != value)
-                {
-                    this.statusText = value;
-
-                    // notify any bound elements that the text has changed
-                    if (this.PropertyChanged != null)
-                    {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("StatusText"));
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Execute shutdown tasks
         /// </summary>
         /// <param name="sender">object sending the event</param>
@@ -160,7 +127,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             if (this.bodyIndexFrameReader != null)
             {
                 // remove the event handler
-                this.bodyIndexFrameReader.FrameArrived -= this.Reader_FrameArrived;
+                this.bodyIndexFrameReader.FrameArrived -= this.bodyIndexReader_FrameArrived;
 
                 // BodyIndexFrameReder is IDisposable
                 this.bodyIndexFrameReader.Dispose();
@@ -203,12 +170,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     {
                         encoder.Save(fs);
                     }
-
-                    this.StatusText = string.Format(CultureInfo.CurrentCulture, Properties.Resources.SavedScreenshotStatusTextFormat, path);
                 }
                 catch (IOException)
                 {
-                    this.StatusText = string.Format(CultureInfo.CurrentCulture, Properties.Resources.FailedScreenshotStatusTextFormat, path);
                 }
             }
         }
@@ -218,7 +182,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void Reader_FrameArrived(object sender, BodyIndexFrameArrivedEventArgs e)
+        private void bodyIndexReader_FrameArrived(object sender, BodyIndexFrameArrivedEventArgs e)
         {
             bool bodyIndexFrameProcessed = false;
 
@@ -288,19 +252,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 new Int32Rect(0, 0, this.bodyIndexBitmap.PixelWidth, this.bodyIndexBitmap.PixelHeight),
                 this.bodyIndexPixels,
                 this.bodyIndexBitmap.PixelWidth * (int)BytesPerPixel,
-                0);
-        }
-
-        /// <summary>
-        /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
-        {
-            // on failure, set the status text
-            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
-                                                            : Properties.Resources.SensorNotAvailableStatusText;
+                0
+            );
         }
     }
 }
