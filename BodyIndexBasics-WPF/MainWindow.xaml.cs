@@ -232,7 +232,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     0
                 );
                 // add a frame to the video
-                this.VideoWriter.WriteVideoFrame(this.bodyIndexBitmap);
+                this.VideoWriter.WriteVideoFrame(this.BitmapFromWriteableBitmap(this.bodyIndexBitmap));
             }
         }
 
@@ -266,6 +266,19 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     this.bodyIndexPixels[i] = 0x00000000;
                 }
             }
+        }
+        
+        private System.Drawing.Bitmap BitmapFromWriteableBitmap(WriteableBitmap writeBmp)
+        {
+            System.Drawing.Bitmap bmp;
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create((BitmapSource)writeBmp));
+                enc.Save(outStream);
+                bmp = new System.Drawing.Bitmap(outStream);
+            }
+            return bmp;
         }
     }
 }
