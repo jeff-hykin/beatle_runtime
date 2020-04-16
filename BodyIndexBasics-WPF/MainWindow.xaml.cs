@@ -167,8 +167,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 }} catch (IOException) { }
             }
         }
-        
-        private void 
 
         /// <summary>
         /// Handles the body index frame data arriving from the sensor
