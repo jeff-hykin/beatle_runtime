@@ -103,7 +103,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // 
             
             // create new video file with the same dimensions as the incoming frames
-            any frameRate = 25; // fps
+            var frameRate = 25; // fps
             this.VideoWriter.Open("test.avi", this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, frameRate, VideoCodec.MPEG4);
 
             // open the sensor
@@ -203,9 +203,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     // the underlying buffer
                     using (Microsoft.Kinect.KinectBuffer bodyIndexBuffer = bodyIndexFrame.LockImageBuffer())
                     {
-                        any widthMatches = this.bodyIndexFrameDescription.Width == this.bodyIndexBitmap.PixelWidth;
-                        any heightMatches = this.bodyIndexFrameDescription.Height == this.bodyIndexBitmap.PixelHeight;
-                        any sizeMatches = (this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height) == bodyIndexBuffer.Size;
+                        var widthMatches = this.bodyIndexFrameDescription.Width == this.bodyIndexBitmap.PixelWidth;
+                        var heightMatches = this.bodyIndexFrameDescription.Height == this.bodyIndexBitmap.PixelHeight;
+                        var sizeMatches = (this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height) == bodyIndexBuffer.Size;
                         // verify data and write the color data to the display bitmap
                         if (sizeMatches && heightMatches && widthMatches)
                         {
