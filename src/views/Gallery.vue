@@ -19,14 +19,13 @@
       return {
         images: [
         {
-          title: 'A YouYube video',
           href: 'https://www.youtube.com/watch?v=hNdlUHBJDKs',
           type: 'text/html',
           youtube: 'hNdlUHBJDKs',
           poster: 'https://img.youtube.com/vi/hNdlUHBJDKs/maxresdefault.jpg'
         },
         {
-          title: 'A YouYube video 2',
+          
           href: 'https://www.youtube.com/watch?v=s5iUsaPPtnk',
           type: 'text/html',
           youtube: 's5iUsaPPtnk',
@@ -40,11 +39,12 @@
           
         },
 
-
+            'omar.jpeg',
         {
           title: 'Image',
           href: 'omar.jpeg',
           type: 'image/jpeg',
+          poster: 'omar.jpeg',  
       	}
       ],
       index: null
