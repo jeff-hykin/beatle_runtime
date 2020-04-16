@@ -42,7 +42,6 @@ namespace MultiFaceRec
         {
             InitializeComponent();
             //Load haarcascades for face detection
-            //face = new CascadeClassifier("C:\\Emgu\\emgucv-windesktop 4.2.0.3662\\opencv\\data\\haarcascades\\haarcascade_frontalface_default.xml");
             face = new CascadeClassifier(Application.StartupPath + "/opencv/data/lbpcascades/lbpcascade_frontalface.xml");
             try
             {
