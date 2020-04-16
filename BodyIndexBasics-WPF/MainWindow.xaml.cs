@@ -148,6 +148,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <param name="e">event arguments</param>
         private void ScreenshotButton_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("this.bodyIndexBitmap is", this.bodyIndexBitmap)
             if (this.bodyIndexBitmap != null)
             {
                 // create a png bitmap encoder which knows how to save a .png file
@@ -156,26 +157,18 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 // create frame from the writable bitmap and add to encoder
                 encoder.Frames.Add(BitmapFrame.Create(this.bodyIndexBitmap));
 
-                string time = System.DateTime.UtcNow.ToString("hh'-'mm'-'ss", CultureInfo.CurrentUICulture.DateTimeFormat);
-
+                string screenshotTime = System.DateTime.UtcNow.ToString("hh'-'mm'-'ss", CultureInfo.CurrentUICulture.DateTimeFormat);
                 string myPhotos = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                string whereToSaveScreenshot = Path.Combine(myPhotos, "KinectScreenshot-BodyIndex-" + screenshotTime + ".png");
 
-                string path = Path.Combine(myPhotos, "KinectScreenshot-BodyIndex-" + time + ".png");
-
-                // write the new file to disk
-                try
-                {
-                    // FileStream is IDisposable
-                    using (FileStream fs = new FileStream(path, FileMode.Create))
-                    {
-                        encoder.Save(fs);
-                    }
-                }
-                catch (IOException)
-                {
-                }
+                // save the file
+                try { using (FileStream fs = new FileStream(whereToSaveScreenshot, FileMode.Create)) {
+                    encoder.Save(fs);
+                }} catch (IOException) { }
             }
         }
+        
+        private void 
 
         /// <summary>
         /// Handles the body index frame data arriving from the sensor
