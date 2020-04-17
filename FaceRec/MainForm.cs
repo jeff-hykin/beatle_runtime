@@ -13,9 +13,9 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Face;
 using System.IO;
 using System.Diagnostics;
-using Emgu.CV.Face;
 using System.Linq;
 
 namespace MultiFaceRec
@@ -47,6 +47,7 @@ namespace MultiFaceRec
             {
                 //Load of previus trainned faces and labels for each image
                 string Labelsinfo = File.ReadAllText(Application.StartupPath + "/TrainedFaces/TrainedLabels.txt");
+                Console.WriteLine("\"" + Labelsinfo + "\"");
                 string[] Labels = Labelsinfo.Split('%');
                 NumLabels = Convert.ToInt16(Labels[0]);
                 ContTrain = NumLabels;
@@ -67,9 +68,9 @@ namespace MultiFaceRec
                         int_labels.Add(label_to_int[Labels[tf]]);
                     }
                 }
-            
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show("Nothing in binary database, please add at least a face(Simply train the prototype with the Add Face Button).", "Triained faces load", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
