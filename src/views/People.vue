@@ -36,10 +36,10 @@
   export default {
     data: function () {
       return {
-        date1: '4/20/20',
-        date2: '4/21/20',
-        date3: '4/22/20',
-        date4: '4/23  /20',
+        date1: 'HH:MM::SS MM:DD::YY',
+        date2: 'HH:MM::SS MM:DD::YY',
+        date3: 'HH:MM::SS MM:DD::YY',
+        date4: 'HH:MM::SS MM:DD::YY',
         images: [
 
             

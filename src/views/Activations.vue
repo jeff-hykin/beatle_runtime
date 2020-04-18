@@ -19,13 +19,13 @@
     data: function () {
       return {
 
-        date1: '4/20/20',
-        date2: '4/21/20',
-        date3: '4/22/20',
+        date1: 'HH:MM::SS MM:DD::YY',
+        date2: 'HH:MM::SS MM:DD::YY',
+        date3: 'HH:MM::SS MM:DD::YY',
 
         images: [
         {
-          title: '4/22/21',
+          title: 'HH:MM::SS MM:DD::YY',
           href: 'https://www.youtube.com/watch?v=hNdlUHBJDKs',
           type: 'text/html',
           youtube: 'hNdlUHBJDKs',
@@ -33,14 +33,14 @@
         },
 
         {
-          title: '4/23/20',
+          title: 'HH:MM::SS MM:DD::YY',
           href: 'funniest.mp4',
           type: 'video/mp4',
         },
 
           
         {
-          title: '4/20/21',
+          title: 'HH:MM::SS MM:DD::YY',
           href: 'omar.jpeg',
           type: 'image/jpeg',
           poster: './public/omar.jpeg',  
