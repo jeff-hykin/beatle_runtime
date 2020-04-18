@@ -204,7 +204,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         List<int> int_labels = new List<int>();
         List<string> NamePersons = new List<string>();
         int ContTrain, NumLabels, t;
-        string name, startupPath, names = null;
+        string name, startupPath, peopleDataPath, actDataPath, names = null;
         Capture grabber;
 
         /// <summary>
@@ -212,37 +212,38 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         public MainWindow()
         {
+            
+            // absolute path to start of database
+            peopleDataPath = "./people";
+            actDataPath = "./activations";
+            // cascadeclassifier is in this dir
             startupPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             face = new CascadeClassifier(startupPath + "/opencv/data/lbpcascades/lbpcascade_frontalface.xml");
 
             // SOCKET.IO
             // get full list of names from database and all facialRecTraining images for each of them
+            ContTrain = 0;
+            string[] people_names = File.ReadAllText(peopleDataPath + "/DatabaseFile.txt").Split('%');
+            if (people_names[0] == "")
+            {
+                people_names = people_names.Skip(1).ToArray();
+            }
+            foreach (string name in people_names)
+            {
 
-
-            //string Labelsinfo = File.ReadAllText(startupPath + "/TrainedFaces/TrainedLabels.txt");
-            //if (Labelsinfo != "")
-            //{
-            //    string[] Labels = Labelsinfo.Split('%');
-            //    NumLabels = Convert.ToInt16(Labels[0]);
-            //    ContTrain = NumLabels;
-            //    string LoadFaces;
-
-            //    for (int tf = 1; tf < NumLabels + 1; tf++)
-            //    {
-            //        LoadFaces = "face" + tf + ".bmp";
-            //        trainingImages.Add(new Image<Gray, byte>(startupPath + "/TrainedFaces/" + LoadFaces));
-            //        labels.Add(Labels[tf]);
-            //        if (!label_to_int.ContainsKey(Labels[tf]))
-            //        {
-            //            label_to_int.Add(Labels[tf], tf);
-            //            int_labels.Add(tf);
-            //        }
-            //        else
-            //        {
-            //            int_labels.Add(label_to_int[Labels[tf]]);
-            //        }
-            //    }
-            //}
+                label_to_int.Add(name, ContTrain);
+                string dir = peopleDataPath + "/" + name;
+                foreach (string file in Directory.EnumerateFiles(dir))
+                {
+                    if (file.Contains("FacialRecTraining"))
+                    {
+                        int_labels.Add(ContTrain);
+                        labels.Add(name);
+                        trainingImages.Add(new Image<Gray, byte>(file));
+                    }
+                }
+                ContTrain++;
+            }
 
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
@@ -363,6 +364,11 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
             // SOCKET.IO
             // add name to database file, create a new directory for this person, main image = frame, face = new facialrectraining image
+            File.AppendAllText(peopleDataPath + "/DatabaseFile.txt", "%" + name);
+            Directory.CreateDirectory(peopleDataPath + "/" + name);
+            File.WriteAllText(peopleDataPath + "/" + name + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
+            frame.Save(peopleDataPath + "/" + name + "/MainImage.png");
+            face.Convert<Bgr, byte>().Save(peopleDataPath + "/" + name + "/FacialRecTraining01.png");
         }
 
         private void add_training_face(Image<Gray, byte> face, int int_label)
@@ -372,9 +378,23 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             labels.Add(labels[int_label]);
             int_labels.Add(int_label);
 
+            string name = labels.Last();
+
             // SOCKET.IO
             // face = new facialrectraining image
-            
+            int next_img_ix = 01;
+            foreach (string file in Directory.EnumerateFiles(peopleDataPath + "/" + name))
+            {
+                if (file.Contains("FacialRecTraining"))
+                {
+                    next_img_ix++;
+                }
+            }
+            if (next_img_ix < 100)
+            {
+                string fsp = peopleDataPath + "/" + name + "/FacialRecTraining" + next_img_ix.ToString("D2") + ".png";
+                face.Convert<Bgr, byte>().Save(fsp);
+            }
         }
 
         private Rect conv_rectangle(System.Drawing.Rectangle r, int width, int height)
@@ -396,14 +416,13 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         private void face_recognition(DrawingContext dc)
         {
-            System.Windows.Media.Pen drawPen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.LightBlue, 4);
+            System.Windows.Media.Pen drawPen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.LightBlue, 3);
 
             //Get the current frame
             Image<Bgr, byte> frame = wbm_to_img(this.colorBitmap);
 
             //Face Detector
             System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(frame.Convert<Gray, byte>(), 1.2, 10, new System.Drawing.Size(10, 10));
-            List<string> predictions = new List<string>();
 
             //Action for each element detected
             foreach (System.Drawing.Rectangle f in facesDetected)
@@ -412,28 +431,32 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 dc.DrawRectangle(null, drawPen, coili);
                 result = frame.Convert<Gray, byte>().Copy(f).Resize(100, 100, Inter.Cubic);
 
+                if (trainingImages.Count() == 0)
+                {
+                    add_new_face(frame, result);
+                }
+
                 LBPHFaceRecognizer recognizer = new LBPHFaceRecognizer();
                 recognizer.Train<Gray, Byte>(trainingImages.ToArray(), int_labels.ToArray());
 
                 FaceRecognizer.PredictionResult pred = recognizer.Predict(result);
-                
+
+                Console.WriteLine("{0} {1} ", pred.Distance, pred.Label);
+                Console.WriteLine(labels.Count);
                 if (pred.Distance < 100)
                 {
-                    name = labels[pred.Label - 1];
-                    if (pred.Distance > 60)
-                    {
-                        add_training_face(result, pred.Label - 1);
-                    }
-                        
+                        name = labels[pred.Label];
+                        if (pred.Distance > 70)
+                        {
+                            add_training_face(result, pred.Label);
+                        }
                 }
                 else
                 {
                     add_new_face(frame, result);
                     name = labels.Last();
                 }
-                predictions.Add(name);
-                Console.WriteLine(pred.Distance);
-                Console.WriteLine(name);
+                Console.WriteLine(labels[pred.Label]);
 
                 //Draw the label for each face detected and recognized
                 dc.DrawText(new FormattedText(name,
@@ -705,15 +728,15 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                             //If no bodies tracked for a SHORT time then should stay where it is to hopefully catch the lost person.
                             if (bodies_active.Count < 1 && motion_detected && !body_detected) SearchRoom();
                             if (bodies_active.Count > 0) BodyDetected();
+                        }
 
-                            //Test Motion Simulation
-                            if (Keyboard.IsKeyDown(Key.Space)) wait_for_space_key_up = true;
+                        //Test Motion Simulation
+                        if (Keyboard.IsKeyDown(Key.Space)) wait_for_space_key_up = true;
 
-                            if (Keyboard.IsKeyUp(Key.Space) && wait_for_space_key_up)
-                            {
-                                wait_for_space_key_up = false;
-                                MotionDetected();
-                            }
+                        if (Keyboard.IsKeyUp(Key.Space) && wait_for_space_key_up)
+                        {
+                            wait_for_space_key_up = false;
+                            MotionDetected();
                         }
 
                         //Shifting Tracking Target
@@ -1079,6 +1102,11 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         public void MotionDetected()
         {
+            Image<Bgr, byte> frame = wbm_to_img(this.colorBitmap);
+            int next_act_ix = File.ReadAllText(actDataPath + "/DatabaseFile.txt").Split('\n').Length;
+            frame.Save(actDataPath + "/Activation" + next_act_ix.ToString("D3") + ".png");
+            File.AppendAllText(actDataPath + "/DatabaseFile.txt", next_act_ix.ToString("D3") + "%" + DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")) + "\n");
+
             //Reset memory
             if (motion_cooldown_timer != null && motion_cooldown_timer.Enabled == true)
             {
@@ -1094,7 +1122,10 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
             //Sets Cool down timer
             motion_detected = true;
-            SearchRoom();
+            if (use_pan_tilt)
+            {
+                SearchRoom();
+            }
             motion_cooldown_timer = new System.Timers.Timer(1000);
 
             motion_cooldown_timer.Elapsed += Motion_Cooldown_Countdown;
