@@ -17,7 +17,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
-    using AForge.Video.FFMPEG;
+    // using AForge.Video.FFMPEG;
 
     /// <summary>
     /// Interaction logic for the MainWindow
@@ -28,7 +28,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <summary>
         /// An object used to create a video file
         /// </summary>
-        public VideoFileWriter VideoWriter = new VideoFileWriter();
+        // public VideoFileWriter VideoWriter = new VideoFileWriter();
         
         /// <summary>
         /// Size of the RGB pixel in the bitmap
@@ -103,9 +103,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // setup saving data to video file
             // 
             
-            // create new video file with the same dimensions as the incoming frames
-            var frameRate = 25; // fps
-            this.VideoWriter.Open("test.avi", this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, frameRate, VideoCodec.MPEG4);
+            // // create new video file with the same dimensions as the incoming frames
+            // var frameRate = 25; // fps
+            // this.VideoWriter.Open("test.avi", this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, frameRate, VideoCodec.MPEG4);
 
             // open the sensor
             this.kinectSensor.Open();
@@ -156,8 +156,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 this.kinectSensor = null;
             }
             
-            // clean up the video writer
-            this.VideoWriter.Close();
+            // // clean up the video writer
+            // this.VideoWriter.Close();
         }
 
         /// <summary>
@@ -231,8 +231,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     this.bodyIndexBitmap.PixelWidth * (int)BytesPerPixel,
                     0
                 );
-                // add a frame to the video
-                this.VideoWriter.WriteVideoFrame(this.BitmapFromWriteableBitmap(this.bodyIndexBitmap));
+                // // add a frame to the video
+                // this.VideoWriter.WriteVideoFrame(this.BitmapFromWriteableBitmap(this.bodyIndexBitmap));
             }
         }
 
