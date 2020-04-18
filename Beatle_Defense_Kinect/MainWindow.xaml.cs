@@ -30,8 +30,11 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public dynamic systemData;
+        public dynamic systemData = null;
         public string postData = "{ \"dummyData\": \"kinectIsRunning\" }";
+        
+        public var font = new Typeface("Georgia");
+        public var culture_info = CultureInfo.GetCultureInfo("en-us");
         
         /// <summary>
         /// Thickness of face bounding box and face points
@@ -316,6 +319,22 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 }
             });
         }
+        
+        // this is automatically updated by the central server 
+        public bool IsArmed
+        {
+            get
+            {
+                if (this.systemData != null)
+                {
+                    return this.systemData.status == "armed";
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
 
         /// <summary>
         /// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
@@ -463,163 +482,172 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// <param name="e">event arguments</param>
         private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
-            using (var bodyFrame = e.FrameReference.AcquireFrame())
+            // if the system is disarmed, basically do nothing
+            if (this.IsArmed)
             {
-                if (bodyFrame != null)
+                using (var bodyFrame = e.FrameReference.AcquireFrame())
                 {
-                    // update body data
-                    bodyFrame.GetAndRefreshBodyData(this.bodies);
-
-                    using (DrawingContext dc = this.drawingGroup.Open())
+                    if (bodyFrame != null)
                     {
-                        dc.DrawImage(this.colorBitmap, this.displayRect);
-                        // draw the dark background
-                        // dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+                        // update body data
+                        bodyFrame.GetAndRefreshBodyData(this.bodies);
 
-                        //Used for counting bodies observed
-                        bodies_active.Clear();
-
-                        // iterate through each face source
-                        for (int i = 0; i < this.bodyCount; i++)
+                        using (DrawingContext dc = this.drawingGroup.Open())
                         {
-                            if (bodies[i].IsTracked)
+                            dc.DrawImage(this.colorBitmap, this.displayRect);
+                            // draw the dark background
+                            // dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+
+                            //Used for counting bodies observed
+                            bodies_active.Clear();
+
+                            // iterate through each face source
+                            for (int i = 0; i < this.bodyCount; i++)
                             {
-                                Pen drawPen = new Pen(Brushes.White, 6);// = this.bodyColors[penIndex++];
-
-                                if (i < this.bodyCount)//Why do I have this????
+                                if (bodies[i].IsTracked)
                                 {
-                                    if (i == targetIndex)
+                                    Pen drawPen = new Pen(Brushes.White, 6);// = this.bodyColors[penIndex++];
+
+                                    if (i < this.bodyCount)//Why do I have this???? -- Sebastion?     // idk -- Jeff
                                     {
-                                        drawPen = new Pen(Brushes.Red, 6);
-                                    }
-                                    else drawPen = new Pen(Brushes.White, 6);
-                                }
-
-                                //Populate bodies_active
-                                bodies_active.Add(bodies[i]);
-
-                                // draw face frame results
-                                this.DrawFaceFrameResults(i, dc);
-
-                                this.DrawClippedEdges(bodies[i], dc);
-
-                                IReadOnlyDictionary<JointType, Joint> joints = bodies[i].Joints;
-
-                                // convert the joint points to depth (display) space
-                                Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
-
-                                foreach (JointType jointType in joints.Keys)
-                                {
-                                    // sometimes the depth(Z) of an inferred joint may show as negative
-                                    // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
-                                    CameraSpacePoint position = joints[jointType].Position;
-                                    if (position.Z < 0)
-                                    {
-                                        position.Z = InferredZPositionClamp;
+                                        if (i == targetIndex)
+                                        {
+                                            drawPen = new Pen(Brushes.Red, 6);
+                                        }
+                                        else drawPen = new Pen(Brushes.White, 6);
                                     }
 
-                                    DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
-                                    jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+                                    //Populate bodies_active
+                                    bodies_active.Add(bodies[i]);
+
+                                    // draw face frame results
+                                    this.DrawFaceFrameResults(i, dc);
+
+                                    this.DrawClippedEdges(bodies[i], dc);
+
+                                    IReadOnlyDictionary<JointType, Joint> joints = bodies[i].Joints;
+
+                                    // convert the joint points to depth (display) space
+                                    Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
+
+                                    foreach (JointType jointType in joints.Keys)
+                                    {
+                                        // sometimes the depth(Z) of an inferred joint may show as negative
+                                        // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
+                                        CameraSpacePoint position = joints[jointType].Position;
+                                        if (position.Z < 0)
+                                        {
+                                            position.Z = InferredZPositionClamp;
+                                        }
+
+                                        DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
+                                        jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+                                    }
+
+                                    this.DrawBody(joints, jointPoints, dc, drawPen);
                                 }
 
-                                this.DrawBody(joints, jointPoints, dc, drawPen);
-                            }
+                                if (!this.bodies[targetIndex].IsTracked)//If curent body is target//Need to fix for selection code to work
+                                {
+                                    targetIndex = i;
+                                }
+                            } 
+                            
+                            var angleOfFace = Find_Angle_Of_Face(targetIndex);
+                            var textToDisplay = $"Number of Bodies Detected = {bodies_active.Count}"+
+                                                $"\nTargetIndex = {targetIndex}" + 
+                                                $"\nTarget X-Angle from Camera : {angleOfFace.X}°" +
+                                                $"\nTarget Y-Angle from Camera : {angleOfFace.Y}°"
+                            
+                            // Display the Number of bodies currently tracked
+                            dc.DrawText(
+                                new FormattedText(
+                                    textToDisplay,
+                                    this.culture_info,
+                                    FlowDirection.LeftToRight,
+                                    this.font,
+                                    DrawTextFontSize,
+                                    Brushes.White
+                                ),
+                                new Point(displayWidth/2 + 90, displayHeight - 50)
+                            );
 
-                            if (!this.bodies[targetIndex].IsTracked)//If curent body is target//Need to fix for selection code to work
+                            //Servo Tracking
+                            if (use_pan_tilt)
                             {
-                                targetIndex = i;
-                            }
-                        } 
-                
-                        //Display the Number of bodies tracked currently
-                        dc.DrawText(
-                                        new FormattedText(
-                                        ("Number of Bodies Detected = " + bodies_active.Count + 
-                                        "\nTargetIndex = " + targetIndex + 
-                                        "\nTarget X-Angle from Camera : " + Find_Angle_Of_Face(targetIndex).X + "°\n" +
-                                        "Target Y-Angle from Camera : " + Find_Angle_Of_Face(targetIndex).Y + "°\n"),
-                                        CultureInfo.GetCultureInfo("en-us"),
-                                        FlowDirection.LeftToRight,
-                                        new Typeface("Georgia"),
-                                        DrawTextFontSize,
-                                        Brushes.White),
-                                        new Point(displayWidth/2 + 90, displayHeight - 50)
-                                    );
+                                //If not aiming close enough to target on y axis
+                                if (Math.Abs(Find_Angle_Of_Face(targetIndex).Y) > 5)
+                                {
+                                    float amount = movement_amount;
+                                    if (Find_Angle_Of_Face(targetIndex).Y > 0) amount *= -1;
 
-                        //Servo Tracking
-                        if (use_pan_tilt)
-                        {
-                            //If not aiming close enough to target on y axis
-                            if (Math.Abs(Find_Angle_Of_Face(targetIndex).Y) > 5)
+                                    CommandServo(0, (float)(current_y_degrees + amount), 1000.0f);
+                                }
+
+                                //If not aiming close enough to target on x axis
+                                if (Math.Abs(Find_Angle_Of_Face(targetIndex).X) > 1)
+                                {
+                                    float amount = movement_amount;
+                                    if (Find_Angle_Of_Face(targetIndex).X < 0) amount *= -1;
+
+                                    CommandServo(1, (float)(current_x_degrees + 0.1f*amount), 100.0f);
+                                }
+
+                                //If no bodies tracked for a LONG time then should search room.
+                                //If no bodies tracked for a SHORT time then should stay where it is to hopefully catch the lost person.
+                                if (bodies_active.Count < 1 && motion_detected && !body_detected) SearchRoom();
+                                if (bodies_active.Count > 0) BodyDetected();
+
+                                //Test Motion Simulation
+                                if (Keyboard.IsKeyDown(Key.Space)) wait_for_space_key_up = true;
+
+                                if (Keyboard.IsKeyUp(Key.Space) && wait_for_space_key_up)
+                                {
+                                    wait_for_space_key_up = false;
+                                    MotionDetected();
+                                }
+                            }
+
+                            //Shifting Tracking Target
+                            if (bodies_active.Count > 1)
                             {
-                                float amount = movement_amount;
-                                if (Find_Angle_Of_Face(targetIndex).Y > 0) amount *= -1;
+                                //LEFT SHIFT
+                                if (Keyboard.IsKeyDown(Key.Left)) wait_for_left_key_up = true;
 
-                                CommandServo(0, (float)(current_y_degrees + amount), 1000.0f);
+                                if (Keyboard.IsKeyUp(Key.Left) && wait_for_left_key_up)
+                                {
+                                    wait_for_left_key_up = false;
+                                    Debug.Print("Shift Left");
+                                    int target_active_index = bodies_active.IndexOf(bodies[targetIndex]);
+
+                                    if (target_active_index <= 0) target_active_index = bodies_active.Count - 1;
+                                    else target_active_index--;
+
+                                    targetIndex = Array.IndexOf(bodies, bodies_active[target_active_index]);
+                                }
+
+                                //RIGHT SHIFT
+                                if (Keyboard.IsKeyDown(Key.Right)) wait_for_right_key_up = true;
+
+                                if (Keyboard.IsKeyUp(Key.Right) && wait_for_right_key_up)
+                                {
+                                    wait_for_right_key_up = false;
+                                    Debug.Print("Shift Right");
+                                    int target_active_index = bodies_active.IndexOf(bodies[targetIndex]);
+
+                                    if (target_active_index >= (bodies_active.Count - 1)) target_active_index = 0;
+                                    else target_active_index++;
+
+                                    targetIndex = Array.IndexOf(bodies, bodies_active[target_active_index]);
+                                }
                             }
 
-                            //If not aiming close enough to target on x axis
-                            if (Math.Abs(Find_Angle_Of_Face(targetIndex).X) > 1)
-                            {
-                                float amount = movement_amount;
-                                if (Find_Angle_Of_Face(targetIndex).X < 0) amount *= -1;
-
-                                CommandServo(1, (float)(current_x_degrees + 0.1f*amount), 100.0f);
-                            }
-
-                            //If no bodies tracked for a LONG time then should search room.
-                            //If no bodies tracked for a SHORT time then should stay where it is to hopefully catch the lost person.
-                            if (bodies_active.Count < 1 && motion_detected && !body_detected) SearchRoom();
-                            if (bodies_active.Count > 0) BodyDetected();
-
-                            //Test Motion Simulation
-                            if (Keyboard.IsKeyDown(Key.Space)) wait_for_space_key_up = true;
-
-                            if (Keyboard.IsKeyUp(Key.Space) && wait_for_space_key_up)
-                            {
-                                wait_for_space_key_up = false;
-                                MotionDetected();
-                            }
+                            this.drawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
                         }
-
-                        //Shifting Tracking Target
-                        if (bodies_active.Count > 1)
-                        {
-                            //LEFT SHIFT
-                            if (Keyboard.IsKeyDown(Key.Left)) wait_for_left_key_up = true;
-
-                            if (Keyboard.IsKeyUp(Key.Left) && wait_for_left_key_up)
-                            {
-                                wait_for_left_key_up = false;
-                                Debug.Print("Shift Left");
-                                int target_active_index = bodies_active.IndexOf(bodies[targetIndex]);
-
-                                if (target_active_index <= 0) target_active_index = bodies_active.Count - 1;
-                                else target_active_index--;
-
-                                targetIndex = Array.IndexOf(bodies, bodies_active[target_active_index]);
-                            }
-
-                            //RIGHT SHIFT
-                            if (Keyboard.IsKeyDown(Key.Right)) wait_for_right_key_up = true;
-
-                            if (Keyboard.IsKeyUp(Key.Right) && wait_for_right_key_up)
-                            {
-                                wait_for_right_key_up = false;
-                                Debug.Print("Shift Right");
-                                int target_active_index = bodies_active.IndexOf(bodies[targetIndex]);
-
-                                if (target_active_index >= (bodies_active.Count - 1)) target_active_index = 0;
-                                else target_active_index++;
-
-                                targetIndex = Array.IndexOf(bodies, bodies_active[target_active_index]);
-                            }
-                        }
-
-                        this.drawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
                     }
                 }
             }
+            
         }
 
         /// <summary>
@@ -1052,22 +1080,29 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         // partof: central_server_connection
         public void GetRequestStreamCallback(IAsyncResult asynchronousResult)
         {
-            HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
-            request.ContentType = "application/json";
-            request.Method = "POST";
-            Stream postStream = request.EndGetRequestStream(asynchronousResult);
-            
-            // 
-            // Create the post data
-            // 
-            string postData = this.postData;
-            
-            // cleanup
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            postStream.Write(byteArray, 0, byteArray.Length);
-            postStream.Close();
-            // Start the web request
-            request.BeginGetResponse(new AsyncCallback(GetResponceStreamCallback), request);
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
+                request.ContentType = "application/json";
+                request.Method = "POST";
+                Stream postStream = request.EndGetRequestStream(asynchronousResult);
+                
+                // 
+                // Create the post data
+                // 
+                string postData = this.postData;
+                
+                // cleanup
+                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+                postStream.Write(byteArray, 0, byteArray.Length);
+                postStream.Close();
+                // Start the web request
+                request.BeginGetResponse(new AsyncCallback(GetResponceStreamCallback), request);
+            }   
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error when getting data from central server GetRequestStreamCallback");
+            }
         }
 
         // partof: central_server_connection
