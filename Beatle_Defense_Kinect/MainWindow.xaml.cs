@@ -163,7 +163,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         bool wait_for_space_key_up = false;
 
         //Servo Stuff
-        private bool use_pan_tilt = true;
+        private bool use_pan_tilt = false;
         public System.IO.Ports.SerialPort serialPort;
 
         //Targeting  Stuff
