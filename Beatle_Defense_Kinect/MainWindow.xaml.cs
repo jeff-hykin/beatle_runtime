@@ -326,7 +326,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             get
             {
                 return this.imageSource;
-                //return this.colorBitmap;
+                // return this.colorBitmap;
             }
         }
 
@@ -468,8 +468,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                     using (DrawingContext dc = this.drawingGroup.Open())
                     {
+                        dc.DrawImage(this.colorBitmap, this.displayRect);
                         // draw the dark background
-                        dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+                        // dc.DrawRectangle(Brushes.Black, null, this.displayRect);
 
                         //Used for counting bodies observed
                         bodies_active.Clear();
@@ -1073,6 +1074,19 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 string result = httpWebStreamReader.ReadToEnd();
                 Console.WriteLine($"The response from the server is:{result}");
             };
+        }
+        
+        private System.Drawing.Bitmap BitmapFromWriteableBitmap(WriteableBitmap writeBmp)
+        {
+            System.Drawing.Bitmap bmp;
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create((BitmapSource)writeBmp));
+                enc.Save(outStream);
+                bmp = new System.Drawing.Bitmap(outStream);
+            }
+            return bmp;
         }
     }
 }
