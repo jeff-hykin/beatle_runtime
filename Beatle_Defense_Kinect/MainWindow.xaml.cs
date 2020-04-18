@@ -25,6 +25,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     using Emgu.CV.CvEnum;
     using Emgu.CV.Face;
     using Emgu.CV.WPF;
+    using Phidget22;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -207,6 +208,10 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         string name, startupPath, peopleDataPath, actDataPath, names = null;
         Capture grabber;
 
+        int strobe_state;
+        DigitalOutput strobe_do;
+        int strobe_phidget_sn;
+
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
@@ -244,6 +249,12 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 }
                 ContTrain++;
             }
+
+            // STROBE
+            strobe_state = 0;
+            strobe_phidget_sn = 12312;
+            strobe_do.DeviceSerialNumber = strobe_phidget_sn;
+            strobe_do.Open(5000);
 
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
@@ -347,6 +358,18 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             //Search Stuff
             motion_cooldown_time_seconds = motion_detection_search_time;
             body_cooldown_time_seconds = body_detection_search_time;
+        }
+
+        private void turn_on_strobe()
+        {
+            strobe_state = 1;
+            strobe_do.State = true;
+        }
+
+        private void turn_off_strobe()
+        {
+            strobe_state = 0;
+            strobe_do.State = false;
         }
 
         private void add_new_face(Image <Bgr, byte> frame, Image<Gray, byte> face)
@@ -605,6 +628,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 }
             }
 
+            strobe_do.Close();
         }
 
         /// <summary>
