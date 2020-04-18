@@ -19,6 +19,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Threading;
+    using System.Threading.Tasks;
     // using AForge.Video.FFMPEG;
 
     /// <summary>
