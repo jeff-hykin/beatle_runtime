@@ -3,24 +3,24 @@
 <div>
 <p contenteditable="true">Omar Santos</p>
 <p>Last seen: {{ date1 }}</p>
-<img src="omar.jpeg" alt="Example" width="193" height="130">
+<img src="baby.png" alt="Example" width="193" height="130">
 
 <h4></h4>
 
 <p contenteditable="true">Walter S</p>
 <p>Last seen: {{ date2 }}</p>
-<img src="omar.jpeg" alt="Example" width="193" height="130">
+<img src="baby.png" alt="Example" width="193" height="130">
 <p></p>
 
 <p contenteditable="true">Jueff H</p>
 <p>Last seen: {{ date3 }}</p>
-<img src="omar.jpeg" alt="Example" width="193" height="130">
+<img src="baby.png" alt="Example" width="193" height="130">
 
 <p></p>
 
 <p contenteditable="true">Sebastiant</p>
 <p>Last seen: {{ date4 }}</p>
-<img src="omar.jpeg" alt="Example" width="193" height="130">
+<img src="baby.png" alt="Example" width="193" height="130">
 <p></p>
 
 

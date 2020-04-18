@@ -15,6 +15,7 @@
 <script>
   import VueGallery from 'vue-gallery';
   
+  
   export default {
     data: function () {
       return {
@@ -26,9 +27,7 @@
         images: [
         {
           title: 'HH:MM::SS MM:DD::YY',
-          href: 'https://www.youtube.com/watch?v=hNdlUHBJDKs',
-          type: 'text/html',
-          youtube: 'hNdlUHBJDKs',
+          
           poster: './public/omar.jpeg'
         },
 
@@ -38,12 +37,13 @@
           type: 'video/mp4',
         },
 
-          
+          'baby.png',
+
         {
           title: 'HH:MM::SS MM:DD::YY',
-          href: 'omar.jpeg',
-          type: 'image/jpeg',
-          poster: './public/omar.jpeg',  
+          href: 'baby.png',
+          type: 'image/png',
+          poster: './public/baby.jpeg',  
       	}
       ],
       index: null
