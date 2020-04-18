@@ -47,7 +47,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -59,7 +59,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -148,15 +148,6 @@
     <Reference Include="AForge.Vision, Version=2.2.5.0, Culture=neutral, PublicKeyToken=b612fa915eefaa06, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files (x86)\AForge.NET\Framework\Release\AForge.Vision.dll</HintPath>
-    </Reference>
-    <Reference Include="H.Engine.IO, Version=0.15.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\H.Engine.IO.0.15.3\lib\netstandard2.0\H.Engine.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="H.Socket.IO, Version=0.15.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\H.Socket.IO.0.15.3\lib\netstandard2.0\H.Socket.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="H.WebSockets, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\H.WebSockets.1.0.4\lib\netstandard2.0\H.WebSockets.dll</HintPath>
     </Reference>
     <Reference Include="IPPrototyper, Version=1.0.1.1, Culture=neutral, PublicKeyToken=deedab63545c06c9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

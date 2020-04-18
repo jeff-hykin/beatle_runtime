@@ -154,15 +154,9 @@ C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Xml.XmlDoc
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Xml.XmlSerializer.dll
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Xml.XPath.dll
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Xml.XPath.XDocument.dll
-C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\H.Engine.IO.dll
-C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\H.Socket.IO.dll
-C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\H.WebSockets.dll
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Threading.Tasks.Extensions.dll
-C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\H.Engine.IO.xml
-C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\H.Socket.IO.xml
-C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\H.WebSockets.xml
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\Microsoft.Bcl.AsyncInterfaces.xml
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\user\beatle_runtime\BodyIndexBasics-WPF\bin\x86\Debug\System.Threading.Tasks.Extensions.xml
