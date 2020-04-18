@@ -6,7 +6,11 @@
         </div>    
         
         <!-- when loggedIn -->
-        <div v-if='$root.loggedIn' >    
+        <div v-if='$root.loggedIn' >
+
+        <ui-button class="logout-button" @click="onLogout">
+                Logout
+            </ui-button>    
             
             <Nav />
             
@@ -14,13 +18,9 @@
                 <router-view/>
             </transition>
             
-            <column position=fixed left=0 bottom=0 width=100vw padding=1rem align-h=left color="white" :background-color='$root.systemData.status=="disarmed"?"var(--blue-400)" : "var(--red-500)" '  >
-                status: {{$root.systemData.status}}
-            </column>
             
-            <ui-button class="logout-button" @click="onLogout">
-                Logout
-            </ui-button>
+            
+            
         </div>
     </div>
 </template>

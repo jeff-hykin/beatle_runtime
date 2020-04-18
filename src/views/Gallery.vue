@@ -8,7 +8,8 @@
       @click="index = imageIndex"
       :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
     ></div>
-  </div>
+    </div>
+ 
 </template>
 
 <script>
@@ -22,21 +23,21 @@
           href: 'https://www.youtube.com/watch?v=hNdlUHBJDKs',
           type: 'text/html',
           youtube: 'hNdlUHBJDKs',
-          poster: 'https://img.youtube.com/vi/hNdlUHBJDKs/maxresdefault.jpg'
+          poster: '/public/omar.jpeg'
         },
         {
           
           href: 'https://www.youtube.com/watch?v=s5iUsaPPtnk',
           type: 'text/html',
           youtube: 's5iUsaPPtnk',
-          poster: 'https://img.youtube.com/vi/s5iUsaPPtnk/maxresdefault.jpg'
+          poster: './public/omar.jpeg'
         },
 
         {
           title: 'Video from files',
           href: 'funniest.mp4',
           type: 'video/mp4',
-          
+          poster: './public/omar.jpeg'
         },
 
             'omar.jpeg',
@@ -44,7 +45,7 @@
           title: 'Image',
           href: 'omar.jpeg',
           type: 'image/jpeg',
-          poster: 'omar.jpeg',  
+          poster: './public/omar.jpeg',  
       	}
       ],
       index: null

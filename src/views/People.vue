@@ -1,14 +1,33 @@
 <template>
-  <div>
-    <gallery :images="images" :index="index" @close="index = null"></gallery>
-    <div
-      class="image"
-      v-for="(image, imageIndex) in images"
-      :key="imageIndex"
-      @click="index = imageIndex"
-      :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
-    ></div>
-  </div>
+
+<div>
+<p contenteditable="true">Omar Santos</p>
+<p>Last seen: {{ date1 }}</p>
+<img src="omar.jpeg" alt="Example" width="193" height="130">
+
+<h4></h4>
+
+<p contenteditable="true">Walter S</p>
+<p>Last seen: {{ date2 }}</p>
+<img src="omar.jpeg" alt="Example" width="193" height="130">
+<p></p>
+
+<p contenteditable="true">Jueff H</p>
+<p>Last seen: {{ date3 }}</p>
+<img src="omar.jpeg" alt="Example" width="193" height="130">
+
+<p></p>
+
+<p contenteditable="true">Sebastiant</p>
+<p>Last seen: {{ date4 }}</p>
+<img src="omar.jpeg" alt="Example" width="193" height="130">
+<p></p>
+
+
+</div>
+
+
+ 
 </template>
 
 <script>
@@ -17,35 +36,16 @@
   export default {
     data: function () {
       return {
+        date1: '4/20/20',
+        date2: '4/21/20',
+        date3: '4/22/20',
+        date4: '4/23  /20',
         images: [
-        {
-          href: 'https://www.youtube.com/watch?v=hNdlUHBJDKs',
-          type: 'text/html',
-          youtube: 'hNdlUHBJDKs',
-          poster: 'https://img.youtube.com/vi/hNdlUHBJDKs/maxresdefault.jpg'
-        },
-        {
-          
-          href: 'https://www.youtube.com/watch?v=s5iUsaPPtnk',
-          type: 'text/html',
-          youtube: 's5iUsaPPtnk',
-          poster: 'https://img.youtube.com/vi/s5iUsaPPtnk/maxresdefault.jpg'
-        },
 
-        {
-          title: 'Video from files',
-          href: 'funniest.mp4',
-          type: 'video/mp4',
-          
-        },
-
+            
             'omar.jpeg',
-        {
-          title: 'Image',
-          href: 'omar.jpeg',
-          type: 'image/jpeg',
-          poster: 'omar.jpeg',  
-      	}
+            'omar.jpeg',
+        
       ],
       index: null
       };
@@ -55,6 +55,7 @@
       'gallery': VueGallery
     },
   }
+  
 </script> 
 
 <style scoped>
