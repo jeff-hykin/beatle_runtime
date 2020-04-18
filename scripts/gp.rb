@@ -1,0 +1,5 @@
+system "git add -A"
+system "git add -u"
+system "git commit -m #{ARGV[0] != nil ? ARGV[0] : "-"}"
+system "git pull"
+system "git push"
