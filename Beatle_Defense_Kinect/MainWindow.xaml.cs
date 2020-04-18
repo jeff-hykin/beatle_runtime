@@ -19,6 +19,10 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     using Microsoft.Kinect;
     using System.Windows.Input;
     using System.Timers;
+    using System.Net;  
+    using System.Text; 
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -296,6 +300,17 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             //Search Stuff
             motion_cooldown_time_seconds = motion_detection_search_time;
             body_cooldown_time_seconds = body_detection_search_time;
+            
+            // 
+            // central_server stuff
+            // 
+            Task.Run(async () => {
+                for(;;)
+                {
+                    await Task.Delay(1000); // once per second
+                    SendPostRequest();
+                }
+            });
         }
 
         /// <summary>
@@ -1016,6 +1031,48 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     CommandServo(0, 0.0f, 250.0f);//Returns to Center, unless there is motion detected
                 }
             }
+        }
+        
+        // partof: central_server_connection
+        public void SendPostRequest()
+        {
+            var request = HttpWebRequest.Create(
+                "http://localhost:3001/sync"
+            ) as HttpWebRequest;
+            request.Method = "POST";
+            request.ContentType = "text/json";
+            request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);
+        }
+        
+        // partof: central_server_connection
+        public void GetRequestStreamCallback(IAsyncResult asynchronousResult)
+        {
+            HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
+            request.ContentType = "application/json";
+            request.Method = "POST";
+            Stream postStream = request.EndGetRequestStream(asynchronousResult);
+
+            // Create the post data
+            string postData = "{ \"from_c_sharp\": \"this works\" }";
+            
+            // cleanup
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            postStream.Write(byteArray, 0, byteArray.Length);
+            postStream.Close();
+            // Start the web request
+            request.BeginGetResponse(new AsyncCallback(GetResponceStreamCallback), request);
+        }
+
+        // partof: central_server_connection
+        public void GetResponceStreamCallback(IAsyncResult callbackResult)
+        {
+            HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
+            HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
+            using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
+            {
+                string result = httpWebStreamReader.ReadToEnd();
+                Console.WriteLine($"The response from the server is:{result}");
+            };
         }
     }
 }
