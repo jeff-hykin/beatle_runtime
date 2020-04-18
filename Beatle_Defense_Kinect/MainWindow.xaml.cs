@@ -29,6 +29,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public string postData = "{ \"dummyData\": \"kinectIsRunning\" }";
+        
         /// <summary>
         /// Thickness of face bounding box and face points
         /// </summary>
@@ -1053,7 +1055,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             Stream postStream = request.EndGetRequestStream(asynchronousResult);
 
             // Create the post data
-            string postData = "{ \"from_c_sharp\": \"this works\" }";
+            string postData = this.postData;
             
             // cleanup
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
@@ -1071,6 +1073,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
             {
                 string result = httpWebStreamReader.ReadToEnd();
+                // TODO: change this to something like this.systemIsArmed = JSON.parse(result)["armed"]
                 Console.WriteLine($"The response from the server is:{result}");
             };
         }
