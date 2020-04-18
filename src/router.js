@@ -31,12 +31,22 @@ export default new Router({
     },
 
     {
-    path: "/gallery",
-    name: "gallery",
+    path: "/activations",
+    name: "activations",
       // route level code-splitting
       // this generates a separate chunk (help.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ "./views/Gallery.vue"),
+    },
+
+    {
+
+    path: "/people",
+    name: "people",
+      // route level code-splitting
+      // this generates a separate chunk (help.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ "./views/People.vue"),
     },
 
 

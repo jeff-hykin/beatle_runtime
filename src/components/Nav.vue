@@ -35,8 +35,13 @@ export default {
             },
 
             {
-                name: 'Gallery',
-                location: '/gallery'
+                name: 'Activations',
+                location: '/activations'
+            },
+
+            {
+            name: 'People',
+                location: '/people'
             },
         ]
     })
