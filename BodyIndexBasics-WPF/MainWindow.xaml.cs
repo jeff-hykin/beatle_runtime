@@ -12,12 +12,14 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Net;  
+    using System.Text;  
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
-    using AForge.Video.FFMPEG;
+    // using AForge.Video.FFMPEG;
 
     /// <summary>
     /// Interaction logic for the MainWindow
@@ -28,7 +30,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <summary>
         /// An object used to create a video file
         /// </summary>
-        public VideoFileWriter VideoWriter = new VideoFileWriter();
+        // public VideoFileWriter VideoWriter = new VideoFileWriter();
+        public int WhichFrame = 0;
         
         /// <summary>
         /// Size of the RGB pixel in the bitmap
@@ -78,10 +81,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// </summary>
         public MainWindow()
         {
-            this.kinectSensor = KinectSensor.GetDefault();
-            
-            
-            
+            this.kinectSensor = KinectSensor.GetDefault();            
             
             // 
             // body index frame reader
@@ -103,9 +103,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // setup saving data to video file
             // 
             
-            // create new video file with the same dimensions as the incoming frames
-            var frameRate = 25; // fps
-            this.VideoWriter.Open("test.avi", this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, frameRate, VideoCodec.MPEG4);
+            // // create new video file with the same dimensions as the incoming frames
+            // var frameRate = 25; // fps
+            // this.VideoWriter.Open("test.avi", this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, frameRate, VideoCodec.MPEG4);
 
             // open the sensor
             this.kinectSensor.Open();
@@ -156,8 +156,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 this.kinectSensor = null;
             }
             
-            // clean up the video writer
-            this.VideoWriter.Close();
+            // // clean up the video writer
+            // this.VideoWriter.Close();
         }
 
         /// <summary>
@@ -231,8 +231,12 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     this.bodyIndexBitmap.PixelWidth * (int)BytesPerPixel,
                     0
                 );
-                // add a frame to the video
-                this.VideoWriter.WriteVideoFrame(this.BitmapFromWriteableBitmap(this.bodyIndexBitmap));
+                // // add a frame to the video
+                // this.VideoWriter.WriteVideoFrame(this.BitmapFromWriteableBitmap(this.bodyIndexBitmap));
+                this.WhichFrame += 1;
+                if ((this.WhichFrame % 10) == 1) {
+                    SendPostRequest();
+                }
             }
         }
 
@@ -279,6 +283,45 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 bmp = new System.Drawing.Bitmap(outStream);
             }
             return bmp;
+        }
+        
+        public void SendPostRequest()
+        {
+            var request = HttpWebRequest.Create(
+                "http://localhost:3001/sync"
+            ) as HttpWebRequest;
+            request.Method = "POST";
+            request.ContentType = "text/json";
+            request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);
+        }
+        
+        public void GetRequestStreamCallback(IAsyncResult asynchronousResult)
+        {
+            HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
+            request.ContentType = "application/json";
+            request.Method = "POST";
+            Stream postStream = request.EndGetRequestStream(asynchronousResult);
+
+            // Create the post data
+            string postData = "{ \"from_c_sharp\": \"this works\" }";
+            
+            // cleanup
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            postStream.Write(byteArray, 0, byteArray.Length);
+            postStream.Close();
+            // Start the web request
+            request.BeginGetResponse(new AsyncCallback(GetResponceStreamCallback), request);
+        }
+
+        public void GetResponceStreamCallback(IAsyncResult callbackResult)
+        {
+            HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
+            HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
+            using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
+            {
+                string result = httpWebStreamReader.ReadToEnd();
+                Console.WriteLine($"The response from the server is:{result}");
+            };
         }
     }
 }
