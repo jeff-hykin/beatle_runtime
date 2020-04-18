@@ -298,16 +298,17 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         public void GetRequestStreamCallback(IAsyncResult asynchronousResult)
         {
             HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
-            // End the stream request operation
+            request.ContentType = "application/json";
+            request.Method = "POST";
             Stream postStream = request.EndGetRequestStream(asynchronousResult);
 
             // Create the post data
             string postData = "{ \"from_c_sharp\": \"this works\" }";
+            
+            // cleanup
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-
             postStream.Write(byteArray, 0, byteArray.Length);
             postStream.Close();
-
             // Start the web request
             request.BeginGetResponse(new AsyncCallback(GetResponceStreamCallback), request);
         }
