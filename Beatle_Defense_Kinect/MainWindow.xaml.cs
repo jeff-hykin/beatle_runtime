@@ -1053,8 +1053,10 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             request.ContentType = "application/json";
             request.Method = "POST";
             Stream postStream = request.EndGetRequestStream(asynchronousResult);
-
+            
+            // 
             // Create the post data
+            // 
             string postData = this.postData;
             
             // cleanup
@@ -1073,7 +1075,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
             {
                 string result = httpWebStreamReader.ReadToEnd();
+                // 
                 // TODO: change this to something like this.systemIsArmed = JSON.parse(result)["armed"]
+                // 
                 Console.WriteLine($"The response from the server is:{result}");
             };
         }
