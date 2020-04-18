@@ -18,31 +18,29 @@
   export default {
     data: function () {
       return {
+
+        date1: '4/20/20',
+        date2: '4/21/20',
+        date3: '4/22/20',
+
         images: [
         {
+          title: '4/22/21',
           href: 'https://www.youtube.com/watch?v=hNdlUHBJDKs',
           type: 'text/html',
           youtube: 'hNdlUHBJDKs',
-          poster: '/public/omar.jpeg'
-        },
-        {
-          
-          href: 'https://www.youtube.com/watch?v=s5iUsaPPtnk',
-          type: 'text/html',
-          youtube: 's5iUsaPPtnk',
           poster: './public/omar.jpeg'
         },
 
         {
-          title: 'Video from files',
+          title: '4/23/20',
           href: 'funniest.mp4',
           type: 'video/mp4',
-          poster: './public/omar.jpeg'
         },
 
-            'omar.jpeg',
+          
         {
-          title: 'Image',
+          title: '4/20/21',
           href: 'omar.jpeg',
           type: 'image/jpeg',
           poster: './public/omar.jpeg',  
