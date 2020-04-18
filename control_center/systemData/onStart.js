@@ -1,5 +1,4 @@
 let processManager = require("../processManager")
-let systemData = require(global.pathFor.systemDataStorage)
 let fs = require("fs")
 
 // import the official listener-names for this process
@@ -8,15 +7,15 @@ let yell = processManager.processes.systemData.canYell
 
 // whenever dataShouldChange
 listeners.dataShouldChange = (newData) => {
-    let dataBeforeChange = JSON.stringify(systemData)
+    let dataBeforeChange = JSON.stringify(global.systemData)
     console.log('received dataChange request')
-    systemData = {...systemData, ...newData}
-    let dataAfterChange = JSON.stringify(systemData)
-    console.log(`systemData is now:`,systemData)
+    global.systemData = {...global.systemData, ...newData}
+    let dataAfterChange = JSON.stringify(global.systemData)
+    console.log(`systemData is now:`,global.systemData)
     // if there was a change, tell everyone about it
     if (dataBeforeChange != dataAfterChange) {
-        console.log("sending dataDidCha    nge")
-        yell.dataDidChange(systemData)
+        console.log("sending dataDidChange")
+        yell.dataDidChange(global.systemData)
         // save changes to permanent storage
         fs.writeFile(global.pathFor.systemDataStorage, dataAfterChange, (...args)=>{
             console.log(`file write args is:`,args)
@@ -27,5 +26,5 @@ listeners.dataShouldChange = (newData) => {
 // whenever someone asks for systemData
 listeners.requestSystemData = (newData) => {
     console.log("found a requestSystemData")
-    yell.providingSystemData(systemData)
+    yell.providingSystemData(global.systemData)
 }

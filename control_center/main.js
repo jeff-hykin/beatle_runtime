@@ -12,6 +12,7 @@ global.pathFor = require("../pathFor")
 
 let processManager = require(global.pathFor.processManager)
 let packageJson = require(global.pathFor.package)
+global.systemData = require(global.pathFor.systemDataStorage)
 
 //
 // setup routes
@@ -22,7 +23,7 @@ app.get("/", (req, res) => {
 })
 app.post("/sync", jsonParser, (req, res) => {
     console.log(`req.body is:`,req.body)
-    res.send({ testData: true })
+    res.send(systemData)
 })
 
 //
