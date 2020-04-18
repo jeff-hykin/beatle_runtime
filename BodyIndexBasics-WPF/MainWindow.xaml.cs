@@ -31,7 +31,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// An object used to create a video file
         /// </summary>
         // public VideoFileWriter VideoWriter = new VideoFileWriter();
-        public int WhichFrame = 0;
         
         /// <summary>
         /// Size of the RGB pixel in the bitmap
@@ -115,6 +114,15 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+            
+            // partof: central_server_connection
+            Task.Run(async () => {
+                for(;;)
+                {
+                    await Task.Delay(1000); // once per second
+                    SendPostRequest();
+                }
+            });
         }
 
         /// <summary>
@@ -233,10 +241,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 );
                 // // add a frame to the video
                 // this.VideoWriter.WriteVideoFrame(this.BitmapFromWriteableBitmap(this.bodyIndexBitmap));
-                this.WhichFrame += 1;
-                if ((this.WhichFrame % 10) == 1) {
-                    SendPostRequest();
-                }
             }
         }
 
@@ -285,6 +289,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             return bmp;
         }
         
+        // partof: central_server_connection
         public void SendPostRequest()
         {
             var request = HttpWebRequest.Create(
@@ -295,6 +300,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);
         }
         
+        // partof: central_server_connection
         public void GetRequestStreamCallback(IAsyncResult asynchronousResult)
         {
             HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
@@ -313,6 +319,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             request.BeginGetResponse(new AsyncCallback(GetResponceStreamCallback), request);
         }
 
+        // partof: central_server_connection
         public void GetResponceStreamCallback(IAsyncResult callbackResult)
         {
             HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
