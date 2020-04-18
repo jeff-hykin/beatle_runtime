@@ -214,30 +214,35 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         {
             startupPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             face = new CascadeClassifier(startupPath + "/opencv/data/lbpcascades/lbpcascade_frontalface.xml");
-            string Labelsinfo = File.ReadAllText(startupPath + "/TrainedFaces/TrainedLabels.txt");
-            if (Labelsinfo != "")
-            {
-                string[] Labels = Labelsinfo.Split('%');
-                NumLabels = Convert.ToInt16(Labels[0]);
-                ContTrain = NumLabels;
-                string LoadFaces;
 
-                for (int tf = 1; tf < NumLabels + 1; tf++)
-                {
-                    LoadFaces = "face" + tf + ".bmp";
-                    trainingImages.Add(new Image<Gray, byte>(startupPath + "/TrainedFaces/" + LoadFaces));
-                    labels.Add(Labels[tf]);
-                    if (!label_to_int.ContainsKey(Labels[tf]))
-                    {
-                        label_to_int.Add(Labels[tf], tf);
-                        int_labels.Add(tf);
-                    }
-                    else
-                    {
-                        int_labels.Add(label_to_int[Labels[tf]]);
-                    }
-                }
-            }
+            // SOCKET.IO
+            // get full list of names from database and all facialRecTraining images for each of them
+
+
+            //string Labelsinfo = File.ReadAllText(startupPath + "/TrainedFaces/TrainedLabels.txt");
+            //if (Labelsinfo != "")
+            //{
+            //    string[] Labels = Labelsinfo.Split('%');
+            //    NumLabels = Convert.ToInt16(Labels[0]);
+            //    ContTrain = NumLabels;
+            //    string LoadFaces;
+
+            //    for (int tf = 1; tf < NumLabels + 1; tf++)
+            //    {
+            //        LoadFaces = "face" + tf + ".bmp";
+            //        trainingImages.Add(new Image<Gray, byte>(startupPath + "/TrainedFaces/" + LoadFaces));
+            //        labels.Add(Labels[tf]);
+            //        if (!label_to_int.ContainsKey(Labels[tf]))
+            //        {
+            //            label_to_int.Add(Labels[tf], tf);
+            //            int_labels.Add(tf);
+            //        }
+            //        else
+            //        {
+            //            int_labels.Add(label_to_int[Labels[tf]]);
+            //        }
+            //    }
+            //}
 
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
@@ -343,43 +348,33 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             body_cooldown_time_seconds = body_detection_search_time;
         }
 
-        private void add_faces(ref System.Drawing.Rectangle[] facesDetected, ref List<string> predictions, ref Image<Bgr, byte> currentFrame)
+        private void add_new_face(Image <Bgr, byte> frame, Image<Gray, byte> face)
         {
             //Trained face counter
-            ContTrain = ContTrain + facesDetected.Length;
+            ContTrain = ContTrain + 1;
 
-            int c = 0;
-            foreach (System.Drawing.Rectangle f in facesDetected)
-            {   
-                if (predictions[c] != "Unknown")
-                {
-                    TrainedFace = currentFrame.Copy(f).Convert<Gray, byte>();
-                    //resize face detected image for force to compare the same size with the 
-                    //test image with cubic interpolation type method
-                    TrainedFace = result.Resize(100, 100, Inter.Cubic);
-                    trainingImages.Add(TrainedFace);
-                    labels.Add(predictions[c]);
-                    if (!label_to_int.ContainsKey(labels.Last()))
-                    {
-                        label_to_int.Add(labels.Last(), labels.Count);
-                        int_labels.Add(labels.Count);
-                    }
-                    else
-                    {
-                        int_labels.Add(label_to_int[labels.Last()]);
-                    }
-                }
-                c++;
-            }
-            //Write the number of triained faces in a file text for further load
-            File.WriteAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
+            //resize face detected image for force to compare the same size with the 
+            trainingImages.Add(face);
+            labels.Add("Unknown" + ContTrain.ToString());
+            label_to_int.Add(labels.Last(), labels.Count);
+            int_labels.Add(label_to_int[labels.Last()]);
 
-            //Write the labels of triained faces in a file text for further load
-            for (int i = 1; i < trainingImages.ToArray().Length + 1; i++)
-            {
-                trainingImages.ToArray()[i - 1].Save(startupPath + "/TrainedFaces/face" + i + ".bmp");
-                File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
-            }
+            string name = labels.Last();
+
+            // SOCKET.IO
+            // add name to database file, create a new directory for this person, main image = frame, face = new facialrectraining image
+        }
+
+        private void add_training_face(Image<Gray, byte> face, int int_label)
+        {
+            //resize face detected image for force to compare the same size with the 
+            trainingImages.Add(face);
+            labels.Add(labels[int_label]);
+            int_labels.Add(int_label);
+
+            // SOCKET.IO
+            // face = new facialrectraining image
+            
         }
 
         private Rect conv_rectangle(System.Drawing.Rectangle r, int width, int height)
@@ -394,9 +389,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             return new Point(x * w_fac, y * h_fac);
         }
 
-        private Image<Gray, byte> wbm_to_img(WriteableBitmap wbm)
+        private Image<Bgr, byte> wbm_to_img(WriteableBitmap wbm)
         {
-            return BitmapSourceConvert.ToMat(wbm).ToImage<Bgr, byte>().Resize(426, 240, Inter.Cubic).Convert<Gray, byte>();
+            return BitmapSourceConvert.ToMat(wbm).ToImage<Bgr, byte>().Resize(426, 240, Inter.Cubic);
         }
 
         private void face_recognition(DrawingContext dc)
@@ -404,47 +399,50 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             System.Windows.Media.Pen drawPen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.LightBlue, 4);
 
             //Get the current frame
-            Image<Gray, byte> gray = wbm_to_img(this.colorBitmap);
+            Image<Bgr, byte> frame = wbm_to_img(this.colorBitmap);
 
             //Face Detector
-            System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(gray, 1.2, 10, new System.Drawing.Size(10, 10));
+            System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(frame.Convert<Gray, byte>(), 1.2, 10, new System.Drawing.Size(10, 10));
             List<string> predictions = new List<string>();
 
             //Action for each element detected
             foreach (System.Drawing.Rectangle f in facesDetected)
             {
                 Rect coili = conv_rectangle(f, this.displayWidth, this.displayHeight);
-                result = gray.Copy(f).Resize(100, 100, Inter.Cubic);
                 dc.DrawRectangle(null, drawPen, coili);
+                result = frame.Convert<Gray, byte>().Copy(f).Resize(100, 100, Inter.Cubic);
 
-                if (trainingImages.ToArray().Length != 0)
+                LBPHFaceRecognizer recognizer = new LBPHFaceRecognizer();
+                recognizer.Train<Gray, Byte>(trainingImages.ToArray(), int_labels.ToArray());
+
+                FaceRecognizer.PredictionResult pred = recognizer.Predict(result);
+                
+                if (pred.Distance < 100)
                 {
-                    LBPHFaceRecognizer recognizer = new LBPHFaceRecognizer();
-                    recognizer.Train<Gray, Byte>(trainingImages.ToArray(), int_labels.ToArray());
-
-                    FaceRecognizer.PredictionResult pred = recognizer.Predict(result);
-                    Console.WriteLine(pred.Distance);
-                    if (pred.Distance < 60)
+                    name = labels[pred.Label - 1];
+                    if (pred.Distance > 60)
                     {
-                        name = labels[pred.Label - 1];
+                        add_training_face(result, pred.Label - 1);
                     }
-                    else
-                    {
-                        name = "Unknown";
-                    }
-                    predictions.Add(name);
-                    Console.WriteLine(name);
-
-                    //Draw the label for each face detected and recognized
-                    dc.DrawText(new FormattedText(name,
-                                    CultureInfo.GetCultureInfo("en-us"),
-                                    FlowDirection.LeftToRight,
-                                    new Typeface("Georgia"),
-                                    DrawTextFontSize, Brushes.LightGreen),
-                               conv_point(f.X, f.Y, this.displayWidth, this.displayHeight));
+                        
                 }
+                else
+                {
+                    add_new_face(frame, result);
+                    name = labels.Last();
+                }
+                predictions.Add(name);
+                Console.WriteLine(pred.Distance);
+                Console.WriteLine(name);
+
+                //Draw the label for each face detected and recognized
+                dc.DrawText(new FormattedText(name,
+                                CultureInfo.GetCultureInfo("en-us"),
+                                FlowDirection.LeftToRight,
+                                new Typeface("Georgia"),
+                                DrawTextFontSize, Brushes.LightGreen),
+                            conv_point(f.X, f.Y, this.displayWidth, this.displayHeight));
             }
-            //add_faces(ref facesDetected, ref predictions, ref currentFrame);
         }
 
         /// <summary>
@@ -607,9 +605,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         dc.DrawImage(this.colorBitmap, this.displayRect);
 
                         // detect and draw faces
-                        //Console.WriteLine("Recognizing faces");
                         face_recognition(dc);
-                        //Console.WriteLine("Done with faces");
 
                         //Used for counting bodies observed
                         bodies_active.Clear();
@@ -670,8 +666,6 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         }
 
                         //Display the Number of bodies tracked currently
-                        Console.WriteLine("bodies");
-                        Console.WriteLine(bodies_active.Count);
                         dc.DrawText(
                                         new FormattedText(
                                         ("Number of Bodies Detected = " + bodies_active.Count +
