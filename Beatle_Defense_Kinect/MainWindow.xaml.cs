@@ -20,7 +20,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     using System.Windows.Input;
     using System.Timers;
     using System.Net;  
-    using System.Text; 
+    using System.Text;
+    using Newtonsoft.Json;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -29,6 +30,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public dynamic systemData;
         public string postData = "{ \"dummyData\": \"kinectIsRunning\" }";
         
         /// <summary>
@@ -1075,11 +1077,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
             using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
             {
-                string result = httpWebStreamReader.ReadToEnd();
-                // 
-                // TODO: change this to something like this.systemIsArmed = JSON.parse(result)["armed"]
-                // 
-                Console.WriteLine($"The response from the server is:{result}");
+                this.systemData = JsonConvert.DeserializeObject(httpWebStreamReader.ReadToEnd());
+                Console.WriteLine($"systemData.status is {systemData.status}");
             };
         }
         

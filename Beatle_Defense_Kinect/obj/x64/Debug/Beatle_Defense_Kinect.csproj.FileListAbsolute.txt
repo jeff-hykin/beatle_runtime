@@ -55,3 +55,5 @@ C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Newtonsoft.Json.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Newtonsoft.Json.xml
