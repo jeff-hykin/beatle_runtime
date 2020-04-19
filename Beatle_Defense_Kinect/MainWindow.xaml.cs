@@ -264,20 +264,27 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             // Servo Tracking
             if (use_pan_tilt)
             {
+                var faceAngle = mainWindow.Find_Angle_Of_Face(mainWindow.targetBody);
                 // If not aiming close enough to target on y axis
-                if (Math.Abs(mainWindow.Find_Angle_Of_Face(mainWindow.bodies[mainWindow.targetIndex]).Y) > 5)
+                if (Math.Abs(faceAngle.Y) > 5)
                 {
                     float amount = movement_amount;
-                    if (mainWindow.Find_Angle_Of_Face(mainWindow.bodies[mainWindow.targetIndex]).Y > 0) amount *= -1;
+                    if (faceAngle.Y > 0)
+                    {
+                        amount *= -1;
+                    }
 
                     CommandServo(0, (float)(current_y_degrees + amount), 1000.0f);
                 }
 
                 // If not aiming close enough to target on x axis
-                if (Math.Abs(mainWindow.Find_Angle_Of_Face(mainWindow.bodies[mainWindow.targetIndex]).X) > 1)
+                if (Math.Abs(faceAngle.X) > 1)
                 {
                     float amount = movement_amount;
-                    if (mainWindow.Find_Angle_Of_Face(mainWindow.bodies[mainWindow.targetIndex]).X < 0) amount *= -1;
+                    if (faceAngle.X < 0)
+                    {
+                        amount *= -1;
+                    }
 
                     CommandServo(1, (float)(current_x_degrees + 0.1f*amount), 100.0f);
                 }
@@ -685,7 +692,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         {
             get
             {
-                return Array.IndexOf(bodies, targetBody);
+                return Array.IndexOf(this.bodies, targetBody);
             }
         }
 
@@ -803,17 +810,15 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         this.activeBodies.Clear();
                         foreach (var body in this.bodies)
                         {
-                            // FIXME: If curent body is target // Need to fix for selection code to work
-                            if (!body.IsTracked)
+                            if (body == null || !(body.IsTracked))
                             {
-                                targetBody = body; // this doesn't make any sense to me -- Jeff
                                 continue;
                             }
                             
                             // Populate activeBodies
                             this.activeBodies.Add(body);
-                            // select brush
-                            var brush = this.SelectBrush(body); // red brush if currently targeted
+                            // red brush if currently targeted, white otherwise
+                            var brush = this.SelectBrush(body);
                             
                             // 
                             // draw
@@ -826,7 +831,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         // 
                         // tell central server who was found
                         // 
-                        this.communicationHelper.outgoingData.numberOfPeople = this.activeBodies.ToArray().Length;
+                        this.communicationHelper.outgoingData.numberOfPeople = this.activeBodies.Count;
                         
                         // 
                         // HUD info
@@ -875,9 +880,14 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     // 
                     // Change Which Person is the Target
                     // 
-                    if (activeBodies.Count > 1)
+                    if (activeBodies.Count > 0)
                     {
                         int target_active_index = this.activeBodies.IndexOf(this.targetBody);
+                        // if target isn't in found in active bodies automatically, then switch to a new body
+                        if (target_active_index < 0) {
+                            target_active_index = 0;
+                            this.targetBody = this.activeBodies[0];
+                        }
                         
                         // 
                         // LEFT SHIFT (change target body)
@@ -890,15 +900,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         {
                             this.waitForLeftKeyUp = false;
                             Debug.Print("Shift Left");
-
-                            if (target_active_index <= 0)
-                            {
-                                target_active_index = this.activeBodies.Count - 1;  
-                            } 
-                            else
-                            {
-                                target_active_index--;
-                            }
+                            target_active_index--;
                         }
                         
                         // 
@@ -912,15 +914,21 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         {
                             this.waitForRightKeyUp = false;
                             Debug.Print("Shift Right");
-
-                            if (target_active_index >= (this.activeBodies.Count - 1))
-                            {
-                                target_active_index = 0;
-                            }
-                            else
-                            {
-                                target_active_index++;
-                            }
+                            target_active_index++;
+                        }
+                        
+                        // 
+                        // keep target in range
+                        //
+                        if (target_active_index < 0)
+                        {
+                            // if negative, wrap it around
+                            target_active_index = this.activeBodies.Count + target_active_index;
+                        }
+                        else if (target_active_index >= this.activeBodies.Count)
+                        {
+                            // if positive, wrap it down using modulus
+                            target_active_index = target_active_index % this.activeBodies.Count;
                         }
                         
                         // update target
@@ -1196,7 +1204,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         private Vector Find_Angle_Of_Face(Body body)
         {
-            if (body.IsTracked)
+            if (body != null && body.IsTracked)
             {
                 // var headJoint = body.Joints[JointType.Head].Position;
                 var midpoint = body.Joints[JointType.SpineMid].Position;
@@ -1207,7 +1215,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                 return new Vector(Math.Round(xAngle, 2), Math.Round(yAngle, 2));
             }
-            else return new Vector(0, 0);
+            return new Vector(0, 0);
         }
 
         private double Find_Distance_To_Face(Body body)
