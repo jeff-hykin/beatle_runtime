@@ -20,12 +20,12 @@ module.exports = processManager = {
                 keyPressed: null, // returns: which key as a string
             }
         },
-        motionSensor: {
-            listensFor: {},
-            canYell: {
-                motionFound: null,
-            }
-        },
+        // motionSensor: {
+        //     listensFor: {},
+        //     canYell: {
+        //         motionFound: null,
+        //     }
+        // },
         kinect: {
             listensFor: {
                 wakeUp: null, // no arguments
