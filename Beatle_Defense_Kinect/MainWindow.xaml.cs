@@ -33,8 +33,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public dynamic systemData = null;
         public string postData = "{ \"dummyData\": \"kinectIsRunning\" }";
         
-        public var font = new Typeface("Georgia");
-        public var culture_info = CultureInfo.GetCultureInfo("en-us");
+        public dynamic font = new Typeface("Georgia");
+        public dynamic culture_info = CultureInfo.GetCultureInfo("en-us");
         
         /// <summary>
         /// Thickness of face bounding box and face points
@@ -349,7 +349,6 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             get
             {
                 return this.imageSource;
-                // return this.colorBitmap;
             }
         }
 
@@ -483,7 +482,14 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             // if the system is disarmed, basically do nothing
-            if (this.IsArmed)
+            if (!this.IsArmed)
+            {
+                using (DrawingContext dc = this.drawingGroup.Open())
+                {
+                    dc.DrawImage(this.colorBitmap, this.displayRect);
+                }
+            }
+            else
             {
                 using (var bodyFrame = e.FrameReference.AcquireFrame())
                 {
@@ -557,7 +563,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                             var textToDisplay = $"Number of Bodies Detected = {bodies_active.Count}"+
                                                 $"\nTargetIndex = {targetIndex}" + 
                                                 $"\nTarget X-Angle from Camera : {angleOfFace.X}°" +
-                                                $"\nTarget Y-Angle from Camera : {angleOfFace.Y}°"
+                                                $"\nTarget Y-Angle from Camera : {angleOfFace.Y}°";
                             
                             // Display the Number of bodies currently tracked
                             dc.DrawText(
