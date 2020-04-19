@@ -30,7 +30,7 @@ new Vue({
         },
         connectedToBackend: false,
         changesAreUnconfirmed: true,
-        loggedIn: false,
+        loggedIn: localStorage.getItem("loggedIn"),
     }),
     mounted() {
         window.systemData = this.$data.systemData

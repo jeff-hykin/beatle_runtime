@@ -1,5 +1,5 @@
 {
-    "name": "video_labeler",
+    "name": "beatle_app",
     "version": "1.0.0",
     "author": "Jeff Hykin <jeff.hykin@gmail.com>",
     "description": "An electron-vue project",
@@ -15,7 +15,7 @@
         "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
         "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
         "postinstall": "",
-        "package": "npx electron-packager . --no-prune --overwrite ; mv video_labeler-darwin-x64 app.nosync"
+        "package": "npx electron-packager . --no-prune --overwrite ; mv beatle_app-darwin-x64 app.nosync"
     },
     "vueElectronSettings": {
         "devPortNumber": 9080
@@ -24,8 +24,8 @@
     "nodeGypRebuild": true,
     "npmRebuild": false,
     "build": {
-        "productName": "video_labeler",
-        "appId": "jeffhykin.video_labeler",
+        "productName": "beatle_app",
+        "appId": "jeffhykin.beatle_app",
         "directories": {
             "output": "build"
         },

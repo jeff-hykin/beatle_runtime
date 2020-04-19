@@ -11,6 +11,7 @@ export default {
     methods: {
         onLogout() {
             $root.loggedIn = false
+            localStorage.removeItem("loggedIn")
         }
     }
 }

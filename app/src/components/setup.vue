@@ -21,9 +21,17 @@
                 @keydown="onKeydown($event)"
                 v-model="password"
             />
+            <ui-textbox
+                floating-label
+                label="New Keypad-Pin"
+                type=password
+                
+                @keydown="onKeydown($event)"
+                v-model="pin"
+            />
             <column height=1rem  />
             <ui-button
-                :disabled="password.length == 0 || username.length == 0" color=primary
+                :disabled="password.length == 0 || username.length == 0 || !pinIsValid" color=primary
                 @click="onSubmit"
                 >
                     Submit
@@ -37,9 +45,20 @@ export default {
     data:()=>({
         username: "",
         password: "",
+        pin: "",
     }),
     mounted() {
         
+    },
+    computed: {
+        pinIsValid() {
+            if (this.pin.length >= 4) {
+                if (this.pin.replace(/[^0-9]/g,"").length == this.pin.length) {
+                    return true
+                }
+            }
+            return false
+        }
     },
     methods: {
         onKeydown($event) {
@@ -51,6 +70,7 @@ export default {
             console.log("submitting")
             // try to make the account (will throw error if bad data)
             passwordManager.setUsernameAndPassword({ username: this.username, password: this.password })
+            passwordManager.setPin(this.pin)
             // tell the app to end setup process
             $root.needsSetup = false
             // tell the user about the success

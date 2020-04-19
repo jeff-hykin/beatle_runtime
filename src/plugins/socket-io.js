@@ -46,6 +46,7 @@ socket.on("systemData.providingSystemData", (backendSystemData) => {
 socket.on("interface.userAuthenticated", function(){
     console.log("authenicated")
     $root.loggedIn = true
+    localStorage.setItem("loggedIn", "true")
 })
 
 socket.on("interface.userAuthenticationFailed", function(){

@@ -31,6 +31,15 @@ function checkIfNormalString(string, argumentSource) {
     }
 }
 
+function setPin(pin) {
+    checkIfNormalString(pin, "pin argument from setPin()")
+
+    let privateData = JSON.parse(fs.readFileSync(pathFor.privateSystemData))
+    // create/overwrite pin
+    privateData.pin = hashPassword(password)
+    // save them to the file
+    fs.writeFileSync(pathFor.privateSystemData, JSON.stringify(privateData))
+}
 
 function setUsernameAndPassword({ username, password }) {
     // 
@@ -82,6 +91,7 @@ function resetAllUsers() {
 
 module.exports = {
     doesAtLeastOneUserExist,
+    setPin,
     setUsernameAndPassword,
     checkUsernameAndPassword,
     resetAllUsers,
