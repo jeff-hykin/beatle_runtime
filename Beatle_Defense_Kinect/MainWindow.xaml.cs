@@ -40,14 +40,18 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     
     // 
     // Communication
-    // 
+    //
+    public class OutgoingData
+    {
+        public int numberOfPeople = 0;
+    }
     public class CommunicationHelper : Helper {
         // copy-paste constructor from Helpers
         public CommunicationHelper(dynamic mainWindow) { this.mainWindow = mainWindow; }
         
         // data
         public dynamic systemData = null;
-        public string postData = "{ \"personIsFound\": false }";
+        public dynamic outgoingData = new OutgoingData();
         
         // 
         // events (construct, newFrame, destruct)
@@ -105,7 +109,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 // 
                 // Create the post data
                 // 
-                string postData = this.postData;
+                string postData = JsonConvert.SerializeObject(this.outgoingData);
                 
                 // cleanup
                 byte[] byteArray = Encoding.UTF8.GetBytes(postData);
@@ -818,6 +822,11 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                             this.DrawClippedEdges(body, dc);
                             this.DrawBody(body, dc, brush);
                         }
+                        
+                        // 
+                        // tell central server who was found
+                        // 
+                        this.communicationHelper.outgoingData.numberOfPeople = this.activeBodies.ToArray().Length;
                         
                         // 
                         // HUD info
