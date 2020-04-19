@@ -1,6 +1,8 @@
-
-
 let phidget22 = require("phidget22")
+// module.exports = {
+//     setupListener: whenStarPressed
+// }
+
 
 // 
 // fixed data
@@ -99,9 +101,9 @@ conn.connect().then(() => {
     // what to do when an input value changes
     onStateChange = async (pin, pinIndex, state) => {
         try {
-            console.log(`keypad state changed`)
-            if (state == 1) {
-                console.log(await whichKey(pin, pinIndex, outputPins))
+            console.log(`keypad state changed: pin:${pinIndex} state: ${state}`)
+            if (state == true) {
+                
             }
         } catch (error) {
             console.log(`error is:`,error)
