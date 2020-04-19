@@ -464,9 +464,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         // 
         // helpers
         // 
-        public dynamic CommunicationHelper;
-        public dynamic StrobeHelper;
-        public dynamic ServoHelper;
+        public dynamic communicationHelper;
+        public dynamic strobeHelper;
+        public dynamic servoHelper;
         
         // 
         // drawing
@@ -552,15 +552,15 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         public MainWindow()
         {
-            this.CommunicationHelper = new CommunicationHelper(this);
-            this.StrobeHelper        = new StrobeHelper(this);
-            this.ServoHelper         = new ServoHelper(this);
+            this.communicationHelper = new CommunicationHelper(this);
+            this.strobeHelper        = new StrobeHelper(this);
+            this.servoHelper         = new ServoHelper(this);
             
             SetupKinectStuff();
             
-            this.CommunicationHelper.afterConstructor();
-            // this.StrobeHelper.afterConstructor();
-            this.ServoHelper.afterConstructor();
+            this.communicationHelper.afterConstructor();
+            this.strobeHelper.afterConstructor();
+            this.servoHelper.afterConstructor();
         }
         
         // System
@@ -751,9 +751,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 this.kinectSensor = null;
             }
             
-            this.CommunicationHelper.afterDesctructor();
-            this.StrobeHelper.afterDesctructor();
-            this.ServoHelper.afterDesctructor();
+            this.communicationHelper.afterDesctructor();
+            this.strobeHelper.afterDesctructor();
+            this.servoHelper.afterDesctructor();
         }
 
         /// <summary>
@@ -764,7 +764,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             // if the system is disarmed, basically do nothing
-            if (!this.CommunicationHelper.IsArmed)
+            if (!this.communicationHelper.IsArmed)
             {
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
@@ -846,9 +846,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     // run helpers
                     // 
                     
-                    this.CommunicationHelper.afterNewFrame();
-                    this.StrobeHelper.afterNewFrame();
-                    this.ServoHelper.afterNewFrame();
+                    this.communicationHelper.afterNewFrame();
+                    this.strobeHelper.afterNewFrame();
+                    this.servoHelper.afterNewFrame();
                     
                     // 
                     // Motion Input Simulation
@@ -860,7 +860,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     if (Keyboard.IsKeyUp(Key.Space) && this.waitForSpaceKeyUp)
                     {
                         this.waitForSpaceKeyUp = false;
-                        this.ServoHelper.MotionDetected();
+                        this.servoHelper.MotionDetected();
                     }
                     
                     // 
@@ -1160,8 +1160,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                             colorFrame.CopyConvertedFrameDataToIntPtr(
                                 this.colorBitmap.BackBuffer,
                                 (uint)(colorFrameDescription.Width * colorFrameDescription.Height * 4),
-                                ColorImageFormat.Bgra);
-
+                                ColorImageFormat.Bgra
+                            );
 
                             this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
                         }
