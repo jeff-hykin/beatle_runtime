@@ -1,11 +1,7 @@
 let app = require("express")()
 let http = require("http").createServer(app)
 let io = require("socket.io")(http)
-let bodyParser = require('body-parser')
 let cors = require('cors')
-
-// create application/json parser
-let jsonParser = bodyParser.json()
 
 // a single location for all javascript paths to prevent future breaking changes
 global.pathFor = require("../pathFor")
@@ -13,6 +9,7 @@ global.pathFor = require("../pathFor")
 let processManager = require(global.pathFor.processManager)
 let packageJson = require(global.pathFor.package)
 global.systemData = require(global.pathFor.systemDataStorage)
+global.app = app
 
 //
 // setup routes
@@ -20,10 +17,6 @@ global.systemData = require(global.pathFor.systemDataStorage)
 app.use(cors())
 app.get("/", (req, res) => {
     res.sendFile(global.pathFor.homepage)
-})
-app.post("/sync", jsonParser, (req, res) => {
-    console.log(`req.body is:`,req.body)
-    res.send(systemData)
 })
 
 //

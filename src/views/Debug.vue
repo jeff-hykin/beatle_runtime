@@ -11,15 +11,18 @@
 </template>
 
 <script>
+let DateTime = require("good-date")
 export default {
     data: ()=>({
         lightIsOn: false,
         eventStream: "",
     }),
     mounted() {
-        window.socket.on("keypad.keyPressed", (whichKey)=> {
-            this.eventStream += `\nkey pressed: ${whichKey}`
-        })
+        // events to keep track of 
+        window.socket.on("keypad.keyPressed", (whichKey)=>this.logEvent(`key pressed: ${whichKey}`))
+        window.socket.on("kinect.foundPeople", (people)=>this.logEvent(`kinect found people: ${people.length}`))
+        window.socket.on("kinect.lostSomePeople", ()=>this.logEvent(`kinect lost tracking for some people`))
+        window.socket.on("kinect.lostEveryone", ()=>this.logEvent(`kinect lost tracking of everyone`))
     },
     methods: {
         toggleStrobe() {
@@ -29,6 +32,10 @@ export default {
             } else {
                 window.socket.emit('strobeLight.turnOff', {})
             }
+        },
+        logEvent(string) {
+            let now = DateTime.now()
+            this.eventStream = `${now.time} ${now.date}: ${string}\n` + this.eventStream
         }
     }
 }

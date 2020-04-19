@@ -32,6 +32,8 @@ module.exports = processManager = {
             },
             canYell: {
                 foundPeople: null, // returns: list of people-objects (each with an id and maybe head location)
+                lostSomePeople: null,
+                lostEveryone: null,
             }
         },
         systemData: {
