@@ -37,13 +37,14 @@
           type: 'video/mp4',
         },
 
-          'baby.png',
+          'Activation001.png',
+          'Activation002.png',
+          'Activation003.png',
+          'Activation004.png',
 
         {
           title: 'HH:MM::SS MM:DD::YY',
-          href: 'baby.png',
-          type: 'image/png',
-          poster: './public/baby.jpeg',  
+          poster: 'Activation001.png',  
       	}
       ],
       index: null
