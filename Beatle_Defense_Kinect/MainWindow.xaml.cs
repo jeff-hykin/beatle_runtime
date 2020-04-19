@@ -802,14 +802,16 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             if (this.GetFaceTextPositionInColorSpace(faceIndex, out faceTextLayout))
             {
                 drawingContext.DrawText(
-                        new FormattedText(
-                            faceText,
-                            CultureInfo.GetCultureInfo("en-us"),
-                            FlowDirection.LeftToRight,
-                            new Typeface("Georgia"),
-                            DrawTextFontSize,
-                            drawingBrush),
-                        faceTextLayout);
+                    new FormattedText(
+                        faceText,
+                        this.culture_info,
+                        FlowDirection.LeftToRight,
+                        this.font,
+                        DrawTextFontSize,
+                        drawingBrush
+                    ),
+                    faceTextLayout
+                );
             }
         }
 
