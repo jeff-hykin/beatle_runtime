@@ -6,7 +6,7 @@ let listeners = processManager.processes.kinect.listensFor
 let yell = processManager.processes.kinect.canYell
 
 // FIXME: start the actual C# executable here
-
+// "../Beatle_Defense_Kinect/bin/x64/Debug"
 
 // 
 // setup listener since C# doesn't use socket.io

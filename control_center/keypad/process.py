@@ -7,18 +7,21 @@ from Phidget22.Devices.DigitalInput import *
 
 number_of_inputs = 4
 number_of_outputs = 4
-timeout_duration = 15 * 1000 # its in miliseconds
+timeout_duration = 5 * 1000 # its in miliseconds
+serial_number = 96781
 
 # create input pins
 input_pins  = [ DigitalInput() for each_index in range(number_of_inputs)  ]
 for each_index, each in enumerate(input_pins):
     each.setChannel(each_index)
+    each.setDeviceSerialNumber(serial_number)
     each.openWaitForAttachment(timeout_duration)
 
 # create ouput pins
 output_pins = [ DigitalOutput() for each_index in range(number_of_outputs) ]
 for each_index, each in enumerate(output_pins):
     each.setChannel(each_index)
+    each.setDeviceSerialNumber(serial_number)
     each.openWaitForAttachment(timeout_duration)
 
 def which_key(input_pin, index_of_input):
