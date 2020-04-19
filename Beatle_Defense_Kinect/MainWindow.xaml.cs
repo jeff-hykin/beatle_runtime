@@ -33,7 +33,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public dynamic systemData = null;
         public string postData = "{ \"dummyData\": \"kinectIsRunning\" }";
         
-        public dynamic font = new Typeface("Georgia");
+        public dynamic font = new Typeface("Helvetica");
         public dynamic culture_info = CultureInfo.GetCultureInfo("en-us");
         
         /// <summary>
@@ -414,8 +414,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Couldn't open the Serial Port!");
-                    Console.WriteLine(ex.ToString());//Report the actual error
+                    Debug.WriteLine("Couldn't open the Serial Port!");
+                    Debug.WriteLine(ex.ToString());//Report the actual error
                     use_pan_tilt = false;
                 }
 
@@ -1107,20 +1107,27 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             }   
             catch (Exception ex)
             {
-                Console.WriteLine("Error when getting data from central server GetRequestStreamCallback");
+                Debug.WriteLine("Error when getting data from central server from: GetRequestStreamCallback()");
             }
         }
 
         // partof: central_server_connection
         public void GetResponceStreamCallback(IAsyncResult callbackResult)
         {
-            HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
-            HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
-            using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
+            try 
             {
-                this.systemData = JsonConvert.DeserializeObject(httpWebStreamReader.ReadToEnd());
-                Console.WriteLine($"systemData.status is {systemData.status}");
-            };
+                HttpWebRequest request = (HttpWebRequest)callbackResult.AsyncState;
+                HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(callbackResult);
+                using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
+                {
+                    this.systemData = JsonConvert.DeserializeObject(httpWebStreamReader.ReadToEnd());
+                    Debug.WriteLine($"systemData.status is {systemData.status}");
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error when getting data from central server from: GetResponceStreamCallback()");
+            }
         }
         
         private System.Drawing.Bitmap BitmapFromWriteableBitmap(WriteableBitmap writeBmp)
