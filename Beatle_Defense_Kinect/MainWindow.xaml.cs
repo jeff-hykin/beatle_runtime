@@ -197,16 +197,14 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         CascadeClassifier face;
         FontFace font = FontFace.HersheyTriplex;
-        Image<Gray, byte> result, TrainedFace = null;
-        Image<Gray, byte> gray = null;
+        Image<Gray, byte> result;
         List<Image<Gray, byte>> trainingImages = new List<Image<Gray, byte>>();
         Dictionary<string, int> label_to_int = new Dictionary<string, int>();
         List<string> labels = new List<string>();
         List<int> int_labels = new List<int>();
         List<string> NamePersons = new List<string>();
-        int ContTrain, NumLabels, t;
-        string name, startupPath, peopleDataPath, actDataPath, names = null;
-        Capture grabber;
+        int ContTrain, t;
+        string name, startupPath, peopleDataPath, actDataPath;
 
         int strobe_state;
         DigitalOutput strobe_do;
