@@ -14,6 +14,17 @@
         - create presentation
         - make pre-recorded demos
         - consider speaker sounds for countdown after keypad-arming
+    timeline:
+        - imaginary: computer starts, app opens
+        - real: connect to wifi, set username, password, pin
+        - real: connect on phone, save as bookmark, requires login but remembers
+        - real: test functionality the strobe, the tracking
+        - imaginary: mount device with 4 screws
+        - real: arm and disarm with the phone
+        - real: TODO: when person is present and armed strobe flashes
+        - real: TODO: arm and disarm with the keypad
+        - real: arming the system will have a warmup time
+        
     (commands):
         gp: ruby scripts/gp.rb
         run: npx nodemon control_center/main.js

@@ -3,6 +3,7 @@ module.exports = {
     homepage: __dirname + "/index.html", // used but file doesn't exist (doesn't need to exist)
     // control center
     processFolder: __dirname + "/control_center/",
+    centralServer: __dirname + "/control_center/main.js",
     processManager: __dirname + "/control_center/processManager.js",
     systemDataStorage: __dirname + "/control_center/systemData.json",
     privateSystemData: __dirname + "/control_center/privateSystemData.json",
