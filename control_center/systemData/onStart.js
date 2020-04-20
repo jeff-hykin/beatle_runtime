@@ -14,9 +14,10 @@ listeners.dataShouldChange = (newData, who) => {
     newData = global.systemData
     let dataAfterChange = JSON.stringify(global.systemData)
     // if there was a change, tell everyone about it
-    console.log(`oldData is:`,oldData)
-    console.log(`newData is:`,newData)
     if (JSON.stringify(oldData) != dataAfterChange) {
+        console.log(`oldData is:`,oldData)
+        console.log(`newData is:`,newData)
+        
         console.log("sending dataDidChange")
         yell.dataDidChange(global.systemData)
         

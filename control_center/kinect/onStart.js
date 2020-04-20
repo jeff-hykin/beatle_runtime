@@ -19,8 +19,6 @@ let jsonParser = require('body-parser').json()
 app.post("/sync", jsonParser, (req, res) => {
     let newData = req.body
     let oldData = global.systemData.kinectData
-    console.log(`kinect: oldData is:`,oldData)
-    console.log(`kinect: newData is:`,newData)
     // if there was a change
     if (JSON.stringify(oldData) != JSON.stringify(newData)) {
         

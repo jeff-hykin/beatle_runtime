@@ -6,6 +6,7 @@
     "main": "control_center/main.js",
     "scripts": {
         "start": "npx nodemon control_center/main.js",
+        "server": "node control_center/main.js",
         "start_frontend": "vue-cli-service serve"
     },
     "repository": {
