@@ -1,29 +1,36 @@
 (using_atk_version): 1.1.0
 (project):
     todo:
-        - add 2nd phigit board
-        - merge in face recognition code
-        - send people (number and who) data to the central server
-        - call exe from the app
-        - record video of intruder
-        - enable the servos
-        - have website remember logins
-        - website GUI for showing which people
-        - website GUI for browsing event logs
-        - add more details to the App homepage instructions
-        - create presentation
         - make pre-recorded demos
-        - consider speaker sounds for countdown after keypad-arming
-    timeline:
+        - cleanup mobile interface
+        - record events to file, load file on start, update in real time
+        - merge in face recognition code
+        - send record people data to event log
+        - find & implment library for recording video of intruder
+        - enable the servos for pan&tilt
+        - only show head tracking
+    demo timeline:
         - imaginary: computer starts, app opens
         - real: connect to wifi, set username, password, pin
         - real: connect on phone, save as bookmark, requires login but remembers
         - real: test functionality the strobe, the tracking
         - imaginary: mount device with 4 screws
         - real: arm and disarm with the phone
-        - real: TODO: when person is present and armed strobe flashes
-        - real: TODO: arm and disarm with the keypad
-        - real: arming the system will have a warmup time
+        - real: when person is present and armed strobe flashes
+        - real: arming the system with the keypad will have a warmup time
+        - real: arm with the keypad
+        - real: TODO: user can view an event log of what happened
+        - real: TODO: disarm with the keypad
+        - real: TODO: when person is found, camera moves into recognizing person
+        - real: TODO: when intruder is found, video begins recording
+        - real: TODO: when new person is found, picture of their face is saved
+        - real: TODO: user can view saved pictures and videos
+        
+    cleanup:
+        - change logo on website
+        - fix thumbnails on gallery
+        - have way to change pin
+        - only show head tracking
         
     (commands):
         gp: ruby scripts/gp.rb
