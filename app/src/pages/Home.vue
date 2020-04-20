@@ -15,9 +15,14 @@
         <!-- Main Section -->
         <column class=main-area>
             <h4> To connect to the Beatle from any device </h4>
-            <br /><br /> 1. Make sure the Beatle (this computer) is connected to WiFi
-            <br /><br /> 2. Make sure the other device is connected to the same WiFi
-            <br /><br /> 3. Go to http://{{$root.localIpAddress}}:8080 in the web browser of the other device
+            <span>
+                <br /><br /> Go to <a href="">http://{{$root.localIpAddress}}:8080</a> in the web browser of your phone (or computer).
+                <br /> You probably want to bookmark that page, or add it to your homescreen for easy access.
+                
+                <br /><br /> Arm the system by pressing * on the keypad
+                <br /><br /> Disarm the system by pressing * on the keypad, followed by your pin
+                <br /><br /> To see what the Beatle sees, take a look at the Kinect app that should be open
+            </span>
         </column>
     </row>
 </template>

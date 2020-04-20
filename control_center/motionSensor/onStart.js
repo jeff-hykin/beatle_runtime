@@ -1,5 +1,5 @@
 let processManager = require("../processManager")
-let setupProcess = require("../commandlineHelper")
+let setupProcess = require("../utils/commandlineHelper")
 
 // import the official listener-names for this process
 let listeners = processManager.processes.motionSensor.listensFor

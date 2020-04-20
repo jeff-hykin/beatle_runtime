@@ -109,7 +109,7 @@ let App = {
                 socket.emit('systemData.dataShouldChange', this.systemData)
                 this.changesAreUnconfirmed = true
             },
-        }
+        },
     },
     methods: {
         confirmDialogue({title, action, message}) {

@@ -1,16 +1,20 @@
 let app = require("express")()
 let http = require("http").createServer(app)
 let io = require("socket.io")(http)
+let cors = require('cors')
 
 // a single location for all javascript paths to prevent future breaking changes
 global.pathFor = require("../pathFor")
 
 let processManager = require(global.pathFor.processManager)
 let packageJson = require(global.pathFor.package)
+global.systemData = require(global.pathFor.systemDataStorage)
+global.app = app
 
 //
-// setup homepage (no main use, just for tests)
+// setup routes
 //
+app.use(cors())
 app.get("/", (req, res) => {
     res.sendFile(global.pathFor.homepage)
 })

@@ -17,6 +17,7 @@ socket.on("connect", () => {
 socket.on("disconnect", () => {
     console.log("socket disconnected")
     window.$root.connectedToBackend = false
+    $root.systemData.status = "disconnected"
 })
 
 // update the app state whenever there are changes
