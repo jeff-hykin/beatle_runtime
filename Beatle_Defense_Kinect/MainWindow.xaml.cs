@@ -476,6 +476,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private bool use_phidget = false;
+
         // 
         // helpers
         // 
@@ -634,10 +636,14 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         private void StrobeSetup()
         {
             // STROBE
-            strobe_state = 0;
-            strobe_phidget_sn = 12312;
-            strobe_do.DeviceSerialNumber = strobe_phidget_sn;
-            strobe_do.Open(5000);
+            if (use_phidget)
+            {
+                strobe_state = 0;
+                strobe_phidget_sn = 12312;
+                strobe_do = new DigitalOutput();
+                strobe_do.DeviceSerialNumber = strobe_phidget_sn;
+                strobe_do.Open(5000);
+            }
         }
         
         // System
@@ -740,14 +746,20 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         private void turn_on_strobe()
         {
-            strobe_state = 1;
-            strobe_do.State = true;
+            if (use_phidget)
+            {
+                strobe_state = 1;
+                strobe_do.State = true;
+            }
         }
 
         private void turn_off_strobe()
         {
-            strobe_state = 0;
-            strobe_do.State = false;
+            if (use_phidget)
+            {
+                strobe_state = 0;
+                strobe_do.State = false;
+            }
         }
 
         private void add_new_face(Image <Bgr, byte> frame, Image<Gray, byte> face)
