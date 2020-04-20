@@ -1,6 +1,6 @@
 <template>
     <column>
-        <ui-button color=primary raised @click="toggleStrobe">Toggle Strobe</ui-button>
+        <ui-button :disable='$root.systemData.status=="disarmed"' color=primary raised @click="toggleStrobe">Toggle Strobe</ui-button>
         <column width=40rem height=20rem max-width=80vw align-v=top align-h=left background-color=white padding="1rem 2rem" margin=1.5rem>
             <h5 style="text-decoration: underline;">Event Console</h5>
             <div style="white-space: pre; width: 100%; overflow: auto;">{{eventStream}}</div>
@@ -24,8 +24,7 @@ export default {
     },
     methods: {
         toggleStrobe() {
-            this.lightIsOn = !this.lightIsOn
-            if (this.lightIsOn) {
+            if (!$root.systemData.strobeIsOn) {
                 window.socket.emit('strobeLight.turnOn', {})
             } else {
                 window.socket.emit('strobeLight.turnOff', {})

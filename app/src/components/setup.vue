@@ -55,6 +55,8 @@
 </template>
 
 <script>
+const { spawn } = require('child_process')
+
 export default {
     data:()=>({
         check1: false,

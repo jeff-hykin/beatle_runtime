@@ -50,7 +50,6 @@ webFrame.setVisualZoomLevelLimits(1, 3)
 // utils 
 const { lookup } = require('dns').promises
 const { hostname } = require('os')
-const { spawn } = require('child_process')
 
 // paths
 window.pathFor = require("../../pathFor")

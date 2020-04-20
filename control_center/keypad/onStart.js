@@ -14,7 +14,7 @@ let stopSystemArmingProcess = false
 // start the process
 let theProcess = setupProcess(`python ${__dirname}/process.py`, (response)=>{
     response = response.trim()
-    
+
     // 
     // setup key history (Que)
     // 
@@ -32,21 +32,19 @@ let theProcess = setupProcess(`python ${__dirname}/process.py`, (response)=>{
         if (systemIsBeingArmed == true) {
             stopSystemArmingProcess = true
             audioManager.systemDisarmedSound.play()
+        // if the system wasn't armed, then it is now being armed (and is prepared to be cancelled if needed)
         } else {
             systemIsBeingArmed = true
             audioManager.systemArmed10Seconds.play()
             setTimeout(() => {
                 if (!stopSystemArmingProcess) {
-                    global.systemData.status = "armed"
-                    // tell everyone the systemData changed
-                    processManager.processes.systemData.canYell.dataDidChange(global.systemData)
-                    // say the system is armed
-                    audioManager.systemArmedSound.play()
+                    // tell system to update the data
+                    processManager.processes.systemData.listensFor.dataShouldChange({ status: "armed" })
                 }
                 // always reset the variables
                 stopSystemArmingProcess = false 
                 systemIsBeingArmed = false
-            }, 10000)
+            }, 10000) // 10 seconds
         }
     }
 

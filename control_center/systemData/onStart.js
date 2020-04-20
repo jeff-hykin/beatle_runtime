@@ -11,18 +11,30 @@ listeners.dataShouldChange = (newData) => {
     let oldData = global.systemData
     console.log('received dataChange request')
     global.systemData = {...global.systemData, ...newData}
-    console.log(`systemData is now:`,global.systemData)
+    newData = global.systemData
     let dataAfterChange = JSON.stringify(global.systemData)
     // if there was a change, tell everyone about it
+    console.log(`oldData is:`,oldData)
+    console.log(`newData is:`,newData)
     if (JSON.stringify(oldData) != dataAfterChange) {
         console.log("sending dataDidChange")
         yell.dataDidChange(global.systemData)
         
-        // call armed
+        // call armed/disarmed
         if (oldData.status == "disarmed" && newData.status == "armed") {
             audioManager.systemArmedSound.play()
         } else if (oldData.status == "armed" && newData.status == "disarmed") {
             audioManager.systemDisarmedSound.play()
+        }
+        
+        // 
+        // handle lightOn/lightOff
+        // 
+        if (oldData.kinectData.numberOfPeople == 0 && newData.kinectData.numberOfPeople > 0 && newData.status == "armed") {
+            processManager.processes.strobeLight.listensFor.turnOn()
+        }
+        if (newData.kinectData.numberOfPeople == 0 || newData.status == "disarmed") {
+            processManager.processes.strobeLight.listensFor.turnOff()
         }
 
         // save changes to permanent storage
@@ -37,3 +49,5 @@ listeners.requestSystemData = (newData) => {
     console.log("found a requestSystemData")
     yell.providingSystemData(global.systemData)
 }
+
+module.exports = listeners

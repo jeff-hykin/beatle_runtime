@@ -1,3 +1,4 @@
+const { spawn } = require('child_process')
 let processManager = require("../processManager")
 let setupProcess = require("../utils/commandlineHelper")
 
@@ -5,8 +6,10 @@ let setupProcess = require("../utils/commandlineHelper")
 let listeners = processManager.processes.kinect.listensFor
 let yell = processManager.processes.kinect.canYell
 
-// FIXME: start the actual C# executable here
-// "../Beatle_Defense_Kinect/bin/x64/Debug"
+// start the C# executable
+const subprocess = spawn(pathFor.kinectExecutable, [], {
+    stdio: 'ignore'
+})
 
 // 
 // setup listener since C# doesn't use socket.io
@@ -21,7 +24,9 @@ app.post("/sync", jsonParser, (req, res) => {
         
         // if there is a change in people
         if (oldData.numberOfPeople != newData.numberOfPeople) {
-
+            // 
+            // find info for logs
+            // 
             if (newData.numberOfPeople == 0) {
                 yell.lostEveryone()
             } else if (newData.numberOfPeople > oldData.numberOfPeople) {
@@ -32,8 +37,8 @@ app.post("/sync", jsonParser, (req, res) => {
             }
         }
         
-        // update the data
-        global.systemData.kinectData = req.body
+        // tell system to update the data
+        processManager.processes.systemData.listensFor.dataShouldChange({ kinectData: req.body })
     }
     // tell the kinect the info it needs to know (arm/disarm)
     res.send(global.systemData)

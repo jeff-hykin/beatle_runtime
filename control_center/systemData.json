@@ -1,1 +1,1 @@
-{"status":"disarmed","kinectData":{"numberOfPeople":0}}
+{"status":"armed","kinectData":{"numberOfPeople":1},"strobeIsOn":false}

@@ -7,5 +7,7 @@ module.exports = {
     processManager: __dirname + "/control_center/processManager.js",
     systemDataStorage: __dirname + "/control_center/systemData.json",
     privateSystemData: __dirname + "/control_center/privateSystemData.json",
-    passwordManager: __dirname + "/control_center/utils/passwordManager.js"
+    passwordManager: __dirname + "/control_center/utils/passwordManager.js",
+    // kinect
+    kinectExecutable: __dirname + "/Beatle_Defense_Kinect/bin/x64/Debug/Beatle_Defense_Kinect.exe",
 }
