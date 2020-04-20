@@ -25,27 +25,12 @@
         date3: 'HH:MM::SS MM:DD::YY',
 
         images: [
-        {
-          title: 'HH:MM::SS MM:DD::YY',
-          
-          poster: './public/omar.jpeg'
-        },
-
-        {
-          title: 'HH:MM::SS MM:DD::YY',
-          href: 'funniest.mp4',
-          type: 'video/mp4',
-        },
 
           'Activation001.png',
           'Activation002.png',
           'Activation003.png',
           'Activation004.png',
 
-        {
-          title: 'HH:MM::SS MM:DD::YY',
-          poster: 'Activation001.png',  
-      	}
       ],
       index: null
       };
