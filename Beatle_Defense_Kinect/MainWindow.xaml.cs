@@ -601,8 +601,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         private void FacialRecSetup()
         {
             // absolute path to start of database
-            peopleDataPath = "./people";
-            actDataPath = "./activations";
+            peopleDataPath = "C:/Users/Walter/Documents/beatle_repo/public/people";
+            actDataPath = "C:/Users/Walter/Documents/beatle_repo/public/activations";
             // cascadeclassifier is in this dir
             startupPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             face = new CascadeClassifier(startupPath + "/opencv/data/lbpcascades/lbpcascade_frontalface.xml");
