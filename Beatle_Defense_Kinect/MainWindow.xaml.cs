@@ -988,8 +988,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             {
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
-                    face_recognition(dc);
                     dc.DrawImage(this.colorBitmap, this.displayRect);
+                    face_recognition(dc);
                 }
                 return;
             }
@@ -1006,19 +1006,18 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     bodyFrame.GetAndRefreshBodyData(this.bodies);
                     using (DrawingContext dc = this.drawingGroup.Open())
                     {
-                        // facial recognition
-                        face_recognition(dc);
-
                         // 
                         // draw visible spectrum
                         // 
                         dc.DrawImage(this.colorBitmap, this.displayRect);
-            
-                        
+
+                        // facial recognition
+                        face_recognition(dc);
+
                         // 
                         // iterate over each body
                         // 
-                        
+
                         // Used for counting bodies observed
                         this.activeBodies.Clear();
                         foreach (var body in this.bodies)
