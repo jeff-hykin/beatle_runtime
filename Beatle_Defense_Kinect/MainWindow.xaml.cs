@@ -764,13 +764,10 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
         private void add_new_face(Image <Bgr, byte> frame, Image<Gray, byte> face)
         {
-            //Trained face counter
-            ContTrain = ContTrain + 1;
-
             //resize face detected image for force to compare the same size with the 
             trainingImages.Add(face);
             labels.Add("Unknown" + ContTrain.ToString());
-            label_to_int.Add(labels.Last(), labels.Count);
+            label_to_int.Add(labels.Last(), ContTrain);
             int_labels.Add(label_to_int[labels.Last()]);
 
             string name = labels.Last();
@@ -782,6 +779,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             File.WriteAllText(peopleDataPath + "/" + name + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
             frame.Save(peopleDataPath + "/" + name + "/MainImage.png");
             face.Convert<Bgr, byte>().Save(peopleDataPath + "/" + name + "/FacialRecTraining01.png");
+
+            //Trained face counter
+            ContTrain = ContTrain + 1;
         }
 
         private void add_training_face(Image<Gray, byte> face, int int_label)
@@ -856,7 +856,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                 Console.WriteLine("{0} {1} ", pred.Distance, pred.Label);
                 Console.WriteLine(labels.Count);
-                if (pred.Distance < 100)
+                if (pred.Distance < 100 && labels.Count() != 0)
                 {
                         name = labels[pred.Label];
                         if (pred.Distance > 70)
@@ -988,6 +988,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             {
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
+                    face_recognition(dc);
                     dc.DrawImage(this.colorBitmap, this.displayRect);
                 }
                 return;
