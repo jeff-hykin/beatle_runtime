@@ -7,9 +7,9 @@ let listeners = processManager.processes.systemData.listensFor
 let yell = processManager.processes.systemData.canYell
 
 // whenever dataShouldChange
-listeners.dataShouldChange = (newData) => {
+listeners.dataShouldChange = (newData, who) => {
     let oldData = global.systemData
-    console.log('received dataChange request')
+    console.log(`received dataChange request from :${who}`)
     global.systemData = {...global.systemData, ...newData}
     newData = global.systemData
     let dataAfterChange = JSON.stringify(global.systemData)
@@ -48,6 +48,11 @@ listeners.dataShouldChange = (newData) => {
 listeners.requestSystemData = (newData) => {
     console.log("found a requestSystemData")
     yell.providingSystemData(global.systemData)
+}
+
+listeners.fullShutdown = () => {
+    console.log("received request for fullShutdown (shutting down now)")
+    process.exit(0)
 }
 
 module.exports = listeners

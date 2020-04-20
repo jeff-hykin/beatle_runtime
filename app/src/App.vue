@@ -90,7 +90,9 @@ let App = {
         loading: true,
         needsSetup: null,
         localIpAddress: null,
-        confirmationBox: {},
+        confirmationBox: {
+            action: ()=>0 // placeholder
+        },
     }),
     async mounted() {
         window.systemData = this.$data.systemData

@@ -48,6 +48,9 @@ module.exports = processManager = {
                 requestSystemData: null, // no arguments
                     // this command is used when a process comes online and doesn't know
                     // what is going on. It asks the system for the most up-to-date information
+
+                fullShutdown: null, // no arguments
+                    // this command will kill all the processes
             },
             canYell: {
                 dataDidChange: null, // returns: JSON representing all system data

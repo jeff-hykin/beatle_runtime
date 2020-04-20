@@ -74,6 +74,9 @@ if (process.env.NODE_ENV !== "development") {
     windowUrl = `http://localhost:${settings.vueElectronSettings.devPortNumber}`
 
     // Install `electron-debug` with `devtron`
+    
+    // comment this in to open up the chrome debugging window
+    // dev debugging debug inspect console
     require("electron-debug")()
 
     // Install `vue-devtools`

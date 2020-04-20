@@ -7,7 +7,7 @@ let listeners = processManager.processes.kinect.listensFor
 let yell = processManager.processes.kinect.canYell
 
 // start the C# executable
-const subprocess = spawn(pathFor.kinectExecutable, [], {
+const subprocess = spawn("powershell", ["-command", `Start-Process "${pathFor.kinectExecutable.replace(/\//,"\\")}" -WindowStyle Hidden`], {
     stdio: 'ignore'
 })
 
@@ -19,6 +19,8 @@ let jsonParser = require('body-parser').json()
 app.post("/sync", jsonParser, (req, res) => {
     let newData = req.body
     let oldData = global.systemData.kinectData
+    console.log(`kinect: oldData is:`,oldData)
+    console.log(`kinect: newData is:`,newData)
     // if there was a change
     if (JSON.stringify(oldData) != JSON.stringify(newData)) {
         
@@ -38,7 +40,7 @@ app.post("/sync", jsonParser, (req, res) => {
         }
         
         // tell system to update the data
-        processManager.processes.systemData.listensFor.dataShouldChange({ kinectData: req.body })
+        processManager.processes.systemData.listensFor.dataShouldChange({ kinectData: req.body }, "kinect")
     }
     // tell the kinect the info it needs to know (arm/disarm)
     res.send(global.systemData)

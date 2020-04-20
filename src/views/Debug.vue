@@ -1,6 +1,14 @@
 <template>
     <column>
-        <ui-button :disable='$root.systemData.status=="disarmed"' color=primary raised @click="toggleStrobe">Toggle Strobe</ui-button>
+        <ui-button :disable='$root.systemData.status=="disarmed"' color=primary raised @click="toggleStrobe">
+            Toggle Strobe
+        </ui-button>
+        <column height=2rem>
+            
+        </column>
+        <ui-button color=primary raised @click="causeFullShutdown">
+            Shutdown All processes
+        </ui-button>
         <column width=40rem height=20rem max-width=80vw align-v=top align-h=left background-color=white padding="1rem 2rem" margin=1.5rem>
             <h5 style="text-decoration: underline;">Event Console</h5>
             <div style="white-space: pre; width: 100%; overflow: auto;">{{eventStream}}</div>
@@ -33,6 +41,9 @@ export default {
         logEvent(string) {
             let now = DateTime.now()
             this.eventStream = `${now.time} ${now.date}: ${string}\n` + this.eventStream
+        },
+        causeFullShutdown() {
+            window.socket.emit('systemData.fullShutdown', {})
         }
     }
 }

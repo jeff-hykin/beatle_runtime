@@ -36,6 +36,8 @@ http.listen(packageJson.centralServerPort, () => {
 // start the client interface
 //
 const { exec, spawn } = require("child_process")
+// go to root folder
+process.chdir(__dirname+"/..")
 exec("npx vue-cli-service serve", (err, stdout, stderr) => {
     if (err) {
         console.error(err)

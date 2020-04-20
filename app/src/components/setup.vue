@@ -86,7 +86,7 @@ export default {
                 if (shouldStart) {
                     // starts the centralServer
                     const subprocess = spawn("node", [pathFor.centralServer], {
-                        detached: true,
+                        // detached: true,
                         stdio: 'ignore'
                     })
                     subprocess.unref()
@@ -134,7 +134,7 @@ export default {
     padding-bottom: 1.3rem;
     padding-top: 0.5rem;
     width: 20rem;
-    height: 14rem;
+    height: fit-content;
     margin: 2rem;
     border-radius: 10px;
 }

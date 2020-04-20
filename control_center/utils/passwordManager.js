@@ -36,7 +36,7 @@ function setPin(pin) {
 
     let privateData = JSON.parse(fs.readFileSync(pathFor.privateSystemData))
     // create/overwrite pin
-    privateData.pin = hashPassword(password)
+    privateData.pin = hashPassword(pin)
     // save them to the file
     fs.writeFileSync(pathFor.privateSystemData, JSON.stringify(privateData))
 }
