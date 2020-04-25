@@ -832,7 +832,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     dc.DrawImage(this.colorBitmap, this.displayRect);
 
                     // do and draw facial recognition
-                    facial_rec.recognize_and_draw(dc, ref this.colorBitmap);
+                    facial_rec.recognize_and_draw(dc, ref this.colorBitmap, this.displayWidth, this.displayHeight);
                 }
                 return;
             }
@@ -855,7 +855,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         dc.DrawImage(this.colorBitmap, this.displayRect);
 
                         // do and draw facial recognition
-                        facial_rec.recognize_and_draw(dc, ref this.colorBitmap);
+                        facial_rec.recognize_and_draw(dc, ref this.colorBitmap, this.displayWidth, this.displayHeight);
 
                         // 
                         // iterate over each body
@@ -1286,19 +1286,6 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 return Math.Round(distance, 2);
             }
             else return 0.0;
-        }
-
-        private System.Drawing.Bitmap BitmapFromWriteableBitmap(WriteableBitmap writeBmp)
-        {
-            System.Drawing.Bitmap bmp;
-            using (MemoryStream outStream = new MemoryStream())
-            {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create((BitmapSource)writeBmp));
-                enc.Save(outStream);
-                bmp = new System.Drawing.Bitmap(outStream);
-            }
-            return bmp;
         }
     }
 }

@@ -14,6 +14,7 @@
     using Emgu.CV.Face;
     using Emgu.CV.WPF;
     using Emgu.CV.Util;
+    using System.Threading.Tasks;
 
     public class FacialRecognition
     {
@@ -26,6 +27,9 @@
                 yield return item;
             }
         }
+
+        public int recognized_threshold;
+        public int add_new_training_threshold;
 
         public string database_path, classifier_path, people_path, activations_path;
         public int num_trained;
@@ -51,6 +55,8 @@
             people_path = database_path + "people/";
             activations_path = activations_path + "activations/";
 
+            recognized_threshold = 105;
+            add_new_training_threshold = 75;
             num_trained = 0;
             input_height = 240;
             input_width = 426;
@@ -75,10 +81,11 @@
         {
             // get full list of names from database and all facialRecTraining images for each of them
             string[] people_names = File.ReadAllLines(people_path + "DatabaseFile.txt");
-            Console.WriteLine("loaded {0} faces", people_names.Length);
+
             foreach (string name in people_names)
             {
                 label_to_int.Add(name, num_trained);
+                Console.WriteLine("{0} = {1}", name, label_to_int[name]);
                 num_trained++;
 
                 string person_dir = people_path + name;
@@ -115,9 +122,29 @@
             training_labels.Add(name);
             training_images.Add(face);
 
-            update_single(face, int_label);
+            //update_single(face, int_label);
+            train();
 
             // async call database_add_training_image
+            new Task(() => { database_add_training_image(name, face); }).Start();
+        }
+
+        public void database_add_training_image(string name, Image<Gray, byte> face)
+        {
+            string dir_path = people_path + name;
+            int next_img_ix = 01;
+            foreach (string file in Directory.EnumerateFiles(dir_path))
+            {
+                if (file.Contains("FacialRecTraining"))
+                {
+                    next_img_ix++;
+                }
+            }
+
+            if (next_img_ix < 100)
+            {
+                face.Convert<Bgr, byte>().Save(dir_path + "/FacialRecTraining" + next_img_ix.ToString("D2") + ".png");
+            }
         }
 
         public int add_new_person(Image<Bgr, byte> frame, Image<Gray, byte> face)
@@ -131,35 +158,65 @@
             training_labels.Add(name);
             training_images.Add(face);
 
-            update_single(face, label_to_int[name]);
+            //update_single(face, label_to_int[name]);
+            train();
 
             // async call database_add_new_person
+            new Task(() => { database_add_new_person(name, frame, face); }).Start();
 
             return label_to_int[name];
         }
 
-        public void update_last_seen()
+        public void database_add_new_person(string name, Image<Bgr, byte> frame, Image<Gray, byte> face)
         {
-            // async call databse_update_last_seen
+            // add name to database file, create a new directory for this person, main image = frame, face = new facialrectraining image
+            File.AppendAllLines(people_path + "DatabaseFile.txt", IEnumerableExt.FromSingleItem(name));
+            string dir_path = people_path + name;
+            Directory.CreateDirectory(dir_path);
+            File.WriteAllText(dir_path + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
+            frame.Save(dir_path + "/MainImage.png");
+            face.Convert<Bgr, byte>().Save(dir_path + "/FacialRecTraining01.png");
         }
 
-        public void recognize_and_draw(DrawingContext dc, ref WriteableBitmap color_frame)
+        public void update_last_seen(string name)
+        {
+            // async call databse_update_last_seen
+            new Task(() => { database_update_last_seen(name); }).Start();
+        }
+
+        public void database_update_last_seen(string name)
+        {
+            File.WriteAllText(people_path + name + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
+        }
+
+        public void add_new_activation(Image<Bgr, byte> frame)
+        {
+            new Task(() => { database_add_new_activation(frame); }).Start();
+        }
+
+        public void database_add_new_activation(Image<Bgr, byte> frame)
+        {
+            string[] lines = File.ReadAllLines(activations_path + "DatabaseFile.txt");
+            int next_img_ix = lines.Length + 1;
+            File.AppendAllLines(activations_path + "DatabaseFile.txt", IEnumerableExt.FromSingleItem(DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us"))));
+            frame.Save(activations_path + "Activation" + next_img_ix.ToString("D3") +".png");
+        }
+
+        public void recognize_and_draw(DrawingContext dc, ref WriteableBitmap color_frame, int display_width, int display_height)
         {
             // Get the current frame
             Image<Bgr, byte> frame = writable_bitmap_to_image(color_frame);
+            Image<Gray, byte> small_frame = frame.Convert<Gray, byte>().Resize(input_width, input_height, Inter.Cubic);
 
-            System.Drawing.Rectangle[] faces_detected = face_finder.DetectMultiScale(frame.Convert<Gray, byte>(), 1.2, 10, new System.Drawing.Size(10, 10));
-            //System.Drawing.Rectangle[] faces_detected = new System.Drawing.Rectangle[0];
-
-            Console.WriteLine("detected {0} faces", faces_detected.Length);
+            System.Drawing.Rectangle[] faces_detected = face_finder.DetectMultiScale(small_frame, 1.2, 10, new System.Drawing.Size(10, 10));
 
             // for each face detected
             foreach (System.Drawing.Rectangle f in faces_detected)
             {
-                Rect outline = conv_rectangle(f, frame.Width, frame.Height);
+                Rect outline = conv_rectangle(f, display_width, display_height);
                 dc.DrawRectangle(null, face_outline_pen, outline);
 
-                Image<Gray, byte> face = frame.Convert<Gray, byte>().Copy(f).Resize(100, 100, Inter.Cubic);
+                Image<Gray, byte> face = small_frame.Copy(f).Resize(100, 100, Inter.Cubic);
 
                 if (training_images.Count == 0)
                 {
@@ -169,10 +226,10 @@
                 FaceRecognizer.PredictionResult pred = face_recognizer.Predict(face);
 
                 string name;
-                if (pred.Distance < 100)
+                if (pred.Distance < recognized_threshold)
                 {
                     name = training_labels[pred.Label];
-                    if (pred.Distance > 70 && pred.Distance < 75)
+                    if (pred.Distance > add_new_training_threshold)
                     {
                         add_training_image(face, pred.Label);
                     }
@@ -182,6 +239,7 @@
                     int new_label = add_new_person(frame, face);
                     name = training_labels[new_label];
                 }
+                Console.WriteLine("{0} {1} {2}", training_labels[pred.Label], pred.Label, pred.Distance);
 
                 //Draw the label for each face detected and recognized
                 dc.DrawText(new FormattedText(name,
@@ -190,48 +248,8 @@
                                 face_label_font,
                                 face_label_font_size,
                                 face_label_brush),
-                                conv_point(f.X, f.Y, frame.Width, frame.Height));
+                                conv_point(f.X, f.Y, display_width, display_height));
             }
-        }
-
-        public async void database_add_training_image()
-        {
-            //int next_img_ix = 01;
-            //foreach (string file in Directory.EnumerateFiles(peopleDataPath + "/" + name))
-            //{
-            //    if (file.Contains("FacialRecTraining"))
-            //    {
-            //        next_img_ix++;
-            //    }
-            //}
-            //if (next_img_ix < 100)
-            //{
-            //    string fsp = peopleDataPath + "/" + name + "/FacialRecTraining" + next_img_ix.ToString("D2") + ".png";
-            //    face.Convert<Bgr, byte>().Save(fsp);
-            //}
-        }
-
-        public async void database_add_new_person()
-        {
-            // add name to database file, create a new directory for this person, main image = frame, face = new facialrectraining image
-            //File.AppendAllText(peopleDataPath + "/DatabaseFile.txt", "%" + name);
-            //Directory.CreateDirectory(peopleDataPath + "/" + name);
-            //File.WriteAllText(peopleDataPath + "/" + name + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
-            //frame.Save(peopleDataPath + "/" + name + "/MainImage.png");
-            //face.Convert<Bgr, byte>().Save(peopleDataPath + "/" + name + "/FacialRecTraining01.png");
-
-            ////Trained face counter
-            //ContTrain = ContTrain + 1;
-        }
-
-        public async void database_add_new_activation()
-        {
-
-        }
-
-        public async void database_update_last_seen()
-        {
-
         }
 
         public static Rect conv_rectangle(System.Drawing.Rectangle r, int width, int height)
