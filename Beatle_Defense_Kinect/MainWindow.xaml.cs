@@ -31,8 +31,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     using Newtonsoft.Json;
     using System.Threading;
     using System.Threading.Tasks;
-    
-    
+    using Emgu.CV.Util;
+
     public class Helper {
         public dynamic mainWindow;
         public Helper(dynamic mainWindow=null) {
@@ -565,20 +565,11 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         bool waitForRightKeyUp = false;
         bool waitForSpaceKeyUp = false;
 
-        CascadeClassifier face;
-        //FontFace font = FontFace.HersheyTriplex;
-        Image<Gray, byte> result;
-        List<Image<Gray, byte>> trainingImages = new List<Image<Gray, byte>>();
-        Dictionary<string, int> label_to_int = new Dictionary<string, int>();
-        List<string> labels = new List<string>();
-        List<int> int_labels = new List<int>();
-        List<string> NamePersons = new List<string>();
-        int ContTrain, t;
-        string name, startupPath, peopleDataPath, actDataPath;
-
         int strobe_state;
         DigitalOutput strobe_do;
         int strobe_phidget_sn;
+
+        FacialRecognition facial_rec;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -590,48 +581,17 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             this.servoHelper         = new ServoHelper(this);
             
             SetupKinectStuff();
-            FacialRecSetup();
             StrobeSetup();
-            
+            facial_rec = new FacialRecognition();
+            facial_rec.train();
+
+
+
             this.communicationHelper.afterConstructor();
             this.strobeHelper.afterConstructor();
             this.servoHelper.afterConstructor();
         }
 
-        private void FacialRecSetup()
-        {
-            // absolute path to start of database
-            peopleDataPath = "C:/Users/Walter/Documents/beatle_repo/public/people";
-            actDataPath = "C:/Users/Walter/Documents/beatle_repo/public/activations";
-            // cascadeclassifier is in this dir
-            startupPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            face = new CascadeClassifier(startupPath + "/opencv/data/lbpcascades/lbpcascade_frontalface.xml");
-
-            // SOCKET.IO
-            // get full list of names from database and all facialRecTraining images for each of them
-            ContTrain = 0;
-            string[] people_names = File.ReadAllText(peopleDataPath + "/DatabaseFile.txt").Split('%');
-            if (people_names[0] == "")
-            {
-                people_names = people_names.Skip(1).ToArray();
-            }
-            foreach (string name in people_names)
-            {
-
-                label_to_int.Add(name, ContTrain);
-                string dir = peopleDataPath + "/" + name;
-                foreach (string file in Directory.EnumerateFiles(dir))
-                {
-                    if (file.Contains("FacialRecTraining"))
-                    {
-                        int_labels.Add(ContTrain);
-                        labels.Add(name);
-                        trainingImages.Add(new Image<Gray, byte>(file));
-                    }
-                }
-                ContTrain++;
-            }
-        }
 
         private void StrobeSetup()
         {
@@ -762,125 +722,6 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             }
         }
 
-        private void add_new_face(Image <Bgr, byte> frame, Image<Gray, byte> face)
-        {
-            //resize face detected image for force to compare the same size with the 
-            trainingImages.Add(face);
-            labels.Add("Unknown" + ContTrain.ToString());
-            label_to_int.Add(labels.Last(), ContTrain);
-            int_labels.Add(label_to_int[labels.Last()]);
-
-            string name = labels.Last();
-
-            // SOCKET.IO
-            // add name to database file, create a new directory for this person, main image = frame, face = new facialrectraining image
-            File.AppendAllText(peopleDataPath + "/DatabaseFile.txt", "%" + name);
-            Directory.CreateDirectory(peopleDataPath + "/" + name);
-            File.WriteAllText(peopleDataPath + "/" + name + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
-            frame.Save(peopleDataPath + "/" + name + "/MainImage.png");
-            face.Convert<Bgr, byte>().Save(peopleDataPath + "/" + name + "/FacialRecTraining01.png");
-
-            //Trained face counter
-            ContTrain = ContTrain + 1;
-        }
-
-        private void add_training_face(Image<Gray, byte> face, int int_label)
-        {
-            //resize face detected image for force to compare the same size with the 
-            trainingImages.Add(face);
-            labels.Add(labels[int_label]);
-            int_labels.Add(int_label);
-
-            string name = labels.Last();
-
-            // SOCKET.IO
-            // face = new facialrectraining image
-            int next_img_ix = 01;
-            foreach (string file in Directory.EnumerateFiles(peopleDataPath + "/" + name))
-            {
-                if (file.Contains("FacialRecTraining"))
-                {
-                    next_img_ix++;
-                }
-            }
-            if (next_img_ix < 100)
-            {
-                string fsp = peopleDataPath + "/" + name + "/FacialRecTraining" + next_img_ix.ToString("D2") + ".png";
-                face.Convert<Bgr, byte>().Save(fsp);
-            }
-        }
-
-        private Rect conv_rectangle(System.Drawing.Rectangle r, int width, int height)
-        {
-            double w_fac = (double)width / 426.0, h_fac = (double)height / 240.0;
-            return new Rect(r.X * w_fac, r.Y * h_fac, r.Width * w_fac, r.Height * h_fac);
-        }
-
-        private Point conv_point(int x, int y, int width, int height)
-        {
-            double w_fac = (double)width / 426.0, h_fac = (double)height / 240.0;
-            return new Point(x * w_fac, y * h_fac);
-        }
-
-        private Image<Bgr, byte> wbm_to_img(WriteableBitmap wbm)
-        {
-            return BitmapSourceConvert.ToMat(wbm).ToImage<Bgr, byte>().Resize(426, 240, Inter.Cubic);
-        }
-
-        private void face_recognition(DrawingContext dc)
-        {
-            System.Windows.Media.Pen drawPen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.LightBlue, 3);
-
-            //Get the current frame
-            Image<Bgr, byte> frame = wbm_to_img(this.colorBitmap);
-
-            //Face Detector
-            System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(frame.Convert<Gray, byte>(), 1.2, 10, new System.Drawing.Size(10, 10));
-
-            //Action for each element detected
-            foreach (System.Drawing.Rectangle f in facesDetected)
-            {
-                Rect coili = conv_rectangle(f, this.displayWidth, this.displayHeight);
-                dc.DrawRectangle(null, drawPen, coili);
-                result = frame.Convert<Gray, byte>().Copy(f).Resize(100, 100, Inter.Cubic);
-
-                if (trainingImages.Count() == 0)
-                {
-                    add_new_face(frame, result);
-                }
-
-                LBPHFaceRecognizer recognizer = new LBPHFaceRecognizer();
-                recognizer.Train<Gray, Byte>(trainingImages.ToArray(), int_labels.ToArray());
-
-                FaceRecognizer.PredictionResult pred = recognizer.Predict(result);
-
-                Console.WriteLine("{0} {1} ", pred.Distance, pred.Label);
-                Console.WriteLine(labels.Count);
-                if (pred.Distance < 100 && labels.Count() != 0)
-                {
-                        name = labels[pred.Label];
-                        if (pred.Distance > 70)
-                        {
-                            add_training_face(result, pred.Label);
-                        }
-                }
-                else
-                {
-                    add_new_face(frame, result);
-                    name = labels.Last();
-                }
-                Console.WriteLine(labels[pred.Label]);
-
-                //Draw the label for each face detected and recognized
-                dc.DrawText(new FormattedText(name,
-                                CultureInfo.GetCultureInfo("en-us"),
-                                FlowDirection.LeftToRight,
-                                new Typeface("Georgia"),
-                                DrawTextFontSize, Brushes.LightGreen),
-                            conv_point(f.X, f.Y, this.displayWidth, this.displayHeight));
-            }
-        }
-
         /// <summary>
         /// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
         /// </summary>
@@ -989,7 +830,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
                     dc.DrawImage(this.colorBitmap, this.displayRect);
-                    face_recognition(dc);
+
+                    // do and draw facial recognition
+                    facial_rec.recognize_and_draw(dc, ref this.colorBitmap);
                 }
                 return;
             }
@@ -1011,8 +854,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         // 
                         dc.DrawImage(this.colorBitmap, this.displayRect);
 
-                        // facial recognition
-                        face_recognition(dc);
+                        // do and draw facial recognition
+                        facial_rec.recognize_and_draw(dc, ref this.colorBitmap);
 
                         // 
                         // iterate over each body
