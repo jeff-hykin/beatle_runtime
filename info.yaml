@@ -1,14 +1,14 @@
 (using_atk_version): 1.1.0
 (project):
     todo:
-        - make pre-recorded demos
-        - cleanup mobile interface
+        - enable the servos for pan&tilt
+        - Omar code
+        - only show head tracking
         - record events to file, load file on start, update in real time
         - merge in face recognition code
         - send record people data to event log
         - find & implment library for recording video of intruder
-        - enable the servos for pan&tilt
-        - only show head tracking
+        
     demo timeline:
         - imaginary: computer starts, app opens
         - real: connect to wifi, set username, password, pin

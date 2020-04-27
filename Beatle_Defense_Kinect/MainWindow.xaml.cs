@@ -133,7 +133,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 using (StreamReader httpWebStreamReader = new StreamReader(response.GetResponseStream()))
                 {
                     this.systemData = JsonConvert.DeserializeObject(httpWebStreamReader.ReadToEnd());
-                    Debug.WriteLine($"systemData.status is {this.systemData.status}");
+                    // Debug.WriteLine($"systemData.status is {this.systemData.status}");
                 };
             }
             catch (Exception ex)
@@ -177,12 +177,12 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         // helpers
         // 
         
-        private void TurnOn()
+        public void TurnOn()
         {
             // digitalOutput.State = true;
         }
 
-        private void TurnOff()
+        public void TurnOff()
         {
             // digitalOutput.State = false;
         }
@@ -196,25 +196,25 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public ServoHelper(dynamic mainWindow) { this.mainWindow = mainWindow; }
         
         // Servo
-        private bool use_pan_tilt = false;
+        public bool use_pan_tilt = true;
         public System.IO.Ports.SerialPort serialPort;
         
         // Room Searching Stuff
-        private static System.Timers.Timer motion_cooldown_timer;
-        private readonly float motion_detection_search_time = 15.0f;
-        private float motion_cooldown_time_seconds;
-        private bool motion_detected = false;
-        private static System.Timers.Timer body_cooldown_timer;
-        private readonly float body_detection_search_time = 5.0f;
-        private float body_cooldown_time_seconds;
-        private bool body_detected = false;
-        private Boolean done_searching_left_side = false;
+        public static System.Timers.Timer motion_cooldown_timer;
+        public readonly float motion_detection_search_time = 15.0f;
+        public float motion_cooldown_time_seconds;
+        public bool motion_detected = false;
+        public static System.Timers.Timer body_cooldown_timer;
+        public readonly float body_detection_search_time = 5.0f;
+        public float body_cooldown_time_seconds;
+        public bool body_detected = false;
+        public Boolean done_searching_left_side = false;
         
         // Targeting  Stuff
-        private float target_degree_tolerance = 5.0f;
-        private float movement_amount = 0.5f;
-        private double current_x_degrees = 0;
-        private double current_y_degrees = 0;
+        public float target_degree_tolerance = 5.0f;
+        public float movement_amount = 0.5f;
+        public double current_x_degrees = 0;
+        public double current_y_degrees = 0;
         
         // 
         // events (construct, newFrame, destruct)
@@ -238,7 +238,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 try
                 {
                     // Configure our serial port *** You'll likely need to change these for your config! ***
-                    serialPort.PortName = "COM6";
+                    serialPort.PortName = "COM3";
                     serialPort.BaudRate = 115200;
                     serialPort.Parity = System.IO.Ports.Parity.None;
                     serialPort.DataBits = 8;
@@ -246,6 +246,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                     // Now open the serial port
                     serialPort.Open();
+                    Debug.WriteLine("serial port is open and setup");
                 }
                 catch (Exception ex)
                 {
@@ -330,6 +331,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                 int pulse_width = DegreeToPulseWidth(desired_degrees);
                 string command = "#" + servo_num + "P" + pulse_width + "S" + speed + "\r";
+                Debug.WriteLine($"Serial command is {command}");
                 serialPort.Write(command);
             }
         }
@@ -393,7 +395,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             motion_cooldown_timer.Start();
         }
 
-        private void Motion_Cooldown_Countdown(Object source, ElapsedEventArgs e) // Will be called every second
+        public void Motion_Cooldown_Countdown(Object source, ElapsedEventArgs e) // Will be called every second
         {
             if (!body_detected)
             {
@@ -425,7 +427,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             }
         }
 
-        private void BodyDetected()
+        public void BodyDetected()
         {
             // Reset memory
             if (body_cooldown_timer != null && body_cooldown_timer.Enabled == true)
@@ -444,7 +446,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             body_cooldown_timer.Start();
         }
 
-        private void Body_Cooldown_Countdown(Object source, ElapsedEventArgs e) // Will be called every second
+        public void Body_Cooldown_Countdown(Object source, ElapsedEventArgs e) // Will be called every second
         {
             if (body_cooldown_time_seconds > 0)
             {
@@ -495,61 +497,61 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public double clipBoundsThickness = 10;
         public int bodyPenThickness = 10;
         
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
-        private readonly Brush inferredJointBrush = Brushes.Yellow;
-        private readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
+        public readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
+        public readonly Brush inferredJointBrush = Brushes.Yellow;
+        public readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
 
         /// <summary> Drawing group for body rendering output </summary>
-        private DrawingGroup drawingGroup;
-        private DrawingImage imageSource;
+        public DrawingGroup drawingGroup;
+        public DrawingImage imageSource;
 
         /// <summary> Constant for clamping Z values of camera space points from being negative </summary>
-        private float inferredZPositionClamp = 0.1f;
+        public float inferredZPositionClamp = 0.1f;
         
         // 
         // kinect
         // 
-        private KinectSensor kinectSensor = null;
+        public KinectSensor kinectSensor = null;
 
-            private ColorFrameReader colorFrameReader = null;
-            private BodyFrameReader bodyFrameReader = null;
-            private WriteableBitmap colorBitmap = null;
+            public ColorFrameReader colorFrameReader = null;
+            public BodyFrameReader bodyFrameReader = null;
+            public WriteableBitmap colorBitmap = null;
 
         
         // 
         // body
         // 
         public Body[] bodies = null;
-        private int maxBodyCount;
-        private List<Tuple<JointType, JointType>> bones;
-        private List<JointType> usedJoints;
+        public int maxBodyCount;
+        public List<Tuple<JointType, JointType>> bones;
+        public List<JointType> usedJoints;
         /// <summary> Coordinate mapper to map one type of point to another </summary>
-        private CoordinateMapper coordinateMapper = null;
+        public CoordinateMapper coordinateMapper = null;
 
         /// <summary>
         /// Width of display (color space)
         /// </summary>
-        private int displayWidth;
+        public int displayWidth;
 
         /// <summary>
         /// Height of display (color space)
         /// </summary>
-        private int displayHeight;
+        public int displayHeight;
 
         /// <summary>
         /// Display rectangle
         /// </summary>
-        private Rect displayRect;
+        public Rect displayRect;
 
         /// <summary>
         /// Current status text to display
         /// </summary>
-        private string statusText = null;
+        public string statusText = null;
 
         /// <summary>
         /// Array to store currently bodies
         /// </summary>
-        private List<Body> activeBodies = new List<Body>();
+        public List<Body> activeBodies = new List<Body>();
 
         public Body targetBody;
 
@@ -726,7 +728,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        public void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.bodyFrameReader != null)
             {
@@ -740,7 +742,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        public void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             if (this.bodyFrameReader != null)
             {
@@ -772,7 +774,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
+        public void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             // if the system is disarmed, basically do nothing
             if (!this.communicationHelper.IsArmed)
@@ -957,7 +959,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// <param name="jointPoints">translated positions of joints to draw</param>
         /// <param name="drawingContext">drawing context to draw to</param>
         /// <param name="drawingPen">specifies color to draw a specific body</param>
-        private void DrawBody(Body body, DrawingContext drawingContext, Brush drawingBrush)
+        public void DrawBody(Body body, DrawingContext drawingContext, Brush drawingBrush)
         {
             // 
             // get the joints
@@ -1020,7 +1022,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// <param name="jointType1">second joint of bone to draw</param>
         /// <param name="drawingContext">drawing context to draw to</param>
         /// /// <param name="drawingPen">specifies color to draw a specific bone</param>
-        private void DrawBone(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, JointType jointType0, JointType jointType1, DrawingContext drawingContext, Pen drawingPen)
+        public void DrawBone(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, JointType jointType0, JointType jointType1, DrawingContext drawingContext, Pen drawingPen)
         {
             Joint joint0 = joints[jointType0];
             Joint joint1 = joints[jointType1];
@@ -1047,7 +1049,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         /// <param name="body">body to draw clipping information for</param>
         /// <param name="drawingContext">drawing context to draw to</param>
-        private void DrawClippedEdges(Body body, DrawingContext drawingContext)
+        public void DrawClippedEdges(Body body, DrawingContext drawingContext)
         {
             FrameEdges clippedEdges = body.ClippedEdges;
 
@@ -1090,7 +1092,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// <param name="faceIndex">the index of the face frame corresponding to a specific body in the FOV</param>
         /// <param name="faceResult">container of all face frame results</param>
         /// <param name="drawingContext">drawing context to render to</param>
-        private void DrawPersonInfo(Body body, DrawingContext drawingContext, Brush drawingBrush)
+        public void DrawPersonInfo(Body body, DrawingContext drawingContext, Brush drawingBrush)
         {
             // Possibly draw bounding box in future around body
 
@@ -1128,7 +1130,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// <param name="faceIndex">the index of the face frame corresponding to a specific body in the FOV</param>
         /// <param name="faceTextLayout">the text layout position in screen space</param>
         /// <returns>success or failure</returns>
-        private bool GetFaceTextPositionInColorSpace(Body body, out Point faceTextLayout)
+        public bool GetFaceTextPositionInColorSpace(Body body, out Point faceTextLayout)
         {
             faceTextLayout = new Point();
             bool isLayoutValid = false;
@@ -1158,7 +1160,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
+        public void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
             // ColorFrame is IDisposable
             using (ColorFrame colorFrame = e.FrameReference.AcquireFrame())
@@ -1193,7 +1195,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
+        public void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
         {
             if (this.kinectSensor != null)
             {
@@ -1202,7 +1204,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             }
         }
 
-        private Vector Find_Angle_Of_Face(Body body)
+        public Vector Find_Angle_Of_Face(Body body)
         {
             if (body != null && body.IsTracked)
             {
@@ -1218,7 +1220,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             return new Vector(0, 0);
         }
 
-        private double Find_Distance_To_Face(Body body)
+        public double Find_Distance_To_Face(Body body)
         {
             if (body.IsTracked)
             {
@@ -1230,7 +1232,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             else return 0.0;
         }
         
-        private System.Drawing.Bitmap BitmapFromWriteableBitmap(WriteableBitmap writeBmp)
+        public System.Drawing.Bitmap BitmapFromWriteableBitmap(WriteableBitmap writeBmp)
         {
             System.Drawing.Bitmap bmp;
             using (MemoryStream outStream = new MemoryStream())
