@@ -20,14 +20,19 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
     using Microsoft.Kinect;
+    using Emgu.CV;
+    using Emgu.CV.Structure;
+    using Emgu.CV.CvEnum;
+    using Emgu.CV.Face;
+    using Emgu.CV.WPF;
+    using Phidget22;
     using System.Net;  
     using System.Text;
     using Newtonsoft.Json;
     using System.Threading;
     using System.Threading.Tasks;
-    // using Phidgit22;
-    
-    
+    using Emgu.CV.Util;
+
     public class Helper {
         public dynamic mainWindow;
         public Helper(dynamic mainWindow=null) {
@@ -436,7 +441,6 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 body_cooldown_timer.Dispose();
                 body_cooldown_time_seconds = body_detection_search_time;
             }
-
             // Sets Cool down timer
             body_detected = true;
             body_cooldown_timer = new System.Timers.Timer(1000);
@@ -474,6 +478,8 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private bool use_phidget = false;
+
         // 
         // helpers
         // 
@@ -500,6 +506,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
         public readonly Brush inferredJointBrush = Brushes.Yellow;
         public readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
+
 
         /// <summary> Drawing group for body rendering output </summary>
         public DrawingGroup drawingGroup;
@@ -560,6 +567,12 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         bool waitForRightKeyUp = false;
         bool waitForSpaceKeyUp = false;
 
+        int strobe_state;
+        DigitalOutput strobe_do;
+        int strobe_phidget_sn;
+
+        FacialRecognition facial_rec;
+
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
@@ -570,10 +583,29 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             this.servoHelper         = new ServoHelper(this);
             
             SetupKinectStuff();
-            
+            StrobeSetup();
+            facial_rec = new FacialRecognition();
+            facial_rec.train();
+
+
+
             this.communicationHelper.afterConstructor();
             this.strobeHelper.afterConstructor();
             this.servoHelper.afterConstructor();
+        }
+
+
+        private void StrobeSetup()
+        {
+            // STROBE
+            if (use_phidget)
+            {
+                strobe_state = 0;
+                strobe_phidget_sn = 12312;
+                strobe_do = new DigitalOutput();
+                strobe_do.DeviceSerialNumber = strobe_phidget_sn;
+                strobe_do.Open(5000);
+            }
         }
         
         // System
@@ -581,17 +613,17 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
 
-                    // open the reader for the color frames
-                    this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
+            // open the reader for the color frames
+            this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
 
-                    // wire handler for frame arrival
-                    this.colorFrameReader.FrameArrived += this.Reader_ColorFrameArrived;
+            // wire handler for frame arrival
+            this.colorFrameReader.FrameArrived += this.Reader_ColorFrameArrived;
 
-                    // create the colorFrameDescription from the ColorFrameSource using Bgra format
-                    FrameDescription colorFrameDescription = this.kinectSensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Bgra);
+            // create the colorFrameDescription from the ColorFrameSource using Bgra format
+            FrameDescription colorFrameDescription = this.kinectSensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Bgra);
 
-                    // create the bitmap to display
-                    this.colorBitmap = new WriteableBitmap(colorFrameDescription.Width, colorFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
+            // create the bitmap to display
+            this.colorBitmap = new WriteableBitmap(colorFrameDescription.Width, colorFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
 
 
             // get the coordinate mapper
@@ -672,6 +704,24 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+        }
+
+        private void turn_on_strobe()
+        {
+            if (use_phidget)
+            {
+                strobe_state = 1;
+                strobe_do.State = true;
+            }
+        }
+
+        private void turn_off_strobe()
+        {
+            if (use_phidget)
+            {
+                strobe_state = 0;
+                strobe_do.State = false;
+            }
         }
 
         /// <summary>
@@ -782,6 +832,9 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
                     dc.DrawImage(this.colorBitmap, this.displayRect);
+
+                    // do and draw facial recognition
+                    facial_rec.recognize_and_draw(dc, ref this.colorBitmap, this.displayWidth, this.displayHeight);
                 }
                 return;
             }
@@ -802,12 +855,14 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                         // draw visible spectrum
                         // 
                         dc.DrawImage(this.colorBitmap, this.displayRect);
-            
-                        
+
+                        // do and draw facial recognition
+                        facial_rec.recognize_and_draw(dc, ref this.colorBitmap, this.displayWidth, this.displayHeight);
+
                         // 
                         // iterate over each body
                         // 
-                        
+
                         // Used for counting bodies observed
                         this.activeBodies.Clear();
                         foreach (var body in this.bodies)
@@ -993,22 +1048,25 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             // Draw the joints
             foreach (JointType jointType in joints.Keys)
             {
-                Brush drawBrush = null;
-
-                TrackingState trackingState = joints[jointType].TrackingState;
-
-                if (trackingState == TrackingState.Tracked)
+                if (usedJoints.Contains(jointType))
                 {
-                    drawBrush = this.trackedJointBrush;
-                }
-                else if (trackingState == TrackingState.Inferred)
-                {
-                    drawBrush = this.inferredJointBrush;
-                }
+                    Brush drawBrush = null;
 
-                if (drawBrush != null)
-                {
-                    drawingContext.DrawEllipse(drawBrush, null, jointPoints[jointType], this.jointThickness, this.jointThickness);
+                    TrackingState trackingState = joints[jointType].TrackingState;
+
+                    if (trackingState == TrackingState.Tracked)
+                    {
+                        drawBrush = this.trackedJointBrush;
+                    }
+                    else if (trackingState == TrackingState.Inferred)
+                    {
+                        drawBrush = this.inferredJointBrush;
+                    }
+
+                    if (drawBrush != null)
+                    {
+                        drawingContext.DrawEllipse(drawBrush, null, jointPoints[jointType], this.jointThickness, this.jointThickness);
+                    }
                 }
             }
         }
@@ -1150,7 +1208,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 faceTextLayout.X = depthSpacePoint.X;
                 faceTextLayout.Y = depthSpacePoint.Y;
 
-                isLayoutValid = true;                
+                isLayoutValid = true;
             }
             return isLayoutValid;
         }
