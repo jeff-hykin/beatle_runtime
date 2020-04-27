@@ -1,11 +1,14 @@
 (using_atk_version): 1.1.0
 (project):
-    todo:
+    done:
         - enable the servos for pan&tilt
         - Omar code
+        - merge in face recognition code
+    todo:
+        - get better kinect
+        - fix the bug with turning on and strobe not flashing (b/c person was present from the start)
         - only show head tracking
         - record events to file, load file on start, update in real time
-        - merge in face recognition code
         - send record people data to event log
         - find & implment library for recording video of intruder
         
