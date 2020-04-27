@@ -13,7 +13,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     using System.Globalization;
     using System.Timers;
     using System.Linq;
-    using System.IO;
+    using System.IO; 
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Media;

@@ -1,49 +1,5 @@
-<<<<<<< HEAD
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe.config
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.pdb
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.dll
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.dll
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.xml
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.xml
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csprojAssemblyReference.cache
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.baml
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.g.cs
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\App.g.cs
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect_MarkupCompile.cache
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.g.resources
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Microsoft.Samples.Kinect.Beatle_Defense_Kinect.Properties.Resources.resources
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.GenerateResource.cache
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CoreCompileInputs.cache
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\Sebastian Michko\Documents\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe.config
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.pdb
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.dll
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.dll
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.xml
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.xml
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csprojAssemblyReference.cache
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.baml
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.g.cs
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\App.g.cs
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect_MarkupCompile.cache
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.g.resources
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Microsoft.Samples.Kinect.Beatle_Defense_Kinect.Properties.Resources.resources
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.GenerateResource.cache
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CoreCompileInputs.cache
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\Sebastian Michko\Documents\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe.config
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.pdb
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.dll
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.dll
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.xml
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csprojAssemblyReference.cache
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.baml
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.g.cs
@@ -53,61 +9,169 @@ C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Microsoft.Samples.Kinect.Beatle_Defense_Kinect.Properties.Resources.resources
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.GenerateResource.cache
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CoreCompileInputs.cache
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\dll\x86\phidget22.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\dll\x64\phidget22.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe.config
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.pdb
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Win32.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\netstandard.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.AppContext.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Collections.Concurrent.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Collections.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Collections.NonGeneric.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Collections.Specialized.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.ComponentModel.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.ComponentModel.EventBasedAsync.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.ComponentModel.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.ComponentModel.TypeConverter.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Console.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Data.Common.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.Contracts.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.Debug.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.FileVersionInfo.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.Process.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.StackTrace.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.TextWriterTraceListener.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.Tools.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.TraceSource.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Diagnostics.Tracing.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Drawing.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Dynamic.Runtime.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Globalization.Calendars.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Globalization.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Globalization.Extensions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.Compression.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.Compression.ZipFile.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.FileSystem.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.FileSystem.DriveInfo.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.FileSystem.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.FileSystem.Watcher.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.IsolatedStorage.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.MemoryMappedFiles.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.Pipes.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.UnmanagedMemoryStream.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Linq.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Linq.Expressions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Linq.Parallel.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Linq.Queryable.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.Http.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.NameResolution.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.NetworkInformation.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.Ping.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.Requests.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.Security.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.Sockets.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.WebHeaderCollection.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.WebSockets.Client.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Net.WebSockets.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.ObjectModel.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Reflection.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Reflection.Extensions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Reflection.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Resources.Reader.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Resources.ResourceManager.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Resources.Writer.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.CompilerServices.VisualC.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.Extensions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.Handles.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.InteropServices.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.Numerics.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.Serialization.Formatters.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.Serialization.Json.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.Serialization.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.Serialization.Xml.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Claims.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Cryptography.Algorithms.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Cryptography.Csp.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Cryptography.Encoding.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Cryptography.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Cryptography.X509Certificates.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Principal.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.SecureString.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Text.Encoding.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Text.Encoding.Extensions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Text.RegularExpressions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Overlapped.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Tasks.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Tasks.Parallel.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Thread.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.ThreadPool.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Timer.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.ValueTuple.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Xml.ReaderWriter.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Xml.XDocument.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Xml.XmlDocument.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Xml.XmlSerializer.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Xml.XPath.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Xml.XPath.XDocument.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.GL.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.World.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Configuration.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Logging.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Options.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Primitives.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.dll
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Newtonsoft.Json.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.GLControl.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Phidget22.NET.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Buffers.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Collections.Immutable.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.ComponentModel.Annotations.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.IO.Pipelines.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Memory.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Numerics.Vectors.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Resources.Extensions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Security.Principal.Windows.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Tasks.Dataflow.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Web.Helpers.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Web.Mvc.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Web.Razor.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Web.WebPages.Administration.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Web.WebPages.Deployment.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Web.WebPages.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Web.WebPages.Razor.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Web.Infrastructure.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\NuGet.Core.dll
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.GL.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.World.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Configuration.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Configuration.Abstractions.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Configuration.Binder.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.DependencyInjection.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Logging.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Options.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Extensions.Primitives.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.xml
 C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Newtonsoft.Json.xml
-=======
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csprojAssemblyReference.cache
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.baml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\MainWindow.g.cs
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\App.g.cs
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect_MarkupCompile.cache
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.g.resources
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Microsoft.Samples.Kinect.Beatle_Defense_Kinect.Properties.Resources.resources
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.GenerateResource.cache
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CoreCompileInputs.cache
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\dll\x86\phidget22.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\dll\x64\phidget22.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe.config
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Beatle_Defense_Kinect.pdb
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.GL.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.World.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Newtonsoft.Json.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.GLControl.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Phidget22.NET.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\ZedGraph.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.UI.GL.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Emgu.CV.World.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Microsoft.Kinect.Face.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.GLControl.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Phidget22.NET.pdb
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Phidget22.NET.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\Newtonsoft.Json.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\ZedGraph.xml
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\de\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\es\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\fr\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\hu\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\it\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\ja\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\pt\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\ru\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\sk\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\sv\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\tr\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\zh-cn\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\bin\x64\Debug\zh-tw\ZedGraph.resources.dll
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.exe
-C:\Users\Walter\Documents\beatle_repo\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.pdb
->>>>>>> walter-merge
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\OpenTK.GLControl.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Phidget22.NET.pdb
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\Phidget22.NET.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Buffers.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Memory.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Numerics.Vectors.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\bin\x64\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\user\beatle_runtime\Beatle_Defense_Kinect\obj\x64\Debug\Beatle_Defense_Kinect.csproj.CopyComplete
