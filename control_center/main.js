@@ -8,7 +8,7 @@ global.pathFor = require("../pathFor")
 
 let processManager = require(global.pathFor.processManager)
 let packageJson = require(global.pathFor.package)
-global.systemData = require(global.pathFor.systemDataStorage)
+global.systemData = {...require(global.pathFor.systemDataStorage), ...{status:"disarmed",kinectData:{ numberOfPeople:0 }, strobeIsOn:false} }
 global.app = app
 
 //
