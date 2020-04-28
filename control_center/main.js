@@ -5,11 +5,25 @@ let cors = require('cors')
 
 // a single location for all javascript paths to prevent future breaking changes
 global.pathFor = require("../pathFor")
+global.app = app
 
 let processManager = require(global.pathFor.processManager)
 let packageJson = require(global.pathFor.package)
-global.systemData = {...require(global.pathFor.systemDataStorage), ...{status:"disarmed",kinectData:{ numberOfPeople:0 }, strobeIsOn:false} }
-global.app = app
+
+// 
+// load up system data
+// 
+global.systemData = {
+    status:"disarmed",
+    kinectData: { numberOfPeople:0 },
+    strobeIsOn:false
+}
+try {
+    global.systemData = {...require(global.pathFor.systemDataStorage), ...global.systemData }
+} catch (error) {
+    
+}
+
 
 //
 // setup routes
