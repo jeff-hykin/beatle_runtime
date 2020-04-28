@@ -24,7 +24,7 @@
         public string pathToSystemDataFile    = "control_center/systemData.json";
         public string pathToPeopleFolder      = "public/people/";
         public string pathToActivationsFolder = "public/activations/";
-        
+        public int counter = 0;
         
         // helper by Groo
         public static class IEnumerableExt
@@ -55,10 +55,15 @@
         public System.Windows.Media.Brush face_label_brush;
         public Typeface face_label_font;
         public double face_label_font_size;
+        
+        // rendering helpers
+        System.Drawing.Rectangle[] faces_detected;
+        Image<Bgr, byte> frame;
+        Image<Gray, byte> small_frame;
 
         public FacialRecognition()
         {
-            classifier_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/opencv/data/lbpcascades/lbpcascade_frontalface.xml";
+            classifier_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/opencv/data/haarcascades/haarcascade_frontalface_default.xml";
             database_path = "../../../../public/";
             people_path = database_path + "people/";
             activations_path = activations_path + "activations/";
@@ -138,7 +143,7 @@
             train();
 
             // async call database_add_training_image
-            new Task(() => { database_add_training_image(name, face); }).Start();
+            // new Task(() => { database_add_training_image(name, face); }).Start();
         }
 
         public void database_add_training_image(string name, Image<Gray, byte> face)
@@ -174,7 +179,7 @@
             train();
 
             // async call database_add_new_person
-            new Task(() => { database_add_new_person(name, frame, face); }).Start();
+            // new Task(() => { database_add_new_person(name, frame, face); }).Start();
 
             return label_to_int[name];
         }
@@ -193,7 +198,7 @@
         public void update_last_seen(string name)
         {
             // async call databse_update_last_seen
-            new Task(() => { database_update_last_seen(name); }).Start();
+            // new Task(() => { database_update_last_seen(name); }).Start();
         }
 
         public void database_update_last_seen(string name)
@@ -203,7 +208,7 @@
 
         public void add_new_activation(Image<Bgr, byte> frame)
         {
-            new Task(() => { database_add_new_activation(frame); }).Start();
+            // new Task(() => { database_add_new_activation(frame); }).Start();
         }
 
         public void database_add_new_activation(Image<Bgr, byte> frame)
@@ -216,12 +221,14 @@
 
         public void recognize_and_draw(DrawingContext dc, ref WriteableBitmap color_frame, int display_width, int display_height)
         {
-            // Get the current frame
-            Image<Bgr, byte> frame = writable_bitmap_to_image(color_frame);
-            Image<Gray, byte> small_frame = frame.Convert<Gray, byte>().Resize(input_width, input_height, Inter.Cubic);
+            if (counter % 5 == 0) {
+                // Get the current frame
+                this.frame = writable_bitmap_to_image(color_frame);
+                this.small_frame = this.frame.Convert<Gray, byte>().Resize(input_width, input_height, Inter.Cubic);
 
-            System.Drawing.Rectangle[] faces_detected = face_finder.DetectMultiScale(small_frame, 1.2, 10, new System.Drawing.Size(10, 10));
-
+                this.faces_detected = face_finder.DetectMultiScale(small_frame, 1.2, 10, new System.Drawing.Size(10, 10));
+                Debug.WriteLine($"faces_detected is {faces_detected}");
+            }
             // for each face detected
             foreach (System.Drawing.Rectangle f in faces_detected)
             {
@@ -253,7 +260,7 @@
                 }
                 Console.WriteLine("{0} {1} {2}", training_labels[pred.Label], pred.Label, pred.Distance);
 
-                //Draw the label for each face detected and recognized
+                // Draw the label for each face detected and recognized
                 dc.DrawText(new FormattedText(name,
                                 CultureInfo.GetCultureInfo("en-us"),
                                 FlowDirection.LeftToRight,
@@ -262,6 +269,8 @@
                                 face_label_brush),
                                 conv_point(f.X, f.Y, display_width, display_height));
             }
+            counter++;
+
         }
 
         public static Rect conv_rectangle(System.Drawing.Rectangle r, int width, int height)

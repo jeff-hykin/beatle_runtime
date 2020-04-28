@@ -336,7 +336,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
 
                 int pulse_width = DegreeToPulseWidth(desired_degrees);
                 string command = "#" + servo_num + "P" + pulse_width + "S" + speed + "\r";
-                Debug.WriteLine($"Serial command is {command}");
+                // Debug.WriteLine($"Serial command is {command}");
                 serialPort.Write(command);
             }
         }
@@ -472,6 +472,41 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             }
         }
     }
+    
+    // 
+    // Facial Recognition
+    //
+    public class FaceHelper : Helper {
+        // copy-paste constructor from Helpers
+        public FaceHelper(dynamic mainWindow) { this.mainWindow = mainWindow; }
+        // 
+        // data
+        // 
+        FacialRecognition facial_rec;
+        
+        // 
+        // events (construct, newFrame, destruct)
+        // 
+        new public void afterConstructor() {
+            facial_rec = new FacialRecognition();
+            facial_rec.train();
+        }
+        
+        public void afterNewFrame(DrawingContext dc, ref WriteableBitmap colorBitmap) {
+            try
+            {
+                facial_rec.recognize_and_draw(dc, ref colorBitmap, mainWindow.displayWidth, mainWindow.displayHeight);
+            }
+            catch
+            {
+                Debug.WriteLine("There was an error drawing face recog");
+            }
+        }
+        
+        new public void afterDesctructor() {
+            
+        }
+    }
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -486,6 +521,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public dynamic communicationHelper;
         public dynamic strobeHelper;
         public dynamic servoHelper;
+        public dynamic faceHelper;
         
         // 
         // drawing
@@ -567,12 +603,6 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         bool waitForRightKeyUp = false;
         bool waitForSpaceKeyUp = false;
 
-        int strobe_state;
-        DigitalOutput strobe_do;
-        int strobe_phidget_sn;
-
-        FacialRecognition facial_rec;
-
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
@@ -581,31 +611,14 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             this.communicationHelper = new CommunicationHelper(this);
             this.strobeHelper        = new StrobeHelper(this);
             this.servoHelper         = new ServoHelper(this);
+            this.faceHelper          = new FaceHelper(this);
             
             SetupKinectStuff();
-            StrobeSetup();
-            facial_rec = new FacialRecognition();
-            facial_rec.train();
-
-
-
+            
             this.communicationHelper.afterConstructor();
             this.strobeHelper.afterConstructor();
             this.servoHelper.afterConstructor();
-        }
-
-
-        private void StrobeSetup()
-        {
-            // STROBE
-            if (use_phidget)
-            {
-                strobe_state = 0;
-                strobe_phidget_sn = 12312;
-                strobe_do = new DigitalOutput();
-                strobe_do.DeviceSerialNumber = strobe_phidget_sn;
-                strobe_do.Open(5000);
-            }
+            this.faceHelper.afterConstructor();
         }
         
         // System
@@ -706,24 +719,6 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             this.InitializeComponent();
         }
 
-        private void turn_on_strobe()
-        {
-            if (use_phidget)
-            {
-                strobe_state = 1;
-                strobe_do.State = true;
-            }
-        }
-
-        private void turn_off_strobe()
-        {
-            if (use_phidget)
-            {
-                strobe_state = 0;
-                strobe_do.State = false;
-            }
-        }
-
         /// <summary>
         /// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
         /// </summary>
@@ -817,6 +812,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
             this.communicationHelper.afterDesctructor();
             this.strobeHelper.afterDesctructor();
             this.servoHelper.afterDesctructor();
+            this.faceHelper.afterDesctructor();
         }
 
         /// <summary>
@@ -832,9 +828,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
                     dc.DrawImage(this.colorBitmap, this.displayRect);
-
-                    // do and draw facial recognition
-                    facial_rec.recognize_and_draw(dc, ref this.colorBitmap, this.displayWidth, this.displayHeight);
+                    
                 }
                 return;
             }
@@ -851,13 +845,16 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                     bodyFrame.GetAndRefreshBodyData(this.bodies);
                     using (DrawingContext dc = this.drawingGroup.Open())
                     {
+                        
                         // 
                         // draw visible spectrum
                         // 
                         dc.DrawImage(this.colorBitmap, this.displayRect);
-
-                        // do and draw facial recognition
-                        facial_rec.recognize_and_draw(dc, ref this.colorBitmap, this.displayWidth, this.displayHeight);
+                        
+                        // 
+                        // Facial Recognition
+                        // 
+                        faceHelper.afterNewFrame(dc, ref this.colorBitmap);
 
                         // 
                         // iterate over each body
