@@ -35,12 +35,13 @@ socket.on("systemData.dataDidChange", (backendSystemData) => {
 // server responding to request
 socket.on("systemData.providingSystemData", (backendSystemData) => {
     console.log(`receiving backend data: `,backendSystemData)
+    window.receivingBackendData = true
     // make sure frontend is up to date
     if (Object.keys(backendSystemData).length > 0) {
         window.$root.systemData = backendSystemData
     }
     // changes were just confirmed
-    window.$root.changesAreUnconfirmed = false    
+    window.$root.changesAreUnconfirmed = false
 })
 
 socket.on("interface.userAuthenticated", function(){

@@ -16,7 +16,10 @@ let packageJson = require(global.pathFor.package)
 global.systemData = {
     status:"disarmed",
     kinectData: { numberOfPeople:0 },
-    strobeIsOn:false
+    strobeIsOn: false,
+    faceRecognition: {
+        peopleNames: []
+    },
 }
 try {
     global.systemData = {...require(global.pathFor.systemDataStorage), ...global.systemData }
