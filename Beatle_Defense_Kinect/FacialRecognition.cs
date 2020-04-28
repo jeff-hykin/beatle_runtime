@@ -15,9 +15,17 @@
     using Emgu.CV.WPF;
     using Emgu.CV.Util;
     using System.Threading.Tasks;
-
+    using Newtonsoft.Json;
+    using System.Diagnostics;
+    
     public class FacialRecognition
     {
+        public string pathToRootFolder        = "../../../../";
+        public string pathToSystemDataFile    = "control_center/systemData.json";
+        public string pathToPeopleFolder      = "public/people/";
+        public string pathToActivationsFolder = "public/activations/";
+        
+        
         // helper by Groo
         public static class IEnumerableExt
         {
@@ -51,7 +59,7 @@
         public FacialRecognition()
         {
             classifier_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/opencv/data/lbpcascades/lbpcascade_frontalface.xml";
-            database_path = "C:/Users/Walter/Documents/beatle_repo/public/";
+            database_path = "../../../../public/";
             people_path = database_path + "people/";
             activations_path = activations_path + "activations/";
 
@@ -80,12 +88,16 @@
         public void load_database()
         {
             // get full list of names from database and all facialRecTraining images for each of them
-            string[] people_names = File.ReadAllLines(people_path + "DatabaseFile.txt");
+            string system_data_string = File.ReadAllText(pathToRootFolder+pathToSystemDataFile);
+            dynamic system_data = JsonConvert.DeserializeObject(system_data_string);
+            Debug.WriteLine($"system_data is {system_data}");
+            var people_names = system_data.faceRecognition.peopleNames;
+            Debug.WriteLine($"people_names is {people_names}");
 
             foreach (string name in people_names)
             {
                 label_to_int.Add(name, num_trained);
-                Console.WriteLine("{0} = {1}", name, label_to_int[name]);
+                Console.WriteLine($"{name} = {label_to_int[name]}");
                 num_trained++;
 
                 string person_dir = people_path + name;
