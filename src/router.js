@@ -7,8 +7,9 @@ Vue.use(Router)
 export let routes = [
     {
         path: "/",
-        name: "home",
+        name: "Home",
         component: Home,
+        icon: 'fa fa-home',
     },
     // disable help until more features are added
     // {
@@ -21,7 +22,8 @@ export let routes = [
     // },
     {
         path: "/debug",
-        name: "debug",
+        name: "Debug",
+        icon: 'fa fa-bug',
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -29,7 +31,7 @@ export let routes = [
     },
     {
         path: "/gallery",
-        name: "gallery",
+        name: "Gallery",
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -37,7 +39,7 @@ export let routes = [
     },
     {
         path: "/activations",
-        name: "activations",
+        name: "Activations",
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -45,7 +47,7 @@ export let routes = [
     },
     {
         path: "/people",
-        name: "people",
+        name: "People",
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.

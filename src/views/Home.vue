@@ -8,7 +8,6 @@
                 <h1 class=our-title>Beatle Control Center</h1>
             </column>
         </column>
-        <!-- Projects -->
         <row class=content-container width=100vw margin=2rem>
             <ui-button color='primary' @click="toggleStatus">
                 Toggle Arm/Disarm

@@ -19,9 +19,9 @@ export default {
 
 <style scoped>
 .ui-button {
-    /* position: fixed;
+    position: fixed;
     top: 2rem;
-    right: 2rem; */
+    right: 2rem;
     background-color: var(--grey-700) !important;
     color: white !important;
 }

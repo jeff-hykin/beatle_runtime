@@ -1,41 +1,38 @@
 <template>
-    <nav>
-        <row align-h=space-between>
-            <!-- regular nav buttons -->
-            <row align-h=left :flex-wrap='true'>
-                <router-link
-                    v-for='route in routes'
-                    :key='route.path'
-                    class='nav-link'
-                    :to='route.path'
-                    v-slot="{ href, route, navigate }"
-                    >
-                    <ui-button color='primary' :href="href" @click="navigate">
-                        {{ route.name }}
-                    </ui-button>
-                </router-link>
-            </row>
-            <!-- Logout -->
-            <row align-h=left>
-                <LogoutButton />
-            </row>
-        </row>
-    </nav>
+    <row height=7rem>        
+        <Slide :closeOnNavigation="true" >
+            <router-link
+                v-for='route in routes'
+                :key='route.path'
+                class='nav-link'
+                :to='route.path'
+                v-slot="{ href, route, navigate }"
+                >
+                <i class="fa fa-bug" aria-hidden="true"></i>
+                <a :href="href" @click="navigate">
+                    {{ route.name }}
+                </a>
+            </router-link>
+        </Slide>
+        <LogoutButton />
+    </row>
 </template>
 
 <script>
 
 import LogoutButton from "@/components/LogoutButton.vue"
+import { Slide } from 'vue-burger-menu'
 import { routes } from "@/router"
 
 export default {
     name: 'Navigation',
     components: {
         LogoutButton,
+        Slide,
     },
     data: ()=> ({
         routes,
-    })
+    }),
 }
 </script>
 
@@ -47,5 +44,8 @@ export default {
 .good-row * {
     margin-left: 1rem;
     margin-right: 1rem;
+}
+a {
+    color: var(--grey-100);
 }
 </style>
