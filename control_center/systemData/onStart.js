@@ -6,6 +6,8 @@ let fs = require("fs")
 let listeners = processManager.processes.systemData.listensFor
 let yell = processManager.processes.systemData.canYell
 
+let previousUpdateKey = global.systemData.updateKey;
+
 // whenever dataShouldChange
 listeners.dataShouldChange = (newData, who) => {
     let oldData = global.systemData
@@ -13,12 +15,24 @@ listeners.dataShouldChange = (newData, who) => {
     global.systemData = {...global.systemData, ...newData}
     newData = global.systemData
     let dataAfterChange = JSON.stringify(global.systemData)
+    // receiving an old message
+    if (newData.updateKey == null) {
+        console.log(`newData doesn't have an update key`)
+    }
+    if (oldData.updateKey != newData.updateKey) {
+        console.log(`received out of date message: ${newData}`)
+        console.log(`oldData is: ${global.systemData}`)
+        global.systemData = oldData
+        return
+    }
     // if there was a change, tell everyone about it
     if (JSON.stringify(oldData) != dataAfterChange) {
         console.log(`oldData is:`,oldData)
         console.log(`newData is:`,newData)
         
         console.log("sending dataDidChange")
+        // update the key to recognize when incoming requests get this
+        global.systemData.updateKey = Math.random()
         yell.dataDidChange(global.systemData)
         
         // call armed/disarmed

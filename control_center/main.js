@@ -14,6 +14,7 @@ let packageJson = require(global.pathFor.package)
 // load up system data
 // 
 global.systemData = {
+    updateKey: Math.random(),
     status:"disarmed",
     kinectData: { numberOfPeople:0 },
     strobeIsOn: false,
@@ -22,7 +23,7 @@ global.systemData = {
     },
 }
 try {
-    global.systemData = {...require(global.pathFor.systemDataStorage), ...global.systemData }
+    global.systemData = { ...global.systemData, ...require(global.pathFor.systemDataStorage) }
 } catch (error) {
     
 }
