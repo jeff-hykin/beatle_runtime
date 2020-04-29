@@ -10,4 +10,6 @@ module.exports = {
     passwordManager: __dirname + "/control_center/utils/passwordManager.js",
     // kinect
     kinectExecutable: __dirname + "/Beatle_Defense_Kinect/bin/x64/Debug/Beatle_Defense_Kinect.exe",
+    // other
+    gallery: __dirname + "/public/gallery",
 }

@@ -1,25 +1,23 @@
 <template>
     <div id="app">
-        <main id="page-wrap">
-            <!-- when not loggedIn -->
-            <div v-if='!$root.loggedIn' >
-                <Login />
-            </div>    
+        <!-- when not loggedIn -->
+        <div v-if='!$root.loggedIn' >
+            <Login />
+        </div>    
+        
+        <!-- when loggedIn -->
+        <div v-if='$root.loggedIn' >    
             
-            <!-- when loggedIn -->
-            <div v-if='$root.loggedIn' >    
-                
-                <Nav />
-                
-                <transition name="fade" mode="out-in" >
-                    <router-view/>
-                </transition>
-                
-                <column position=fixed left=0 bottom=0 width='100vw' padding=1rem align-h=left color="white" :background-color='$root.systemData.status=="disarmed"?"var(--blue-400)" : "var(--red-500)" '  >
-                    status: {{$root.systemData.status}}
-                </column>
-            </div>
-        </main>
+            <Nav />
+            
+            <transition name="fade" mode="out-in" >
+                <router-view/>
+            </transition>
+            
+            <column position=fixed left=0 bottom=0 width='100vw' padding=1rem align-h=left color="white" :background-color='$root.systemData.status=="disarmed"?"var(--blue-400)" : "var(--red-500)" '  >
+                status: {{$root.systemData.status}}
+            </column>
+        </div>
     </div>
 </template>
 
@@ -38,9 +36,6 @@ export default {
         Login,
         LogoutButton,
     },
-    data: ()=>({
-        menu:  routes.map(each=>({ title: each.name, href: each.path, icon: each.icon })),
-    })
 }
 </script>
 

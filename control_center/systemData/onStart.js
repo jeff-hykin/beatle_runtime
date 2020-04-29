@@ -1,12 +1,40 @@
 let processManager = require("../processManager")
 let audioManager = require("../utils/audioManager")
-let fs = require("fs")
+let fs = require('fs')
+let util = require('util')
+let path = require('path')
+
 
 // import the official listener-names for this process
 let listeners = processManager.processes.systemData.listensFor
 let yell = processManager.processes.systemData.canYell
 
 let previousUpdateKey = global.systemData.updateKey;
+
+const readdir = util.promisify(fs.readdir)
+const stat = util.promisify(fs.stat)
+async function allFilesRecursively(directoryName) {
+    let files = await readdir(directoryName)
+    let allFiles = []
+    // recursively explore the sub directories
+    for (let each of files) {
+        let fullPath = path.join(directoryName, each)
+        let fileStats = await stat(fullPath)
+        allFiles.push(fullPath)
+        // explore all sub directories
+        if (fileStats.isDirectory()) {
+            allFiles = allFiles.concat(await allFilesRecursively(fullPath))
+        }
+    }
+    return allFiles
+}
+
+// continually update the gallery files
+setTimeout(async () => {
+    let galleryFiles = await allFilesRecursively(pathFor.gallery)
+    let mapped = galleryFiles.map(each=>path.relative(process.cwd()+"/public",each))
+    listeners.dataShouldChange({galleryFiles: mapped}, "galleryUpdater")
+}, 1000)
 
 // whenever dataShouldChange
 listeners.dataShouldChange = (newData, who) => {

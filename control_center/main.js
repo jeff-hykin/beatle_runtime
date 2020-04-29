@@ -21,6 +21,7 @@ global.systemData = {
     faceRecognition: {
         peopleNames: []
     },
+    galleryFiles: [],
 }
 try {
     global.systemData = { ...global.systemData, ...require(global.pathFor.systemDataStorage) }
