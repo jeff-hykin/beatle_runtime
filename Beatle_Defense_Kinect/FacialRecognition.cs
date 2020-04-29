@@ -60,6 +60,7 @@
         System.Drawing.Rectangle[] faces_detected;
         Image<Bgr, byte> frame;
         Image<Gray, byte> small_frame;
+        System.Drawing.Size face_size = new System.Drawing.Size(7, 7); // units in pixels
 
         public FacialRecognition()
         {
@@ -225,9 +226,7 @@
                 // Get the current frame
                 this.frame = writable_bitmap_to_image(color_frame);
                 this.small_frame = this.frame.Convert<Gray, byte>().Resize(input_width, input_height, Inter.Cubic);
-
-                this.faces_detected = face_finder.DetectMultiScale(small_frame, 1.2, 10, new System.Drawing.Size(10, 10));
-                Debug.WriteLine($"faces_detected is {faces_detected}");
+                this.faces_detected = face_finder.DetectMultiScale(small_frame, 1.5, 10, this.face_size);
             }
             // for each face detected
             foreach (System.Drawing.Rectangle f in faces_detected)
