@@ -1,6 +1,6 @@
 <template>
     <row :wrap=true>
-        <VueGallery :images="fullImagePaths" :index="index" @close="index = null" />
+        <VueGallery :images="imageData" :index="index" @close="index = null" />
         <div
             class="image"
             v-for="(imagePath, imageIndex) in fullImagePaths"
@@ -24,9 +24,29 @@ export default {
         baseUrl: window.location.host,
         index: null,
     }),
+    mounted() {
+        console.log(`this.imageData is:`,this.imageData)
+    },
     computed: {
         fullImagePaths() {
             return this.imagePaths.map(each=>`http://${this.baseUrl}/${each}`)
+        },
+        imageData() {
+            return this.fullImagePaths.map(each=>{
+                let type = "video/"
+                let matchVideo = each.match(/.+\.(mp4|mov|avi)$/)
+                let matchImage = each.match(/.+\.(png|jpg|jpeg)$/)
+                if (matchVideo) {
+                    type = `video/${matchVideo[1]}`
+                } else {
+                    type = `image/${matchImage[1]}`
+                }
+                return {
+                    title: "",
+                    href: each,
+                    type
+                }
+            })
         }
     }
 }
