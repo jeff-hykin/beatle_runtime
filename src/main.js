@@ -15,7 +15,7 @@ import { Router } from "./plugins/vue-router"
 import Markdown from "@/components/Markdown"
 
 Vue.config.productionTip = false
-
+let DateTime = require("good-date")
 
 // allow global access to root from non-vue files
 window.Vue = Vue
@@ -62,6 +62,7 @@ new Vue({
         logEvent(string) {
             let now = DateTime.now()
             this.$root.eventStream = `${now.time} ${now.date}: ${string}\n` + this.$root.eventStream
+            console.log(`this.$root.eventStream is:`,this.$root.eventStream)
         },
     },
     render: h => h(App),
