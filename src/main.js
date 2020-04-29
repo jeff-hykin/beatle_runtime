@@ -31,11 +31,18 @@ new Vue({
         connectedToBackend: false,
         changesAreUnconfirmed: true,
         loggedIn: localStorage.getItem("loggedIn"),
+        eventStream: "",
     }),
     mounted() {
         window.systemData = this.$data.systemData
         window.$root = this
         window.$toasted = this.$toasted
+
+        // events to keep track of 
+        window.socket.on("keypad.keyPressed", (whichKey)=>this.logEvent(`key pressed: ${whichKey}`))
+        window.socket.on("kinect.foundPeople", (people)=>this.logEvent(`kinect found people: ${people.length}`))
+        window.socket.on("kinect.lostSomePeople", ()=>this.logEvent(`kinect lost tracking for some people`))
+        window.socket.on("kinect.lostEveryone", ()=>this.logEvent(`kinect lost tracking of everyone`))
     },
     watch: {
         systemData: {
@@ -50,6 +57,12 @@ new Vue({
                 window.receivingBackendData = false
             },
         }
+    },
+    methods: {
+        logEvent(string) {
+            let now = DateTime.now()
+            this.$root.eventStream = `${now.time} ${now.date}: ${string}\n` + this.$root.eventStream
+        },
     },
     render: h => h(App),
 }).$mount("#app")
