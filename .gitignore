@@ -569,6 +569,3 @@ dkms.conf
 
 # Executables
 *.out
-
-**/people/**
-**/activations/**

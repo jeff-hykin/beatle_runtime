@@ -118,16 +118,22 @@
                 label_to_int.Add(name, num_trained);
                 Console.WriteLine($"{name} = {label_to_int[name]}");
                 num_trained++;
-
-                string person_dir = people_path + name;
-                foreach (string file in Directory.EnumerateFiles(person_dir))
+                try
                 {
-                    if (file.Contains("FacialRecTraining"))
+                    string person_dir = people_path + name;
+                    foreach (string file in Directory.EnumerateFiles(person_dir))
                     {
-                        training_int_labels.Add(label_to_int[name]);
-                        training_labels.Add(name);
-                        training_images.Add(new Image<Gray, byte>(file));
+                        if (file.Contains("FacialRecTraining"))
+                        {
+                            training_int_labels.Add(label_to_int[name]);
+                            training_labels.Add(name);
+                            training_images.Add(new Image<Gray, byte>(file));
+                        }
                     }
+                }
+                catch
+                {
+                    Debug.WriteLine("error loading face");
                 }
             }
         }

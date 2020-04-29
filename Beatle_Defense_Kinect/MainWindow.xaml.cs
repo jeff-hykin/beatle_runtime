@@ -530,7 +530,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public dynamic cultureInfo = CultureInfo.GetCultureInfo("en-us");
         
         public double drawFaceShapeThickness = 8;
-        public double drawTextFontSize = 12;
+        public double drawTextFontSize = 10;
         public double facePointRadius = 1.0;
         public float textLayoutOffsetX = -0.1f;
         public float textLayoutOffsetY = 0.25f;
