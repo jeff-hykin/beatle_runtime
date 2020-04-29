@@ -9,7 +9,7 @@ export let routes = [
         path: "/",
         name: "Home",
         component: Home,
-        icon: 'fa fa-home',
+        icon: 'home',
     },
     // disable help until more features are added
     // {
@@ -23,7 +23,7 @@ export let routes = [
     {
         path: "/debug",
         name: "Debug",
-        icon: 'fa fa-bug',
+        icon: 'bug',
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -32,6 +32,7 @@ export let routes = [
     {
         path: "/gallery",
         name: "Gallery",
+        icon: "picture-o",
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -40,6 +41,7 @@ export let routes = [
     {
         path: "/activations",
         name: "Activations",
+        icon: "calendar-check-o",
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -48,6 +50,7 @@ export let routes = [
     {
         path: "/people",
         name: "People",
+        icon: "address-card",
         // route level code-splitting
         // this generates a separate chunk (help.[hash].js) for this route
         // which is lazy-loaded when the route is visited.

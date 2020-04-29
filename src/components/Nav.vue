@@ -2,13 +2,13 @@
     <row height=7rem>        
         <Slide :closeOnNavigation="true" >
             <router-link
-                v-for='route in routes'
-                :key='route.path'
+                v-for='eachRoute in routes'
+                :key='eachRoute.path'
                 class='nav-link'
-                :to='route.path'
+                :to='eachRoute.path'
                 v-slot="{ href, route, navigate }"
                 >
-                <i class="fa fa-bug" aria-hidden="true"></i>
+                <i :class="`fa fa-${eachRoute.icon}`" aria-hidden="true" />
                 <a :href="href" @click="navigate">
                     {{ route.name }}
                 </a>
