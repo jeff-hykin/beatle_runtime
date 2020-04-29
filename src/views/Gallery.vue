@@ -1,14 +1,15 @@
 <template>
-  <div>
-    <VueGallery :images="$root.systemData.galleryFiles" :index="index" @close="index = null" />
-    <div
-      class="image"
-      v-for="(imagePath, imageIndex) in $root.systemData.galleryFiles"
-      :key="imageIndex"
-      @click="index = imageIndex"
-      :style='{ backgroundImage: `url("http://${baseUrl}/${imagePath}")`, width: "300px", height: "200px" }'
-    ></div>
-  </div>
+    <row :wrap=true>
+        <VueGallery :images="fullImagePaths" :index="index" @close="index = null" />
+        <div
+            class="image"
+            v-for="(imagePath, imageIndex) in fullImagePaths"
+            :key="imageIndex"
+            @click="index = imageIndex"
+            :style='{ backgroundImage: `url("${imagePath}")`, width: "300px", height: "200px" }'
+            />
+        
+    </row>
 </template>
 
 <script>
@@ -19,9 +20,15 @@ export default {
         VueGallery,
     },
     data: ()=>({
+        imagePaths: $root.systemData.galleryFiles,
         baseUrl: window.location.host,
         index: null,
-    })
+    }),
+    computed: {
+        fullImagePaths() {
+            return this.imagePaths.map(each=>`http://${this.baseUrl}/${each}`)
+        }
+    }
 }
 </script> 
 
