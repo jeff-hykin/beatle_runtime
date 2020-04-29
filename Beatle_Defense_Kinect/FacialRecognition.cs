@@ -16,6 +16,7 @@
     using Emgu.CV.Util;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using System.Diagnostics;
     
     public class FacialRecognition
@@ -25,6 +26,12 @@
         public string pathToPeopleFolder      = "public/people/";
         public string pathToActivationsFolder = "public/activations/";
         public int counter = 0;
+        
+        dynamic mainWindow;
+        dynamic commHelper;
+        dynamic systemData;
+        
+        dynamic peopleNames;
         
         // helper by Groo
         public static class IEnumerableExt
@@ -62,8 +69,12 @@
         Image<Gray, byte> small_frame;
         System.Drawing.Size face_size = new System.Drawing.Size(7, 7); // units in pixels
 
-        public FacialRecognition()
+        public FacialRecognition(dynamic mainWindow)
         {
+            this.mainWindow = mainWindow;
+            this.commHelper = this.mainWindow.communicationHelper;
+            this.systemData = this.commHelper.systemData;
+            
             classifier_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/opencv/data/haarcascades/haarcascade_frontalface_default.xml";
             database_path = "../../../../public/";
             people_path = database_path + "people/";
@@ -90,17 +101,19 @@
 
             load_database();
         }
+        
+        public List<dynamic> systemPeopleNames
+        {
+            get
+            {
+                IEnumerable<dynamic> keyStep = this.systemData.kinectData.people.Properties();
+                return keyStep.Select(p => p.Name).ToList();
+            }
+        }
 
         public void load_database()
         {
-            // get full list of names from database and all facialRecTraining images for each of them
-            string system_data_string = File.ReadAllText(pathToRootFolder+pathToSystemDataFile);
-            dynamic system_data = JsonConvert.DeserializeObject(system_data_string);
-            Debug.WriteLine($"system_data is {system_data}");
-            var people_names = system_data.faceRecognition.peopleNames;
-            Debug.WriteLine($"people_names is {people_names}");
-
-            foreach (string name in people_names)
+            foreach (string name in this.systemPeopleNames)
             {
                 label_to_int.Add(name, num_trained);
                 Console.WriteLine($"{name} = {label_to_int[name]}");
@@ -144,11 +157,12 @@
             train();
 
             // async call database_add_training_image
-            // new Task(() => { database_add_training_image(name, face); }).Start();
+            new Task(() => { database_add_training_image(name, face); }).Start();
         }
 
         public void database_add_training_image(string name, Image<Gray, byte> face)
         {
+            var max_num_of_training_images = 100;
             string dir_path = people_path + name;
             int next_img_ix = 01;
             foreach (string file in Directory.EnumerateFiles(dir_path))
@@ -159,7 +173,7 @@
                 }
             }
 
-            if (next_img_ix < 100)
+            if (next_img_ix < max_num_of_training_images)
             {
                 face.Convert<Bgr, byte>().Save(dir_path + "/FacialRecTraining" + next_img_ix.ToString("D2") + ".png");
             }
@@ -180,26 +194,32 @@
             train();
 
             // async call database_add_new_person
-            // new Task(() => { database_add_new_person(name, frame, face); }).Start();
+            new Task(() => { database_add_new_person(name, frame, face); }).Start();
 
             return label_to_int[name];
         }
 
         public void database_add_new_person(string name, Image<Bgr, byte> frame, Image<Gray, byte> face)
         {
+            // update systemData
+            Debug.WriteLine($"adding {name} to outgoingData peopleNames");
+            this.commHelper.outgoingData.people = this.systemData.kinectData.people;
+            this.commHelper.outgoingData.people.Add(name, label_to_int[name]);
+            
             // add name to database file, create a new directory for this person, main image = frame, face = new facialrectraining image
             File.AppendAllLines(people_path + "DatabaseFile.txt", IEnumerableExt.FromSingleItem(name));
-            string dir_path = people_path + name;
-            Directory.CreateDirectory(dir_path);
-            File.WriteAllText(dir_path + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
-            frame.Save(dir_path + "/MainImage.png");
-            face.Convert<Bgr, byte>().Save(dir_path + "/FacialRecTraining01.png");
+            // save image
+            Directory.CreateDirectory(pathToPeopleFolder+name);
+            File.WriteAllText( pathToPeopleFolder + name + "/Info.txt", DateTime.Now.ToString(CultureInfo.GetCultureInfo("en-us")));
+            frame.Save(pathToPeopleFolder + name + "/MainImage.png");
+            face.Convert<Bgr, byte>().Save( pathToPeopleFolder + name + "/FacialRecTraining01.png");
+            Debug.WriteLine("saved png!");
         }
 
         public void update_last_seen(string name)
         {
             // async call databse_update_last_seen
-            // new Task(() => { database_update_last_seen(name); }).Start();
+            new Task(() => { database_update_last_seen(name); }).Start();
         }
 
         public void database_update_last_seen(string name)
@@ -209,7 +229,7 @@
 
         public void add_new_activation(Image<Bgr, byte> frame)
         {
-            // new Task(() => { database_add_new_activation(frame); }).Start();
+            new Task(() => { database_add_new_activation(frame); }).Start();
         }
 
         public void database_add_new_activation(Image<Bgr, byte> frame)
@@ -257,16 +277,21 @@
                     int new_label = add_new_person(frame, face);
                     name = training_labels[new_label];
                 }
-                Console.WriteLine("{0} {1} {2}", training_labels[pred.Label], pred.Label, pred.Distance);
+                // Debug.WriteLine("{0} {1} {2}", training_labels[pred.Label], pred.Label, pred.Distance);
 
                 // Draw the label for each face detected and recognized
-                dc.DrawText(new FormattedText(name,
-                                CultureInfo.GetCultureInfo("en-us"),
-                                FlowDirection.LeftToRight,
-                                face_label_font,
-                                face_label_font_size,
-                                face_label_brush),
-                                conv_point(f.X, f.Y, display_width, display_height));
+                dc.DrawText(
+                    
+                    new FormattedText(
+                        name,
+                        mainWindow.cultureInfo,
+                        FlowDirection.LeftToRight,
+                        mainWindow.font,
+                        mainWindow.drawTextFontSize,
+                        Brushes.White
+                    ),
+                    conv_point(f.X, f.Y, display_width, display_height)
+                );
             }
             counter++;
 

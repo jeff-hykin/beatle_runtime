@@ -2,6 +2,7 @@ let app = require("express")()
 let http = require("http").createServer(app)
 let io = require("socket.io")(http)
 let cors = require('cors')
+let fs = require('fs')
 
 // a single location for all javascript paths to prevent future breaking changes
 global.pathFor = require("../pathFor")
@@ -16,11 +17,11 @@ let packageJson = require(global.pathFor.package)
 global.systemData = {
     updateKey: Math.random(),
     status:"disarmed",
-    kinectData: { numberOfPeople:0 },
-    strobeIsOn: false,
-    faceRecognition: {
-        peopleNames: []
+    kinectData: {
+        numberOfPeople:0,
+        people: {},
     },
+    strobeIsOn: false,
     galleryFiles: [],
 }
 try {
@@ -28,6 +29,12 @@ try {
 } catch (error) {
     
 }
+if (!(global.systemData.kinectData instanceof Object && global.systemData.kinectData.people instanceof Object)) {
+    global.systemData.kinectData.people = {}
+}
+fs.writeFile(global.pathFor.systemDataStorage, JSON.stringify(global.systemData), (...args)=>{
+    console.log(`file write args is:`,args)
+})
 
 
 //

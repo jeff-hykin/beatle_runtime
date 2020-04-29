@@ -14,7 +14,6 @@ const subprocess = spawn("powershell", ["-command", `Start-Process "${pathFor.ki
 // 
 // setup listener since C# doesn't use socket.io
 // 
-global.systemData.kinectData = { numberOfPeople: 0 }
 let jsonParser = require('body-parser').json()
 app.post("/sync", jsonParser, (req, res) => {
     let newData = req.body
@@ -38,6 +37,10 @@ app.post("/sync", jsonParser, (req, res) => {
         }
         
         // tell system to update the data
+        let newKinectData = req.body
+        if (newKinectData.people == null) {
+            newKinectData.people = {}
+        }
         processManager.processes.systemData.listensFor.dataShouldChange({ kinectData: req.body }, "kinect")
     }
     // tell the kinect the info it needs to know (arm/disarm)

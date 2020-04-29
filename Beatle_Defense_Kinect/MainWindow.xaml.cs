@@ -48,6 +48,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     //
     public class OutgoingData
     {
+        public dynamic people;
         public int numberOfPeople = 0;
     }
     public class CommunicationHelper : Helper {
@@ -63,6 +64,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         // 
         
         new public void afterConstructor() {
+            this.systemData = JsonConvert.DeserializeObject(File.ReadAllText(mainWindow.pathToRootFolder+mainWindow.pathToSystemDataFile));
             Task.Run(async () => {
                 for(;;)
                 {
@@ -488,19 +490,12 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         // events (construct, newFrame, destruct)
         // 
         new public void afterConstructor() {
-            facial_rec = new FacialRecognition();
+            facial_rec = new FacialRecognition(this.mainWindow);
             facial_rec.train();
         }
         
         public void afterNewFrame(DrawingContext dc, ref WriteableBitmap colorBitmap) {
-            try
-            {
-                facial_rec.recognize_and_draw(dc, ref colorBitmap, mainWindow.displayWidth, mainWindow.displayHeight);
-            }
-            catch
-            {
-                Debug.WriteLine("There was an error drawing face recog");
-            }
+            facial_rec.recognize_and_draw(dc, ref colorBitmap, mainWindow.displayWidth, mainWindow.displayHeight);
         }
         
         new public void afterDesctructor() {
@@ -513,6 +508,11 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public string pathToRootFolder        = "../../../../";
+        public string pathToSystemDataFile    = "control_center/systemData.json";
+        public string pathToPeopleFolder      = "public/people/";
+        public string pathToActivationsFolder = "public/activations/";
+        
         private bool use_phidget = false;
 
         // 
@@ -530,7 +530,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
         public dynamic cultureInfo = CultureInfo.GetCultureInfo("en-us");
         
         public double drawFaceShapeThickness = 8;
-        public double drawTextFontSize = 10;
+        public double drawTextFontSize = 12;
         public double facePointRadius = 1.0;
         public float textLayoutOffsetX = -0.1f;
         public float textLayoutOffsetY = 0.25f;
@@ -828,7 +828,7 @@ namespace Microsoft.Samples.Kinect.Beatle_Defense_Kinect
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
                     dc.DrawImage(this.colorBitmap, this.displayRect);
-                    
+                    faceHelper.afterNewFrame(dc, ref this.colorBitmap);
                 }
                 return;
             }
